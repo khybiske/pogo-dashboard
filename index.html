@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokemon Go Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+  padding: 15px;
+  min-height: 100vh;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.header {
+  background: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header h1 {
+  color: #FF6B6B;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+.status-badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.status-connected { background: #d4edda; color: #155724; }
+.status-disconnected { background: #f8d7da; color: #721c24; }
+.card {
+  background: white;
+  padding: 20px;
+  margin: 0;
+  border-top: 1px solid #eee;
+}
+.card:last-child {
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.card h2 {
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #4ECDC4;
+}
+.test-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 10px 0;
+}
+.btn {
+  background: #4ECDC4;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: bold;
+}
+.btn:active { background: #3db8af; }
+.saved-data {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  min-height: 50px;
+}
+.info-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.timestamp {
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
+}
+ol {
+  margin: 10px 0 0 20px;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>⚡ Pokemon Go Dashboard</h1>
+    <div class="status-badge" id="statusBadge">🔄 Testing Connection...</div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Sync Test</h2>
+    <p class="info-text">This test verifies the dashboard is working and data persists across devices.</p>
+    
+    <input type="text" class="test-input" id="testInput" placeholder="Enter a Pokemon name...">
+    <button class="btn" onclick="saveTest()">💾 Save Test Data</button>
+    
+    <div class="saved-data">
+      <strong>Saved Data:</strong>
+      <div id="displayData" style="margin-top: 10px;">
+        <em style="color: #999;">Nothing saved yet</em>
+      </div>
+      <div class="timestamp" id="timestamp"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔧 Next Steps</h2>
+    <ol>
+      <li>Save test data above on one device</li>
+      <li>Open this URL on another device</li>
+      <li>Verify data appears automatically</li>
+      <li>Once confirmed, we'll add Google Sheets integration</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>ℹ️ System Info</h2>
+    <div class="info-text">
+      <strong>URL:</strong> <span id="currentUrl"></span><br>
+      <strong>Storage:</strong> <span id="storageStatus">Checking...</span><br>
+      <strong>Device:</strong> <span id="deviceInfo"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Check localStorage
+function checkStorage() {
+  try {
+    localStorage.setItem('test', 'test');
+    localStorage.removeItem('test');
+    document.getElementById('storageStatus').textContent = '✅ Available';
+    document.getElementById('statusBadge').textContent = '✅ Dashboard Ready';
+    document.getElementById('statusBadge').className = 'status-badge status-connected';
+    return true;
+  } catch(e) {
+    document.getElementById('storageStatus').textContent = '❌ Unavailable';
+    document.getElementById('statusBadge').textContent = '❌ Storage Error';
+    document.getElementById('statusBadge').className = 'status-badge status-disconnected';
+    return false;
+  }
+}
+
+// Save test data
+function saveTest() {
+  const input = document.getElementById('testInput').value;
+  if (!input) {
+    alert('Please enter some text first!');
+    return;
+  }
+  
+  const timestamp = new Date().toLocaleString();
+  const device = /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iPhone/iPad' : 'Desktop';
+  
+  localStorage.setItem('pogoTest', input);
+  localStorage.setItem('pogoTestTime', timestamp);
+  localSto
