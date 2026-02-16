@@ -126,85 +126,49 @@ body {
   display: none;
 }
 
-/* Events Section - Pokemon Go Style */
-.events-container {
-  display: grid;
-  gap: 12px;
+/* AI Helper Box */
+.ai-helper-box {
+  background: linear-gradient(135deg, #FFF3CD 0%, #FFF8E1 100%);
+  border: 2px solid #FFC107;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 
-.event-upload-zone {
-  margin: 12px 0;
-  padding: 25px 20px;
-  border: 3px dashed #3B7DDD;
-  border-radius: 12px;
-  text-align: center;
-  background: linear-gradient(135deg, #EBF4FF 0%, #F7FAFC 100%);
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.event-upload-zone:hover {
-  background: linear-gradient(135deg, #BEE3F8 0%, #EBF4FF 100%);
-  border-color: #2C5AA0;
-}
-
-.event-upload-zone.dragover {
-  background: linear-gradient(135deg, #BEE3F8 0%, #90CDF4 100%);
-  border-color: #2C5AA0;
-  transform: scale(1.02);
-}
-
-.upload-icon {
-  font-size: 48px;
+.ai-helper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
-  opacity: 0.6;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.upload-text {
-  font-weight: 600;
-  color: #2D3748;
-  margin-bottom: 5px;
-}
-
-.upload-subtext {
-  font-size: 12px;
-  color: #718096;
-}
-
-.event-image-container {
-  position: relative;
-  margin: 12px 0;
-}
-
-.event-image {
-  max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  border: 2px solid #E2E8F0;
-}
-
-.remove-image-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(239, 68, 68, 0.9);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+.ai-helper-title {
+  color: #856404;
+  font-size: 15px;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
 
-.remove-image-btn:hover {
-  background: rgba(220, 38, 38, 1);
+.ai-helper-text {
+  font-size: 13px;
+  color: #856404;
+  line-height: 1.6;
+  margin-top: 8px;
 }
 
+.ai-helper-steps {
+  margin-top: 12px;
+  padding-left: 20px;
+  font-size: 12px;
+  color: #856404;
+  line-height: 1.8;
+}
+
+/* Events Section */
 .event-quick-info {
   background: white;
   border-radius: 10px;
@@ -590,14 +554,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="file"] {
-  padding: 8px;
-  border: 2px solid #dee2e6;
-  border-radius: 6px;
-  width: 100%;
-  font-size: 12px;
-}
-
 /* Empty states */
 .empty-state {
   text-align: center;
@@ -626,6 +582,7 @@ input[type="file"] {
   .trainer-info { font-size: 14px; }
   .list-item-details { font-size: 11px; }
   .candy-controls { flex-wrap: wrap; }
+  .ai-helper-header { flex-direction: column; align-items: flex-start; }
 }
 </style>
 </head>
@@ -646,18 +603,27 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <!-- Upload Zone -->
-      <div class="event-upload-zone" id="uploadZone" onclick="document.getElementById('eventImageUpload').click()">
-        <div class="upload-icon">📸</div>
-        <div class="upload-text">Upload Weekly Event Graphic</div>
-        <div class="upload-subtext">Click to browse or drag & drop (auto-compresses large images)</div>
-        <input type="file" id="eventImageUpload" accept="image/*" style="display:none;" onchange="uploadEventImage(event)">
-      </div>
-      
-      <!-- Image Preview -->
-      <div id="eventImageContainer" class="event-image-container" style="display:none;">
-        <img id="eventImage" class="event-image" src="" alt="Event Graphic">
-        <button class="remove-image-btn" onclick="removeEventImage()" title="Remove image">×</button>
+      <!-- AI Extraction Helper -->
+      <div class="ai-helper-box">
+        <div class="ai-helper-header">
+          <div class="ai-helper-title">
+            🤖 AI Event Extraction Helper
+          </div>
+          <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()">
+            📋 Copy Prompt
+          </button>
+        </div>
+        <div class="ai-helper-text">
+          Use this workflow to update events weekly (takes ~30 seconds):
+        </div>
+        <ol class="ai-helper-steps">
+          <li>Click "Copy Prompt" button above</li>
+          <li>Go to Claude.ai or ChatGPT</li>
+          <li>Paste the prompt and upload your weekly event graphic</li>
+          <li>Copy the AI's tab-separated output</li>
+          <li>Paste into Google Sheets "CurrentEvents" tab (cell A1)</li>
+          <li>Click "Refresh" below to see updates here</li>
+        </ol>
       </div>
       
       <!-- Event Info from Google Sheets -->
@@ -675,7 +641,10 @@ input[type="file"] {
         <a href="https://www.g47ix.pro" target="_blank" class="event-link">📊 G47IX</a>
       </div>
       
-      <div class="last-updated">Update events in Google Sheets "CurrentEvents" tab • <button class="btn btn-small" onclick="loadAllData()" style="margin: 5px 0 0;">🔄 Refresh</button></div>
+      <div class="last-updated">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
+      </div>
     </div>
   </div>
 
@@ -982,130 +951,73 @@ function getPokemonSprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
 }
 
-// Image compression and upload
-function initDragDrop() {
-  const uploadZone = document.getElementById('uploadZone');
-  
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    uploadZone.addEventListener(eventName, preventDefaults, false);
-  });
-  
-  function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-  
-  ['dragenter', 'dragover'].forEach(eventName => {
-    uploadZone.addEventListener(eventName, () => {
-      uploadZone.classList.add('dragover');
-    }, false);
-  });
-  
-  ['dragleave', 'drop'].forEach(eventName => {
-    uploadZone.addEventListener(eventName, () => {
-      uploadZone.classList.remove('dragover');
-    }, false);
-  });
-  
-  uploadZone.addEventListener('drop', handleDrop, false);
-}
+// Copy AI extraction prompt to clipboard
+function copyPromptToClipboard() {
+  const prompt = `Extract this week's Pokemon Go events into a table with these exact columns: Icon, EventType, Description
 
-function handleDrop(e) {
-  const dt = e.dataTransfer;
-  const files = dt.files;
-  
-  if (files.length > 0) {
-    handleEventImageFile(files[0]);
-  }
-}
+Format as tab-separated values ready to paste into Google Sheets.
 
-function uploadEventImage(event) {
-  const file = event.target.files[0];
-  if (file) {
-    handleEventImageFile(file);
-  }
-}
+Use these guidelines:
+- Icon: Use appropriate emoji (⚔️ for raids, 💡 for spotlight, 🌟 for events, 🎯 for special hours, 🏆 for PvP, 🔥 for Max Monday, 📆 for upcoming, etc.)
+- EventType: Short category (Raids, Mega Raids, Event, Spotlight, PvP, Max Monday, GO Tour, etc.)
+- Description: Concise details (Pokemon names, times, bonuses)
 
-function handleEventImageFile(file) {
-  if (!file.type.startsWith('image/')) {
-    alert('Please upload an image file');
-    return;
-  }
-  
-  // Compress image if needed
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      // Compress if larger than 2MB
-      let quality = 0.9;
-      if (file.size > 2 * 1024 * 1024) {
-        quality = 0.7;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        quality = 0.5;
-      }
-      
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      // Maintain aspect ratio, max width 1200px
-      let width = img.width;
-      let height = img.height;
-      const maxWidth = 1200;
-      
-      if (width > maxWidth) {
-        height = (height * maxWidth) / width;
-        width = maxWidth;
-      }
-      
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-      
-      try {
-        localStorage.setItem('eventImageData', compressedDataUrl);
-        displayEventImage(compressedDataUrl);
-        console.log(`Image compressed from ${(file.size / 1024 / 1024).toFixed(2)}MB to ${(compressedDataUrl.length * 0.75 / 1024 / 1024).toFixed(2)}MB`);
-      } catch (err) {
-        console.error('Storage error:', err);
-        alert('Image still too large after compression. Try a smaller file.');
-      }
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
+Example output format:
+Icon	EventType	Description
+⚔️	Raids	Necrozma (5★) - starts Monday 10am, Raid Hour Wednesday 6pm
+💡	Spotlight	Wednesday 6pm - 2x Transfer Candy
+🌟	Event	Lunar New Year (Tue 10am - Fri 8pm)
 
-function displayEventImage(dataUrl) {
-  const container = document.getElementById('eventImageContainer');
-  const img = document.getElementById('eventImage');
-  
-  if (dataUrl) {
-    img.src = dataUrl;
-    container.style.display = 'block';
+Please extract the events from this image now.`;
+
+  // Try modern clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(prompt).then(() => {
+      showCopyConfirmation();
+    }).catch(err => {
+      fallbackCopyToClipboard(prompt);
+    });
   } else {
-    container.style.display = 'none';
+    fallbackCopyToClipboard(prompt);
   }
 }
 
-function removeEventImage() {
-  if (confirm('Remove uploaded event image?')) {
-    localStorage.removeItem('eventImageData');
-    document.getElementById('eventImageContainer').style.display = 'none';
-    document.getElementById('eventImageUpload').value = '';
+// Fallback copy method for older browsers
+function fallbackCopyToClipboard(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    document.execCommand('copy');
+    showCopyConfirmation();
+  } catch (err) {
+    alert('Copy failed. Please copy manually.');
   }
+  
+  document.body.removeChild(textArea);
+}
+
+// Show visual confirmation
+function showCopyConfirmation() {
+  const btn = event.target;
+  const originalText = btn.innerHTML;
+  const originalBg = btn.style.background;
+  
+  btn.innerHTML = '✅ Copied!';
+  btn.style.background = 'linear-gradient(135deg, #28a745, #218838)';
+  
+  setTimeout(() => {
+    btn.innerHTML = originalText;
+    btn.style.background = originalBg;
+  }, 2000);
 }
 
 function renderEvents() {
-  const savedImage = localStorage.getItem('eventImageData');
-  if (savedImage) {
-    displayEventImage(savedImage);
-  }
-  
-  // Render events from Google Sheets
   const container = document.getElementById('eventsList');
   
   if (eventsData.length === 0) {
@@ -1578,7 +1490,6 @@ async function deleteTrade(idx) {
 }
 
 window.onload = function() {
-  initDragDrop();
   loadAllData();
 };
 
