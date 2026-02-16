@@ -21,44 +21,80 @@ body {
   padding-bottom: 30px;
 }
 
-/* Header */
+/* Header - Pokemon Go Style */
 .header {
-  background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
-  border-radius: 12px;
-  padding: 15px;
+  background: linear-gradient(180deg, #3B7DDD 0%, #5089E0 50%, #FFFFFF 100%);
+  border-radius: 16px;
+  padding: 20px 15px 15px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  margin-bottom: 12px;
+  box-shadow: 0 4px 20px rgba(59, 125, 221, 0.4);
+  margin-bottom: 15px;
+  position: relative;
+  border: 3px solid white;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #EE1515 0%, #EE1515 33%, #FFFFFF 33%, #FFFFFF 66%, #3B7DDD 66%, #3B7DDD 100%);
 }
 
 .header h1 {
   color: white;
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 5px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-weight: 800;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.trainer-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 8px 0;
+  flex-wrap: wrap;
 }
 
 .trainer-name {
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 800;
+  background: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.trainer-level {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(255,215,0,0.4);
 }
 
 .status-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
+  padding: 6px 14px;
+  border-radius: 15px;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border: 2px solid white;
 }
 
-.status-connected { background: #28a745; color: white; }
-.status-disconnected { background: #dc3545; color: white; }
-.status-loading { background: #ffc107; color: #333; }
+.status-connected { background: #48BB78; color: white; }
+.status-disconnected { background: #F56565; color: white; }
+.status-loading { background: #ECC94B; color: #2D3748; }
 
 /* Sections */
 .section {
@@ -104,6 +140,160 @@ body {
 
 .section-content.collapsed {
   display: none;
+}
+
+/* Events Section - Pokemon Go Style */
+.events-container {
+  display: grid;
+  gap: 12px;
+}
+
+.event-upload-zone {
+  margin: 12px 0;
+  padding: 25px 20px;
+  border: 3px dashed #3B7DDD;
+  border-radius: 12px;
+  text-align: center;
+  background: linear-gradient(135deg, #EBF4FF 0%, #F7FAFC 100%);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.event-upload-zone:hover {
+  background: linear-gradient(135deg, #BEE3F8 0%, #EBF4FF 100%);
+  border-color: #2C5AA0;
+}
+
+.event-upload-zone.dragover {
+  background: linear-gradient(135deg, #BEE3F8 0%, #90CDF4 100%);
+  border-color: #2C5AA0;
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+.upload-text {
+  font-weight: 600;
+  color: #2D3748;
+  margin-bottom: 5px;
+}
+
+.upload-subtext {
+  font-size: 12px;
+  color: #718096;
+}
+
+.event-image-container {
+  position: relative;
+  margin: 12px 0;
+}
+
+.event-image {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border: 2px solid #E2E8F0;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-image-btn:hover {
+  background: rgba(220, 38, 38, 1);
+}
+
+.event-quick-info {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin: 12px 0;
+}
+
+.event-quick-info h4 {
+  color: #3B7DDD;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  margin: 6px 0;
+  background: #F7FAFC;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.event-item-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.event-item-text {
+  flex: 1;
+  color: #2D3748;
+}
+
+.event-item-text strong {
+  color: #3B7DDD;
+  font-weight: 700;
+}
+
+.event-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.event-link {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #3B7DDD, #2C5AA0);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(59, 125, 221, 0.4);
+  transition: all 0.2s;
+  border: 2px solid white;
+}
+
+.event-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 125, 221, 0.6);
+}
+
+.last-updated {
+  text-align: center;
+  font-size: 11px;
+  color: #718096;
+  margin-top: 10px;
+  font-style: italic;
 }
 
 /* Compact List Items */
@@ -164,7 +354,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Type badges - using emoji fallback since external icons aren't loading */
+/* Type badges */
 .type-badge {
   display: inline-block;
   padding: 2px 6px;
@@ -285,41 +475,6 @@ body {
   font-weight: 700;
   font-size: 13px;
   color: #667eea;
-}
-
-/* Events */
-.event-upload {
-  margin: 10px 0;
-  padding: 15px;
-  border: 2px dashed #667eea;
-  border-radius: 8px;
-  text-align: center;
-  background: #f8f9fa;
-}
-
-.event-image {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  margin: 10px 0;
-}
-
-.event-links {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.event-link {
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
 }
 
 /* Shiny Grid */
@@ -494,8 +649,11 @@ input[type="file"] {
 <div class="container">
   <!-- Header -->
   <div class="header">
-    <h1>⚡ Pokemon Go Dashboard</h1>
-    <div class="trainer-name">🎮 MachoMankey</div>
+    <h1>⚡ POKEMON GO DASHBOARD</h1>
+    <div class="trainer-info">
+      <div class="trainer-name">MachoMankey</div>
+      <div class="trainer-level">Level 71</div>
+    </div>
     <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
   </div>
 
@@ -506,18 +664,67 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <div class="event-upload">
-        <p style="margin-bottom:8px; font-weight:600; font-size:13px;">Upload Weekly Event Graphic</p>
-        <input type="file" id="eventImageUpload" accept="image/*" onchange="uploadEventImage(event)">
+      <!-- Upload Zone -->
+      <div class="event-upload-zone" id="uploadZone" onclick="document.getElementById('eventImageUpload').click()">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Upload Weekly Event Graphic</div>
+        <div class="upload-subtext">Click to browse or drag & drop image here</div>
+        <input type="file" id="eventImageUpload" accept="image/*" style="display:none;" onchange="uploadEventImage(event)">
       </div>
-      <div style="text-align: center;">
-        <img id="eventImage" class="event-image" src="" alt="" style="display:none;">
-        <div id="eventImageStatus" style="padding: 15px; color: #6c757d; font-size:13px;">Upload an event graphic or check the links below</div>
-        <div class="event-links">
-          <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
-          <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
+      
+      <!-- Image Preview -->
+      <div id="eventImageContainer" class="event-image-container" style="display:none;">
+        <img id="eventImage" class="event-image" src="" alt="Event Graphic">
+        <button class="remove-image-btn" onclick="removeEventImage()" title="Remove image">×</button>
+      </div>
+      
+      <!-- Quick Event Info (Feb 16-22, 2026) -->
+      <div class="event-quick-info">
+        <h4>🗓️ This Week (Feb 16-22, 2026)</h4>
+        
+        <div class="event-item">
+          <div class="event-item-icon">⚔️</div>
+          <div class="event-item-text">
+            <strong>Raids:</strong> Necrozma (5★), Tapu Koko (5★), Moltres (Shadow, 5★)
+          </div>
+        </div>
+        
+        <div class="event-item">
+          <div class="event-item-icon">💡</div>
+          <div class="event-item-text">
+            <strong>Spotlight:</strong> Tuesday - Psyduck (2x Transfer Candy)
+          </div>
+        </div>
+        
+        <div class="event-item">
+          <div class="event-item-icon">🎯</div>
+          <div class="event-item-text">
+            <strong>Raid Hour:</strong> Wednesday 6-7pm - Necrozma
+          </div>
+        </div>
+        
+        <div class="event-item">
+          <div class="event-item-icon">🌟</div>
+          <div class="event-item-text">
+            <strong>Event:</strong> Lunar New Year (Feb 15-19) - 2x XP, Dragon spawns
+          </div>
+        </div>
+        
+        <div class="event-item">
+          <div class="event-item-icon">📆</div>
+          <div class="event-item-text">
+            <strong>Next CD:</strong> Feb 23 - Chikorita (11am-5pm)
+          </div>
         </div>
       </div>
+      
+      <div class="event-links">
+        <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
+        <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
+        <a href="https://www.serebii.net/pokemongo/" target="_blank" class="event-link">🌐 Serebii</a>
+      </div>
+      
+      <div class="last-updated">Event info manually updated • Last: Feb 16, 2026</div>
     </div>
   </div>
 
@@ -587,7 +794,7 @@ input[type="file"] {
   </div>
 </div>
 
-<!-- Modals (keeping same as before) -->
+<!-- Modals -->
 <div id="addPowerUpModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -823,30 +1030,101 @@ function getPokemonSprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
 }
 
+// Drag and drop support for event image
+function initDragDrop() {
+  const uploadZone = document.getElementById('uploadZone');
+  
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, preventDefaults, false);
+  });
+  
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ['dragenter', 'dragover'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, () => {
+      uploadZone.classList.add('dragover');
+    }, false);
+  });
+  
+  ['dragleave', 'drop'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, () => {
+      uploadZone.classList.remove('dragover');
+    }, false);
+  });
+  
+  uploadZone.addEventListener('drop', handleDrop, false);
+}
+
+function handleDrop(e) {
+  const dt = e.dataTransfer;
+  const files = dt.files;
+  
+  if (files.length > 0) {
+    handleEventImageFile(files[0]);
+  }
+}
+
 function uploadEventImage(event) {
   const file = event.target.files[0];
-  if (!file) return;
+  if (file) {
+    handleEventImageFile(file);
+  }
+}
+
+function handleEventImageFile(file) {
+  if (!file.type.startsWith('image/')) {
+    alert('Please upload an image file');
+    return;
+  }
+  
+  // Check file size (limit to 5MB for localStorage)
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Image too large (max 5MB). Try a smaller version.');
+    return;
+  }
   
   const reader = new FileReader();
   reader.onload = function(e) {
     const dataUrl = e.target.result;
-    localStorage.setItem('eventImageData', dataUrl);
-    displayEventImage(dataUrl);
+    
+    try {
+      localStorage.setItem('eventImageData', dataUrl);
+      displayEventImage(dataUrl);
+    } catch (err) {
+      console.error('Storage error:', err);
+      alert('Image too large for storage. Try a smaller file.');
+    }
   };
   reader.readAsDataURL(file);
 }
 
 function displayEventImage(dataUrl) {
+  const container = document.getElementById('eventImageContainer');
   const img = document.getElementById('eventImage');
-  const status = document.getElementById('eventImageStatus');
   
   if (dataUrl) {
     img.src = dataUrl;
-    img.style.display = 'block';
-    status.style.display = 'none';
+    container.style.display = 'block';
   } else {
-    img.style.display = 'none';
-    status.style.display = 'block';
+    container.style.display = 'none';
+  }
+}
+
+function removeEventImage() {
+  if (confirm('Remove uploaded event image?')) {
+    localStorage.removeItem('eventImageData');
+    document.getElementById('eventImageContainer').style.display = 'none';
+    document.getElementById('eventImageUpload').value = '';
+  }
+}
+
+function renderEvents() {
+  const savedImage = localStorage.getItem('eventImageData');
+  if (savedImage) {
+    displayEventImage(savedImage);
   }
 }
 
@@ -935,11 +1213,6 @@ function renderAll() {
   renderCandy();
   renderTrades();
   renderShinyGaps();
-}
-
-function renderEvents() {
-  const savedImage = localStorage.getItem('eventImageData');
-  displayEventImage(savedImage);
 }
 
 // Drag and drop variables
@@ -1299,7 +1572,10 @@ async function deleteTrade(idx) {
   renderTrades();
 }
 
-window.onload = loadAllData;
+window.onload = function() {
+  initDragDrop();
+  loadAllData();
+};
 
 window.onclick = function(event) {
   if (event.target.classList.contains('modal')) {
