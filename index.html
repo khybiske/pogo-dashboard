@@ -139,11 +139,16 @@ body {
   align-items: center;
   transition: all 0.3s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: move;
 }
 
 .pokemon-card:hover {
   transform: translateX(5px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.pokemon-card.dragging {
+  opacity: 0.5;
 }
 
 .pokemon-sprite-large {
@@ -164,6 +169,10 @@ body {
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pokemon-details {
@@ -172,38 +181,26 @@ body {
   line-height: 1.6;
 }
 
-/* Type Badges */
-.type-badge {
+/* Type Icons */
+.type-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: bold;
-  color: white;
   margin: 2px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.type-normal { background: linear-gradient(135deg, #A8A878, #C6C6A7); }
-.type-fire { background: linear-gradient(135deg, #F08030, #F5AC78); }
-.type-water { background: linear-gradient(135deg, #6890F0, #9DB7F5); }
-.type-electric { background: linear-gradient(135deg, #F8D030, #FAE078); color: #333; }
-.type-grass { background: linear-gradient(135deg, #78C850, #A7DB8D); }
-.type-ice { background: linear-gradient(135deg, #98D8D8, #BCE6E6); }
-.type-fighting { background: linear-gradient(135deg, #C03028, #D67873); }
-.type-poison { background: linear-gradient(135deg, #A040A0, #C183C1); }
-.type-ground { background: linear-gradient(135deg, #E0C068, #EBD69D); }
-.type-flying { background: linear-gradient(135deg, #A890F0, #C6B7F5); }
-.type-psychic { background: linear-gradient(135deg, #F85888, #FA92B2); }
-.type-bug { background: linear-gradient(135deg, #A8B820, #C6D16E); }
-.type-rock { background: linear-gradient(135deg, #B8A038, #D1C17D); }
-.type-ghost { background: linear-gradient(135deg, #705898, #A292BC); }
-.type-dragon { background: linear-gradient(135deg, #7038F8, #A27DFA); }
-.type-dark { background: linear-gradient(135deg, #705848, #A29288); }
-.type-steel { background: linear-gradient(135deg, #B8B8D0, #D1D1E0); }
-.type-fairy { background: linear-gradient(135deg, #EE99AC, #F4BDC9); }
+/* Special Badges */
+.level-50-badge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #333;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 
 /* Status Icons */
 .status-icon {
@@ -284,6 +281,15 @@ body {
 }
 
 /* Events Widget */
+.event-upload {
+  margin: 15px 0;
+  padding: 20px;
+  border: 2px dashed #667eea;
+  border-radius: 12px;
+  text-align: center;
+  background: #f8f9fa;
+}
+
 .event-image {
   max-width: 100%;
   border-radius: 12px;
@@ -463,6 +469,13 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
+input[type="file"] {
+  padding: 10px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  width: 100%;
+}
+
 /* Empty states */
 .empty-state {
   text-align: center;
@@ -524,25 +537,18 @@ input[type="checkbox"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
+      <div class="event-upload">
+        <p style="margin-bottom:10px; font-weight:600;">Upload Weekly Event Graphic</p>
+        <input type="file" id="eventImageUpload" accept="image/*" onchange="uploadEventImage(event)">
+      </div>
       <div style="text-align: center;">
-        <img id="eventImage" class="event-image" src="" alt="Loading event info..." style="display:none;">
-        <div id="eventImageStatus" style="padding: 20px; color: #6c757d;">Loading events...</div>
+        <img id="eventImage" class="event-image" src="" alt="" style="display:none;">
+        <div id="eventImageStatus" style="padding: 20px; color: #6c757d;">Upload an event graphic or check the links below</div>
         <div class="event-links">
           <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck Events</a>
           <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Level 3 Max Tracker -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>🎯 Level 3 Max Progress</h2>
-      <span class="collapse-icon">▼</span>
-    </div>
-    <div class="section-content" id="maxTrackerContent">
-      <div class="loading">Loading...</div>
     </div>
   </div>
 
@@ -754,53 +760,89 @@ let powerUpData = [];
 let candyData = [];
 let tradePlansData = [];
 let shinyGapsData = [];
-let maxTrackerData = [];
 let eventsData = [];
 
-// Pokemon name to ID mapping (partial - add more as needed)
+// Complete Pokemon ID mapping
 const POKEMON_IDS = {
   'bulbasaur': 1, 'ivysaur': 2, 'venusaur': 3,
   'charmander': 4, 'charmeleon': 5, 'charizard': 6,
   'squirtle': 7, 'wartortle': 8, 'blastoise': 9,
-  'pikachu': 25, 'raichu': 26, 'eevee': 133,
+  'weedle': 13, 'kakuna': 14, 'beedrill': 15,
+  'pikachu': 25, 'raichu': 26,
+  'sandshrew': 27, 'sandslash': 28,
+  'clefairy': 35, 'clefable': 36,
+  'abra': 63, 'kadabra': 64, 'alakazam': 65,
+  'machop': 66, 'machoke': 67, 'machamp': 68,
+  'geodude': 74, 'graveler': 75, 'golem': 76,
+  'slowpoke': 79, 'slowbro': 80,
+  'gastly': 92, 'haunter': 93, 'gengar': 94,
+  'onix': 95,
+  'rhyhorn': 111, 'rhydon': 112,
+  'electabuzz': 125,
+  'magmar': 126,
+  'magikarp': 129, 'gyarados': 130,
+  'eevee': 133,
+  'porygon': 137,
   'dratini': 147, 'dragonair': 148, 'dragonite': 149,
   'mewtwo': 150, 'mew': 151,
-  'chikorita': 152, 'cyndaquil': 155, 'totodile': 158,
-  'mareep': 179, 'larvitar': 246,
-  'treecko': 252, 'torchic': 255, 'mudkip': 258,
-  'ralts': 280, 'slakoth': 287, 'trapinch': 328,
-  'bagon': 371, 'beldum': 374,
-  'turtwig': 387, 'chimchar': 390, 'piplup': 393,
-  'machop': 66, 'gastly': 92, 'abra': 63,
-  'magikarp': 129, 'porygon': 137,
-  'electabuzz': 125, 'magmar': 126,
-  'roselia': 315, 'seedot': 273, 'weedle': 13,
-  'rhyhorn': 111, 'swinub': 220,
-  'fletchling': 661, 'gible': 443,
-  'oshawott': 501, 'shinx': 403, 'tepig': 498,
-  'snivy': 495, 'sandshrew': 27, 'starly': 396,
-  'hoppip': 187, 'geodude': 74, 'bronzor': 436,
-  'swablu': 333, 'duskull': 355, 'onix': 95,
-  'luxray': 405, 'stufful': 759, 'roggenrola': 524,
-  'litwick': 607, 'teddiursa': 216, 'deino': 633,
-  'slowpoke': 79, 'clefairy': 35,
-  'chespin': 650, 'froakie': 656, 'fennekin': 653,
-  'rayquaza': 384, 'groudon': 383, 'kyogre': 382,
-  'dialga': 483, 'palkia': 484, 'giratina': 487,
-  'kyurem': 646, 'reshiram': 643, 'zekrom': 644,
-  'xerneas': 716, 'yveltal': 717,
+  'chikorita': 152, 'bayleef': 153, 'meganium': 154,
+  'cyndaquil': 155, 'quilava': 156, 'typhlosion': 157,
+  'totodile': 158, 'croconaw': 159, 'feraligatr': 160,
+  'mareep': 179, 'flaaffy': 180, 'ampharos': 181,
+  'hoppip': 187, 'skiploom': 188, 'jumpluff': 189,
+  'swinub': 220, 'piloswine': 221,
+  'teddiursa': 216, 'ursaring': 217,
+  'larvitar': 246, 'pupitar': 247, 'tyranitar': 248,
   'lugia': 249, 'ho-oh': 250,
-  'regice': 378, 'registeel': 379, 'regirock': 377,
+  'treecko': 252, 'grovyle': 253, 'sceptile': 254,
+  'torchic': 255, 'combusken': 256, 'blaziken': 257,
+  'mudkip': 258, 'marshtomp': 259, 'swampert': 260,
+  'seedot': 273, 'nuzleaf': 274, 'shiftry': 275,
+  'ralts': 280, 'kirlia': 281, 'gardevoir': 282,
+  'slakoth': 287, 'vigoroth': 288, 'slaking': 289,
+  'roselia': 315, 'roserade': 407,
+  'trapinch': 328, 'vibrava': 329, 'flygon': 330,
+  'swablu': 333, 'altaria': 334,
+  'duskull': 355, 'dusclops': 356,
+  'bagon': 371, 'shelgon': 372, 'salamence': 373,
+  'beldum': 374, 'metang': 375, 'metagross': 376,
+  'regirock': 377, 'regice': 378, 'registeel': 379,
   'latias': 380, 'latios': 381,
+  'kyogre': 382, 'groudon': 383, 'rayquaza': 384,
+  'turtwig': 387, 'grotle': 388, 'torterra': 389,
+  'chimchar': 390, 'monferno': 391, 'infernape': 392,
+  'piplup': 393, 'prinplup': 394, 'empoleon': 395,
+  'starly': 396, 'staravia': 397, 'staraptor': 398,
+  'shinx': 403, 'luxio': 404, 'luxray': 405,
+  'bronzor': 436, 'bronzong': 437,
+  'gible': 443, 'gabite': 444, 'garchomp': 445,
   'uxie': 480, 'mesprit': 481, 'azelf': 482,
-  'heatran': 485, 'cresselia': 488,
-  'darkrai': 491, 'shaymin': 492,
+  'dialga': 483, 'palkia': 484,
+  'heatran': 485,
+  'giratina': 487,
+  'cresselia': 488,
+  'darkrai': 491,
+  'shaymin': 492,
   'arceus': 493,
   'victini': 494,
+  'snivy': 495, 'servine': 496, 'serperior': 497,
+  'tepig': 498, 'pignite': 499, 'emboar': 500,
+  'oshawott': 501, 'dewott': 502, 'samurott': 503,
+  'roggenrola': 524, 'boldore': 525, 'gigalith': 526,
+  'litwick': 607, 'lampent': 608, 'chandelure': 609,
+  'deino': 633, 'zweilous': 634, 'hydreigon': 635,
   'cobalion': 638, 'terrakion': 639, 'virizion': 640,
-  'tornadus': 641, 'thundurus': 642, 'landorus': 645,
+  'tornadus': 641, 'thundurus': 642,
+  'reshiram': 643, 'zekrom': 644,
+  'landorus': 645,
+  'kyurem': 646,
   'genesect': 649,
-  'shadow mewtwo': 150, 'shadow lugia': 249
+  'chespin': 650, 'quilladin': 651, 'chesnaught': 652,
+  'fennekin': 653, 'braixen': 654, 'delphox': 655,
+  'froakie': 656, 'frogadier': 657, 'greninja': 658,
+  'fletchling': 661, 'fletchinder': 662, 'talonflame': 663,
+  'xerneas': 716, 'yveltal': 717,
+  'stufful': 759, 'bewear': 760
 };
 
 function getPokemonId(name) {
@@ -811,12 +853,45 @@ function getPokemonId(name) {
     .replace('shadow ', '')
     .replace('mega ', '');
   
-  return POKEMON_IDS[cleanName] || 25; // Default to Pikachu
+  return POKEMON_IDS[cleanName] || 25;
 }
 
 function getPokemonSprite(name) {
   const id = getPokemonId(name);
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+}
+
+function getTypeIconUrl(type) {
+  const typeName = type.toLowerCase().trim();
+  return `https://raw.githubusercontent.com/msikma/pokesprite/master/icons/types/generation-ix/brilliant-diamond-and-shining-pearl/${typeName}.png`;
+}
+
+// Event image upload
+function uploadEventImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    localStorage.setItem('eventImageData', dataUrl);
+    displayEventImage(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function displayEventImage(dataUrl) {
+  const img = document.getElementById('eventImage');
+  const status = document.getElementById('eventImageStatus');
+  
+  if (dataUrl) {
+    img.src = dataUrl;
+    img.style.display = 'block';
+    status.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    status.style.display = 'block';
+  }
 }
 
 // Toggle section
@@ -880,12 +955,11 @@ async function loadAllData() {
   document.getElementById('syncStatus').className = 'status-badge status-loading';
   
   try {
-    const [powerUp, candy, trades, shinyGaps, maxTracker, events] = await Promise.all([
+    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
       loadSheetData('PowerUpPriority'),
       loadSheetData('RareCandyPriority'),
       loadSheetData('LuckyTradePlans'),
       loadSheetData('CommunityDayShinies'),
-      loadSheetData('MaxTracker'),
       loadSheetData('EventsWidget')
     ]);
     
@@ -893,7 +967,6 @@ async function loadAllData() {
     candyData = candy.length > 1 ? candy.slice(1) : [];
     tradePlansData = trades.length > 1 ? trades.slice(1) : [];
     shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
-    maxTrackerData = maxTracker.length > 1 ? maxTracker.slice(1) : [];
     eventsData = events.length > 1 ? events.slice(1) : [];
     
     renderAll();
@@ -908,7 +981,6 @@ async function loadAllData() {
 
 function renderAll() {
   renderEvents();
-  renderMaxTracker();
   renderPowerUp();
   renderCandy();
   renderTrades();
@@ -917,54 +989,13 @@ function renderAll() {
 
 // Render Events
 function renderEvents() {
-  const eventImageUrl = eventsData.length > 0 && eventsData[0][0] ? eventsData[0][0] : '';
-  const img = document.getElementById('eventImage');
-  const status = document.getElementById('eventImageStatus');
-  
-  if (eventImageUrl) {
-    img.src = eventImageUrl;
-    img.style.display = 'block';
-    status.style.display = 'none';
-  } else {
-    img.style.display = 'none';
-    status.textContent = '💡 Add event image URL in Google Sheet (EventsWidget tab)';
-  }
+  const savedImage = localStorage.getItem('eventImageData');
+  displayEventImage(savedImage);
 }
 
-// Render Max Tracker
-function renderMaxTracker() {
-  const container = document.getElementById('maxTrackerContent');
-  
-  if (maxTrackerData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 Add your 3 Max Pokemon in the Google Sheet (MaxTracker tab)</div>';
-    return;
-  }
-  
-  let html = '';
-  maxTrackerData.forEach(row => {
-    const [pokemon, currentLevel, targetLevel] = row;
-    const current = parseFloat(currentLevel) || 0;
-    const target = parseFloat(targetLevel) || 3;
-    const progress = Math.min((current / target) * 100, 100);
-    
-    html += `
-      <div class="pokemon-card">
-        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
-        <div class="pokemon-info">
-          <div class="pokemon-name">${pokemon}</div>
-          <div class="pokemon-details">Level ${current} → ${target}</div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: ${progress}%">${Math.round(progress)}%</div>
-          </div>
-        </div>
-      </div>
-    `;
-  });
-  
-  container.innerHTML = html;
-}
+// Drag and Drop for Power-Up
+let draggedPowerUpIndex = null;
 
-// Render Power-Up
 function renderPowerUp() {
   const container = document.getElementById('powerUpContent');
   
@@ -973,14 +1004,15 @@ function renderPowerUp() {
     return;
   }
   
-  // Sort by priority
   const sorted = [...powerUpData].sort((a, b) => parseInt(a[12]) - parseInt(b[12]));
   
   let html = '';
   sorted.forEach((row, idx) => {
     const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status] = row;
     
-    const typeBadges = types ? types.split(',').map(t => `<span class="type-badge type-${t.trim().toLowerCase()}">${t.trim()}</span>`).join('') : '';
+    const typeIcons = types ? types.split(',').map(t => 
+      `<img src="${getTypeIconUrl(t.trim())}" class="type-icon" alt="${t.trim()}" title="${t.trim()}" onerror="this.style.display='none'">`
+    ).join('') : '';
     
     const statusIcons = [];
     if (lucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Lucky">⭐</span>');
@@ -988,13 +1020,18 @@ function renderPowerUp() {
     if (needsElite === 'TRUE') statusIcons.push('<span class="status-icon" title="Needs Elite Move">❗</span>');
     if (needLucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Need Lucky Trade">🤝</span>');
     
+    const level50Badge = parseFloat(targetLevel) === 50 ? '<span class="level-50-badge">LVL 50</span>' : '';
+    
     html += `
-      <div class="pokemon-card">
+      <div class="pokemon-card" draggable="true" data-index="${powerUpData.indexOf(row)}" 
+           ondragstart="dragStartPowerUp(event)" ondragover="dragOverPowerUp(event)" ondrop="dropPowerUp(event)" ondragend="dragEndPowerUp(event)">
         <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
         <div class="pokemon-info">
-          <div class="pokemon-name">${pokemon} ${statusIcons.join('')}</div>
+          <div class="pokemon-name">
+            ${pokemon} ${statusIcons.join('')} ${level50Badge}
+          </div>
           <div class="pokemon-details">
-            ${typeBadges}
+            ${typeIcons}
             <br>
             <strong>Level:</strong> ${currentLevel} → ${targetLevel} | 
             <strong>Role:</strong> ${role} | 
@@ -1014,6 +1051,125 @@ function renderPowerUp() {
   container.innerHTML = html;
 }
 
+function dragStartPowerUp(e) {
+  draggedPowerUpIndex = parseInt(e.target.dataset.index);
+  e.target.classList.add('dragging');
+}
+
+function dragOverPowerUp(e) {
+  e.preventDefault();
+}
+
+function dropPowerUp(e) {
+  e.preventDefault();
+  const targetIndex = parseInt(e.currentTarget.dataset.index);
+  
+  if (draggedPowerUpIndex !== null && draggedPowerUpIndex !== targetIndex) {
+    const draggedItem = powerUpData[draggedPowerUpIndex];
+    powerUpData.splice(draggedPowerUpIndex, 1);
+    powerUpData.splice(targetIndex, 0, draggedItem);
+    
+    const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+    saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
+    renderPowerUp();
+  }
+}
+
+function dragEndPowerUp(e) {
+  e.target.classList.remove('dragging');
+  draggedPowerUpIndex = null;
+}
+
+// Drag and Drop for Trades
+let draggedTradeIndex = null;
+
+function renderTrades() {
+  const autoContainer = document.getElementById('autoLuckyWants');
+  const plansContainer = document.getElementById('tradePlansContent');
+  
+  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
+  
+  if (autoWants.length === 0) {
+    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority to auto-populate here</div>';
+  } else {
+    let autoHtml = '';
+    autoWants.forEach(row => {
+      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
+      autoHtml += `
+        <div class="pokemon-card" style="border-left-color: #FFD700; cursor: default;">
+          <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="pokemon-info">
+            <div class="pokemon-name">${pokemon}</div>
+            <div class="pokemon-details">
+              <strong>Need for:</strong> ${role} (Level ${targetLevel})
+              ${notes ? '<br><em>' + notes + '</em>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    autoContainer.innerHTML = autoHtml;
+  }
+  
+  if (tradePlansData.length === 0) {
+    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet. Click "Add Trade Plan" to start!</div>';
+    return;
+  }
+  
+  let plansHtml = '';
+  tradePlansData.forEach((row, idx) => {
+    const [friend, theyWant, youWant, notes, status] = row;
+    
+    plansHtml += `
+      <div class="pokemon-card" draggable="true" data-index="${idx}"
+           ondragstart="dragStartTrade(event)" ondragover="dragOverTrade(event)" ondrop="dropTrade(event)" ondragend="dragEndTrade(event)">
+        <div style="font-size:40px;">👥</div>
+        <div class="pokemon-info">
+          <div class="pokemon-name">${friend}</div>
+          <div class="pokemon-details">
+            <strong>They want:</strong> ${theyWant || 'Not specified'}<br>
+            <strong>You want:</strong> ${youWant || 'Not specified'}<br>
+            <strong>Status:</strong> ${status}
+            ${notes ? '<br><em>' + notes + '</em>' : ''}
+          </div>
+        </div>
+        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
+      </div>
+    `;
+  });
+  
+  plansContainer.innerHTML = plansHtml;
+}
+
+function dragStartTrade(e) {
+  draggedTradeIndex = parseInt(e.target.dataset.index);
+  e.target.classList.add('dragging');
+}
+
+function dragOverTrade(e) {
+  e.preventDefault();
+}
+
+function dropTrade(e) {
+  e.preventDefault();
+  const targetIndex = parseInt(e.currentTarget.dataset.index);
+  
+  if (draggedTradeIndex !== null && draggedTradeIndex !== targetIndex) {
+    const draggedItem = tradePlansData[draggedTradeIndex];
+    tradePlansData.splice(draggedTradeIndex, 1);
+    tradePlansData.splice(targetIndex, 0, draggedItem);
+    
+    const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
+    saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
+    renderTrades();
+  }
+}
+
+function dragEndTrade(e) {
+  e.target.classList.remove('dragging');
+  draggedTradeIndex = null;
+}
+
 // Render Candy
 function renderCandy() {
   const container = document.getElementById('rareCandyContent');
@@ -1030,7 +1186,7 @@ function renderCandy() {
     const progress = Math.min((parseInt(current) / parseInt(target)) * 100, 100);
     
     html += `
-      <div class="pokemon-card">
+      <div class="pokemon-card" style="cursor: default;">
         <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
         <div class="pokemon-info">
           <div class="pokemon-name">${pokemon}</div>
@@ -1057,66 +1213,6 @@ function renderCandy() {
   });
   
   container.innerHTML = html;
-}
-
-// Render Trades
-function renderTrades() {
-  const autoContainer = document.getElementById('autoLuckyWants');
-  const plansContainer = document.getElementById('tradePlansContent');
-  
-  // Auto wants
-  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
-  
-  if (autoWants.length === 0) {
-    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority to auto-populate here</div>';
-  } else {
-    let autoHtml = '';
-    autoWants.forEach(row => {
-      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
-      autoHtml += `
-        <div class="pokemon-card" style="border-left-color: #FFD700;">
-          <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
-          <div class="pokemon-info">
-            <div class="pokemon-name">${pokemon}</div>
-            <div class="pokemon-details">
-              <strong>Need for:</strong> ${role} (Level ${targetLevel})
-              ${notes ? '<br><em>' + notes + '</em>' : ''}
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    autoContainer.innerHTML = autoHtml;
-  }
-  
-  // Manual plans
-  if (tradePlansData.length === 0) {
-    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet. Click "Add Trade Plan" to start!</div>';
-    return;
-  }
-  
-  let plansHtml = '';
-  tradePlansData.forEach((row, idx) => {
-    const [friend, theyWant, youWant, notes, status] = row;
-    
-    plansHtml += `
-      <div class="pokemon-card">
-        <div style="font-size:40px;">👥</div>
-        <div class="pokemon-info">
-          <div class="pokemon-name">${friend}</div>
-          <div class="pokemon-details">
-            <strong>They want:</strong> ${theyWant || 'Not specified'}<br>
-            <strong>You want:</strong> ${youWant || 'Not specified'}<br>
-            <strong>Status:</strong> ${status}
-            ${notes ? '<br><em>' + notes + '</em>' : ''}
-          </div>
-        </div>
-        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
-      </div>
-    `;
-  });
-  
-  plansContainer.innerHTML = plansHtml;
 }
 
 // Render Shiny Gaps
@@ -1168,7 +1264,7 @@ async function savePowerUp(e) {
     document.getElementById('puCurrentLevel').value,
     document.getElementById('puTargetLevel').value,
     document.getElementById('puRole').value,
-    '', '', // XL candy, dust (calculated later)
+    '', '',
     document.getElementById('puNeedLucky').checked ? 'TRUE' : 'FALSE',
     document.getElementById('puNotes').value,
     document.getElementById('puPriority').value,
@@ -1182,6 +1278,7 @@ async function savePowerUp(e) {
   if (success) {
     closeModal('addPowerUpModal');
     renderPowerUp();
+    renderTrades();
   }
 }
 
@@ -1242,6 +1339,7 @@ async function deletePowerUp(idx) {
   const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
   await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
   renderPowerUp();
+  renderTrades();
 }
 
 async function deleteCandy(idx) {
@@ -1263,7 +1361,6 @@ async function deleteTrade(idx) {
 // Initialize
 window.onload = loadAllData;
 
-// Close modal on outside click
 window.onclick = function(event) {
   if (event.target.classList.contains('modal')) {
     event.target.style.display = 'none';
