@@ -126,46 +126,49 @@ body {
   display: none;
 }
 
-/* AI Helper Box */
-.ai-helper-box {
-  background: linear-gradient(135deg, #FFF3CD 0%, #FFF8E1 100%);
+/* Info icon and tooltip */
+.info-icon {
+  cursor: help;
+  font-size: 16px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  user-select: none;
+}
+
+.info-icon:hover {
+  opacity: 1;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: white;
   border: 2px solid #FFC107;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.ai-helper-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.ai-helper-title {
-  color: #856404;
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.ai-helper-text {
-  font-size: 13px;
-  color: #856404;
-  line-height: 1.6;
-  margin-top: 8px;
-}
-
-.ai-helper-steps {
-  margin-top: 12px;
-  padding-left: 20px;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  width: 280px;
   font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #FFC107;
+}
+
+.tooltip strong {
   color: #856404;
-  line-height: 1.8;
 }
 
 /* Events Section */
@@ -582,7 +585,19 @@ input[type="checkbox"] {
   .trainer-info { font-size: 14px; }
   .list-item-details { font-size: 11px; }
   .candy-controls { flex-wrap: wrap; }
-  .ai-helper-header { flex-direction: column; align-items: flex-start; }
+  
+  .tooltip {
+    width: 240px;
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+  
+  .tooltip::after {
+    left: auto;
+    right: 20px;
+    transform: none;
+  }
 }
 </style>
 </head>
@@ -603,27 +618,28 @@ input[type="checkbox"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <!-- AI Extraction Helper -->
-      <div class="ai-helper-box">
-        <div class="ai-helper-header">
-          <div class="ai-helper-title">
-            🤖 AI Event Extraction Helper
+      <!-- AI Extraction Helper - Compact Version -->
+      <div style="background: linear-gradient(135deg, #FFF3CD 0%, #FFF8E1 100%); border: 2px solid #FFC107; border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="color: #856404; font-size: 14px; font-weight: 700;">🤖 Weekly Update Helper</span>
+          <div style="position: relative; display: inline-block;">
+            <span class="info-icon" onmouseenter="showTooltip(event)" onmouseleave="hideTooltip(event)" onclick="toggleTooltip(event)">ℹ️</span>
+            <div class="tooltip" style="display: none;">
+              <strong>Quick Workflow:</strong>
+              <ol style="margin: 8px 0 0 18px; padding: 0; line-height: 1.6;">
+                <li>Click "Copy Prompt"</li>
+                <li>Go to Claude.ai or ChatGPT</li>
+                <li>Paste prompt + upload graphic</li>
+                <li>Copy AI output</li>
+                <li>Paste into Google Sheets "CurrentEvents"</li>
+                <li>Click "Refresh" below</li>
+              </ol>
+            </div>
           </div>
-          <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()">
-            📋 Copy Prompt
-          </button>
         </div>
-        <div class="ai-helper-text">
-          Use this workflow to update events weekly (takes ~30 seconds):
-        </div>
-        <ol class="ai-helper-steps">
-          <li>Click "Copy Prompt" button above</li>
-          <li>Go to Claude.ai or ChatGPT</li>
-          <li>Paste the prompt and upload your weekly event graphic</li>
-          <li>Copy the AI's tab-separated output</li>
-          <li>Paste into Google Sheets "CurrentEvents" tab (cell A1)</li>
-          <li>Click "Refresh" below to see updates here</li>
-        </ol>
+        <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()" style="flex-shrink: 0;">
+          📋 Copy Prompt
+        </button>
       </div>
       
       <!-- Event Info from Google Sheets -->
@@ -949,6 +965,22 @@ function getPokemonId(name) {
 
 function getPokemonSprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
+}
+
+// Tooltip functions
+function showTooltip(event) {
+  const tooltip = event.target.nextElementSibling;
+  tooltip.style.display = 'block';
+}
+
+function hideTooltip(event) {
+  const tooltip = event.target.nextElementSibling;
+  tooltip.style.display = 'none';
+}
+
+function toggleTooltip(event) {
+  const tooltip = event.target.nextElementSibling;
+  tooltip.style.display = tooltip.style.display === 'none' ? 'block' : 'none';
 }
 
 // Copy AI extraction prompt to clipboard
