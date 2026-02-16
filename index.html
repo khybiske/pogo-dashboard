@@ -126,51 +126,6 @@ body {
   display: none;
 }
 
-/* Info icon and tooltip */
-.info-icon {
-  cursor: help;
-  font-size: 16px;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-  user-select: none;
-}
-
-.info-icon:hover {
-  opacity: 1;
-}
-
-.tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  background: white;
-  border: 2px solid #FFC107;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 1000;
-  width: 280px;
-  font-size: 12px;
-  color: #333;
-  line-height: 1.4;
-}
-
-.tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 8px solid transparent;
-  border-top-color: #FFC107;
-}
-
-.tooltip strong {
-  color: #856404;
-}
-
 /* Events Section */
 .event-quick-info {
   background: white;
@@ -247,13 +202,13 @@ body {
   font-style: italic;
 }
 
-/* Compact List Items */
+/* Compact List Items - Two Line Layout */
 .list-item {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   gap: 10px;
-  padding: 8px;
-  margin-bottom: 6px;
+  padding: 10px;
+  margin-bottom: 8px;
   background: #f8f9fa;
   border-radius: 8px;
   border-left: 3px solid #667eea;
@@ -271,6 +226,19 @@ body {
   opacity: 0.5;
 }
 
+.list-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag-handle {
+  cursor: move;
+  color: #999;
+  font-size: 18px;
+  padding: 0;
+}
+
 .list-item-sprite {
   width: 40px;
   height: 40px;
@@ -278,63 +246,64 @@ body {
 }
 
 .list-item-content {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   min-width: 0;
-  line-height: 1.4;
 }
 
-.list-item-name {
-  font-weight: 700;
-  color: #333;
-  font-size: 14px;
+.list-item-line1 {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
 }
 
-.list-item-details {
-  color: #666;
+.list-item-line2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   font-size: 12px;
-  margin-top: 2px;
+  color: #666;
 }
 
 .list-item-actions {
   display: flex;
+  flex-direction: column;
   gap: 4px;
-  flex-shrink: 0;
+  justify-content: center;
 }
 
-/* Type badges */
-.type-badge {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 10px;
+/* Type colored text */
+.type-text {
   font-weight: 700;
-  color: white;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 
-.type-normal { background: #A8A878; }
-.type-fire { background: #F08030; }
-.type-water { background: #6890F0; }
-.type-electric { background: #F8D030; color: #333; }
-.type-grass { background: #78C850; }
-.type-ice { background: #98D8D8; }
-.type-fighting { background: #C03028; }
-.type-poison { background: #A040A0; }
-.type-ground { background: #E0C068; }
-.type-flying { background: #A890F0; }
-.type-psychic { background: #F85888; }
-.type-bug { background: #A8B820; }
-.type-rock { background: #B8A038; }
-.type-ghost { background: #705898; }
-.type-dragon { background: #7038F8; }
-.type-dark { background: #705848; }
-.type-steel { background: #B8B8D0; }
-.type-fairy { background: #EE99AC; }
+.type-normal { color: #A8A878; }
+.type-fire { color: #F08030; }
+.type-water { color: #6890F0; }
+.type-electric { color: #D4A017; } /* Darker gold instead of bright yellow */
+.type-grass { color: #78C850; }
+.type-ice { color: #98D8D8; }
+.type-fighting { color: #C03028; }
+.type-poison { color: #A040A0; }
+.type-ground { color: #E0C068; }
+.type-flying { color: #A890F0; }
+.type-psychic { color: #F85888; }
+.type-bug { color: #A8B820; }
+.type-rock { color: #B8A038; }
+.type-ghost { color: #705898; }
+.type-dragon { color: #7038F8; }
+.type-dark { color: #705848; }
+.type-steel { color: #B8B8D0; }
+.type-fairy { color: #EE99AC; }
 
 /* Small badges */
 .badge {
@@ -344,11 +313,13 @@ body {
   font-size: 10px;
   font-weight: 700;
   margin: 0 2px;
+  white-space: nowrap;
 }
 
 .badge-lvl50 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; }
-.badge-priority { background: linear-gradient(135deg, #FF6B6B, #FFE66D); color: #333; }
-.badge-lucky { background: #FFD700; color: #333; }
+.badge-priority-high { background: linear-gradient(135deg, #FF6B6B, #FF5252); color: white; }
+.badge-priority-medium { background: linear-gradient(135deg, #FFD93D, #FFA500); color: #333; }
+.badge-priority-low { background: linear-gradient(135deg, #A8E6CF, #56CCF2); color: #333; }
 
 /* Icons */
 .icon {
@@ -378,6 +349,27 @@ body {
 .btn-small {
   padding: 4px 8px;
   font-size: 11px;
+}
+
+.btn-icon {
+  background: #e9ecef;
+  color: #666;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: none;
+}
+
+.btn-icon:hover {
+  background: #dee2e6;
+  color: #333;
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
 }
 
 .btn-danger {
@@ -572,32 +564,34 @@ input[type="checkbox"] {
   font-size: 14px;
 }
 
-/* Drag handle */
-.drag-handle {
-  cursor: move;
-  color: #999;
-  font-size: 16px;
-  padding: 0 4px;
+/* Archive toggle */
+.archive-toggle {
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.archive-toggle:hover {
+  background: #e9ecef;
+}
+
+.archive-toggle input[type="checkbox"] {
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
   .header h1 { font-size: 20px; }
   .trainer-info { font-size: 14px; }
-  .list-item-details { font-size: 11px; }
+  .list-item-line2 { font-size: 11px; }
   .candy-controls { flex-wrap: wrap; }
-  
-  .tooltip {
-    width: 240px;
-    left: auto;
-    right: 0;
-    transform: none;
-  }
-  
-  .tooltip::after {
-    left: auto;
-    right: 20px;
-    transform: none;
-  }
+  .list-item-actions { flex-direction: row; }
 }
 </style>
 </head>
@@ -622,11 +616,12 @@ input[type="checkbox"] {
       <div style="background: linear-gradient(135deg, #FFF3CD 0%, #FFF8E1 100%); border: 2px solid #FFC107; border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="color: #856404; font-size: 14px; font-weight: 700;">🤖 Weekly Update Helper</span>
+          <!-- Tooltip commented out as requested
           <div style="position: relative; display: inline-block;">
-            <span class="info-icon" onmouseenter="showTooltip(event)" onmouseleave="hideTooltip(event)" onclick="toggleTooltip(event)">ℹ️</span>
+            <span class="info-icon">ℹ️</span>
             <div class="tooltip" style="display: none;">
               <strong>Quick Workflow:</strong>
-              <ol style="margin: 8px 0 0 18px; padding: 0; line-height: 1.6;">
+              <ol>
                 <li>Click "Copy Prompt"</li>
                 <li>Go to Claude.ai or ChatGPT</li>
                 <li>Paste prompt + upload graphic</li>
@@ -636,6 +631,7 @@ input[type="checkbox"] {
               </ol>
             </div>
           </div>
+          -->
         </div>
         <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()" style="flex-shrink: 0;">
           📋 Copy Prompt
@@ -672,6 +668,10 @@ input[type="checkbox"] {
     </div>
     <div class="section-content">
       <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
+      <label class="archive-toggle">
+        <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()">
+        Show Archived
+      </label>
       <div id="powerUpContent" style="margin-top:10px;">
         <div class="loading">Loading...</div>
       </div>
@@ -734,10 +734,11 @@ input[type="checkbox"] {
 <div id="addPowerUpModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>Add Power-Up Priority</h2>
+      <h2 id="powerUpModalTitle">Add Power-Up Priority</h2>
       <span class="modal-close" onclick="closeModal('addPowerUpModal')">&times;</span>
     </div>
     <form id="powerUpForm" onsubmit="savePowerUp(event)">
+      <input type="hidden" id="puEditIndex" value="">
       <div class="form-group">
         <label>Pokemon Name *</label>
         <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza">
@@ -784,8 +785,12 @@ input[type="checkbox"] {
         <input type="text" class="form-control" id="puNotes" placeholder="Any additional info...">
       </div>
       <div class="form-group">
-        <label>Priority (1-10)</label>
-        <input type="number" class="form-control" id="puPriority" min="1" max="10" value="5">
+        <label>Priority *</label>
+        <select class="form-control" id="puPriority" required>
+          <option value="High">High (Most Important)</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="Low">Low (Least Important)</option>
+        </select>
       </div>
       <div class="form-group">
         <label>Status</label>
@@ -967,22 +972,6 @@ function getPokemonSprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
 }
 
-// Tooltip functions
-function showTooltip(event) {
-  const tooltip = event.target.nextElementSibling;
-  tooltip.style.display = 'block';
-}
-
-function hideTooltip(event) {
-  const tooltip = event.target.nextElementSibling;
-  tooltip.style.display = 'none';
-}
-
-function toggleTooltip(event) {
-  const tooltip = event.target.nextElementSibling;
-  tooltip.style.display = tooltip.style.display === 'none' ? 'block' : 'none';
-}
-
 // Copy AI extraction prompt to clipboard
 function copyPromptToClipboard() {
   const prompt = `Extract this week's Pokemon Go events into a table with these exact columns: Icon, EventType, Description
@@ -1002,7 +991,6 @@ Icon	EventType	Description
 
 Please extract the events from this image now.`;
 
-  // Try modern clipboard API first
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(prompt).then(() => {
       showCopyConfirmation();
@@ -1014,7 +1002,6 @@ Please extract the events from this image now.`;
   }
 }
 
-// Fallback copy method for older browsers
 function fallbackCopyToClipboard(text) {
   const textArea = document.createElement('textarea');
   textArea.value = text;
@@ -1034,7 +1021,6 @@ function fallbackCopyToClipboard(text) {
   document.body.removeChild(textArea);
 }
 
-// Show visual confirmation
 function showCopyConfirmation() {
   const btn = event.target;
   const originalText = btn.innerHTML;
@@ -1081,8 +1067,32 @@ function toggleSection(header) {
 }
 
 function showAddPowerUpModal() {
+  document.getElementById('powerUpModalTitle').textContent = 'Add Power-Up Priority';
   document.getElementById('addPowerUpModal').style.display = 'block';
   document.getElementById('powerUpForm').reset();
+  document.getElementById('puEditIndex').value = '';
+}
+
+function showEditPowerUpModal(idx) {
+  const row = powerUpData[idx];
+  const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status, archived] = row;
+  
+  document.getElementById('powerUpModalTitle').textContent = 'Edit Power-Up Priority';
+  document.getElementById('puEditIndex').value = idx;
+  document.getElementById('puPokemon').value = pokemon;
+  document.getElementById('puTypes').value = types;
+  document.getElementById('puLucky').checked = lucky === 'TRUE';
+  document.getElementById('puHasElite').checked = hasElite === 'TRUE';
+  document.getElementById('puNeedsElite').checked = needsElite === 'TRUE';
+  document.getElementById('puCurrentLevel').value = currentLevel;
+  document.getElementById('puTargetLevel').value = targetLevel;
+  document.getElementById('puRole').value = role;
+  document.getElementById('puNeedLucky').checked = needLucky === 'TRUE';
+  document.getElementById('puNotes').value = notes;
+  document.getElementById('puPriority').value = priority;
+  document.getElementById('puStatus').value = status;
+  
+  document.getElementById('addPowerUpModal').style.display = 'block';
 }
 
 function showAddCandyModal() {
@@ -1213,21 +1223,31 @@ function handleDragEnd(e) {
 
 function renderPowerUp() {
   const container = document.getElementById('powerUpContent');
+  const showArchived = document.getElementById('showArchivedPowerUp').checked;
   
-  if (powerUpData.length === 0) {
+  // Filter based on archived status
+  let filtered = powerUpData.filter(row => {
+    const archived = row[14] === 'TRUE';
+    return showArchived || !archived;
+  });
+  
+  if (filtered.length === 0) {
     container.innerHTML = '<div class="empty-state">📝 No power-up priorities yet</div>';
     return;
   }
   
-  const sorted = [...powerUpData].sort((a, b) => parseInt(a[12]) - parseInt(b[12]));
+  // Sort by priority
+  const priorityOrder = { 'High': 1, 'Medium': 2, 'Low': 3 };
+  const sorted = [...filtered].sort((a, b) => priorityOrder[a[12]] - priorityOrder[b[12]]);
   
   let html = '';
   sorted.forEach((row, idx) => {
-    const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status] = row;
+    const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status, archived] = row;
     
-    const typeMarkup = types ? types.split(',').map(t => 
-      `<span class="type-badge type-${t.trim().toLowerCase()}">${t.trim()}</span>`
-    ).join('') : '';
+    const typeMarkup = types ? types.split(',').map(t => {
+      const type = t.trim().toLowerCase();
+      return `<span class="type-text type-${type}">${t.trim().toUpperCase()}</span>`;
+    }).join(' ') : '';
     
     const badges = [];
     if (parseFloat(targetLevel) === 50) badges.push('<span class="badge badge-lvl50">50</span>');
@@ -1236,23 +1256,30 @@ function renderPowerUp() {
     if (needsElite === 'TRUE') badges.push('<span class="icon" title="Needs Elite">❗</span>');
     if (needLucky === 'TRUE') badges.push('<span class="icon" title="Need Lucky">🤝</span>');
     
+    const priorityBadge = `<span class="badge badge-priority-${priority.toLowerCase()}">${priority}</span>`;
+    
     const actualIndex = powerUpData.indexOf(row);
+    const isArchived = archived === 'TRUE';
     
     html += `
-      <div class="list-item" draggable="true" data-index="${actualIndex}">
-        <span class="drag-handle">☰</span>
-        <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
+      <div class="list-item" draggable="true" data-index="${actualIndex}" style="${isArchived ? 'opacity: 0.6;' : ''}">
+        <div class="list-item-left">
+          <span class="drag-handle">☰</span>
+          <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
+        </div>
         <div class="list-item-content">
-          <div class="list-item-name">
-            ${pokemon} ${badges.join('')} <span class="badge badge-priority">#${priority}</span>
+          <div class="list-item-line1">
+            ${pokemon} ${priorityBadge} ${badges.join('')}
           </div>
-          <div class="list-item-details">
-            ${typeMarkup} Lv${currentLevel}→${targetLevel} • ${role} • ${status}
+          <div class="list-item-line2">
+            ${typeMarkup} • Lv${currentLevel}→${targetLevel} • ${role} • ${status}
             ${notes ? ' • ' + notes : ''}
           </div>
         </div>
         <div class="list-item-actions">
-          <button class="btn btn-small btn-danger" onclick="deletePowerUp(${actualIndex})">🗑️</button>
+          <button class="btn-icon" onclick="showEditPowerUpModal(${actualIndex})" title="Edit">✏️</button>
+          <button class="btn-icon" onclick="toggleArchivePowerUp(${actualIndex})" title="${isArchived ? 'Unarchive' : 'Archive'}">${isArchived ? '📂' : '📦'}</button>
+          <button class="btn-icon" onclick="deletePowerUp(${actualIndex})" title="Delete">🗑️</button>
         </div>
       </div>
     `;
@@ -1268,7 +1295,7 @@ function renderPowerUp() {
     item.addEventListener('dragover', handleDragOver);
     item.addEventListener('dragleave', handleDragLeave);
     item.addEventListener('drop', function(e) {
-      const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+      const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
       handleDrop.call(this, e, powerUpData, renderPowerUp, 'PowerUpPriority', headers);
     });
     item.addEventListener('dragend', handleDragEnd);
@@ -1308,7 +1335,7 @@ function renderCandy() {
           <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+1</button>
           <button class="btn btn-small" onclick="updateCandy(${idx}, 10)">+10</button>
         </div>
-        <button class="btn btn-small btn-danger" style="margin-left:auto;" onclick="deleteCandy(${idx})">🗑️</button>
+        <button class="btn-icon" style="margin-left:auto;" onclick="deleteCandy(${idx})">🗑️</button>
       </div>
     `;
   });
@@ -1320,7 +1347,7 @@ function renderTrades() {
   const autoContainer = document.getElementById('autoLuckyWants');
   const plansContainer = document.getElementById('tradePlansContent');
   
-  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
+  const autoWants = powerUpData.filter(row => row[10] === 'TRUE' && row[14] !== 'TRUE');
   
   if (autoWants.length === 0) {
     autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority</div>';
@@ -1363,7 +1390,7 @@ function renderTrades() {
             ${notes ? ' • ' + notes : ''}
           </div>
         </div>
-        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
+        <button class="btn-icon" onclick="deleteTrade(${idx})">🗑️</button>
       </div>
     `;
   });
@@ -1419,6 +1446,8 @@ function renderShinyGaps() {
 async function savePowerUp(e) {
   e.preventDefault();
   
+  const editIndex = document.getElementById('puEditIndex').value;
+  
   const newRow = [
     document.getElementById('puPokemon').value,
     document.getElementById('puTypes').value,
@@ -1432,11 +1461,20 @@ async function savePowerUp(e) {
     document.getElementById('puNeedLucky').checked ? 'TRUE' : 'FALSE',
     document.getElementById('puNotes').value,
     document.getElementById('puPriority').value,
-    document.getElementById('puStatus').value
+    document.getElementById('puStatus').value,
+    'FALSE' // Archived
   ];
   
-  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
-  powerUpData.push(newRow);
+  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
+  
+  if (editIndex !== '') {
+    // Editing existing entry - preserve archived status
+    newRow[14] = powerUpData[editIndex][14] || 'FALSE';
+    powerUpData[editIndex] = newRow;
+  } else {
+    // Adding new entry
+    powerUpData.push(newRow);
+  }
   
   const success = await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
   if (success) {
@@ -1496,10 +1534,20 @@ async function updateCandy(idx, change) {
   renderCandy();
 }
 
+async function toggleArchivePowerUp(idx) {
+  const currentArchived = powerUpData[idx][14] === 'TRUE';
+  powerUpData[idx][14] = currentArchived ? 'FALSE' : 'TRUE';
+  
+  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
+  await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
+  renderPowerUp();
+  renderTrades();
+}
+
 async function deletePowerUp(idx) {
-  if (!confirm('Delete this entry?')) return;
+  if (!confirm('Delete this entry permanently?')) return;
   powerUpData.splice(idx, 1);
-  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
   await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
   renderPowerUp();
   renderTrades();
