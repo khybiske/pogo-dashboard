@@ -11,61 +11,49 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
-  padding: 10px;
+  padding: 8px;
   min-height: 100vh;
 }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 
 /* Header */
 .header {
   background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
-  border-radius: 20px;
-  padding: 30px 20px;
+  border-radius: 12px;
+  padding: 15px;
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.header::before {
-  content: '⚡';
-  position: absolute;
-  font-size: 120px;
-  opacity: 0.1;
-  top: -20px;
-  right: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  margin-bottom: 12px;
 }
 
 .header h1 {
   color: white;
-  font-size: 32px;
-  margin-bottom: 8px;
+  font-size: 22px;
+  margin-bottom: 5px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   font-weight: 800;
 }
 
 .trainer-name {
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-  letter-spacing: 1px;
 }
 
 .status-badge {
   display: inline-block;
-  padding: 8px 20px;
-  border-radius: 25px;
-  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
   font-weight: bold;
-  margin-top: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  margin-top: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .status-connected { background: #28a745; color: white; }
@@ -75,24 +63,18 @@ body {
 /* Sections */
 .section {
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 0;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   overflow: hidden;
-  transition: transform 0.2s;
-}
-
-.section:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 25px;
+  padding: 12px 15px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
   user-select: none;
@@ -100,17 +82,14 @@ body {
 
 .section-header h2 {
   color: white;
-  font-size: 22px;
+  font-size: 16px;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 .collapse-icon {
   color: white;
-  font-size: 24px;
+  font-size: 18px;
   transition: transform 0.3s;
 }
 
@@ -119,7 +98,7 @@ body {
 }
 
 .section-content {
-  padding: 25px;
+  padding: 15px;
   display: block;
 }
 
@@ -127,118 +106,113 @@ body {
   display: none;
 }
 
-/* Pokemon Cards */
-.pokemon-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-left: 5px solid #667eea;
+/* Compact List Items */
+.list-item {
   display: flex;
-  gap: 15px;
   align-items: center;
-  transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 6px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  font-size: 13px;
   cursor: move;
+  transition: all 0.2s;
 }
 
-.pokemon-card:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.list-item:hover {
+  background: #e9ecef;
+  transform: translateX(3px);
 }
 
-.pokemon-card.dragging {
+.list-item.dragging {
   opacity: 0.5;
 }
 
-.pokemon-sprite-large {
-  width: 80px;
-  height: 80px;
-  background: white;
-  border-radius: 50%;
-  padding: 5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+.list-item-sprite {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
-.pokemon-info {
+.list-item-content {
   flex: 1;
+  min-width: 0;
+  line-height: 1.4;
 }
 
-.pokemon-name {
-  font-size: 20px;
-  font-weight: bold;
+.list-item-name {
+  font-weight: 700;
   color: #333;
-  margin-bottom: 5px;
+  font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
-.pokemon-details {
-  font-size: 13px;
+.list-item-details {
   color: #666;
-  line-height: 1.6;
-}
-
-/* Type Icons */
-.type-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-block;
-  margin: 2px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Special Badges */
-.level-50-badge {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-  color: #333;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* Status Icons */
-.status-icon {
-  font-size: 20px;
-  margin: 0 3px;
-}
-
-.priority-badge {
-  background: linear-gradient(135deg, #FF6B6B, #FFE66D);
-  color: #333;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-weight: bold;
   font-size: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  margin-top: 2px;
 }
 
-/* Progress bars */
-.progress-bar {
-  background: #e9ecef;
-  border-radius: 12px;
-  height: 24px;
-  overflow: hidden;
-  margin-top: 8px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.progress-fill {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  height: 100%;
-  transition: width 0.5s ease;
+.list-item-actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* Type badges - using emoji fallback since external icons aren't loading */
+.type-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
   color: white;
-  font-size: 12px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.type-normal { background: #A8A878; }
+.type-fire { background: #F08030; }
+.type-water { background: #6890F0; }
+.type-electric { background: #F8D030; color: #333; }
+.type-grass { background: #78C850; }
+.type-ice { background: #98D8D8; }
+.type-fighting { background: #C03028; }
+.type-poison { background: #A040A0; }
+.type-ground { background: #E0C068; }
+.type-flying { background: #A890F0; }
+.type-psychic { background: #F85888; }
+.type-bug { background: #A8B820; }
+.type-rock { background: #B8A038; }
+.type-ghost { background: #705898; }
+.type-dragon { background: #7038F8; }
+.type-dark { background: #705848; }
+.type-steel { background: #B8B8D0; }
+.type-fairy { background: #EE99AC; }
+
+/* Small badges */
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  margin: 0 2px;
+}
+
+.badge-lvl50 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; }
+.badge-priority { background: linear-gradient(135deg, #FF6B6B, #FFE66D); color: #333; }
+.badge-lucky { background: #FFD700; color: #333; }
+
+/* Icons */
+.icon {
+  font-size: 14px;
+  margin: 0 2px;
 }
 
 /* Buttons */
@@ -246,124 +220,147 @@ body {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
   cursor: pointer;
   font-weight: 600;
-  margin: 5px;
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
-  transition: all 0.3s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.6);
+  margin: 4px;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+  transition: all 0.2s;
 }
 
 .btn:active {
-  transform: translateY(0);
+  transform: scale(0.95);
 }
 
 .btn-small {
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 4px 8px;
+  font-size: 11px;
 }
 
 .btn-danger {
   background: linear-gradient(135deg, #dc3545, #c82333);
-  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4);
 }
 
 .btn-success {
   background: linear-gradient(135deg, #28a745, #218838);
-  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
 }
 
-/* Events Widget */
+/* Progress bars */
+.progress-bar {
+  background: #e9ecef;
+  border-radius: 8px;
+  height: 16px;
+  overflow: hidden;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  height: 100%;
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Candy counter */
+.candy-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.candy-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #667eea;
+}
+
+/* Events */
 .event-upload {
-  margin: 15px 0;
-  padding: 20px;
+  margin: 10px 0;
+  padding: 15px;
   border: 2px dashed #667eea;
-  border-radius: 12px;
+  border-radius: 8px;
   text-align: center;
   background: #f8f9fa;
 }
 
 .event-image {
   max-width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  margin: 15px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  margin: 10px 0;
 }
 
 .event-links {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .event-link {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   text-decoration: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 600;
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
-  transition: all 0.3s;
-}
-
-.event-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.6);
 }
 
 /* Shiny Grid */
 .shiny-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .shiny-card {
   text-align: center;
-  padding: 15px 10px;
-  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.2s;
   border: 2px solid transparent;
 }
 
 .shiny-card:hover {
   transform: scale(1.05);
   border-color: #FFD700;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
 }
 
 .shiny-sprite {
-  width: 70px;
-  height: 70px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  width: 50px;
+  height: 50px;
 }
 
 .shiny-name {
-  margin-top: 8px;
-  font-size: 13px;
+  margin-top: 5px;
+  font-size: 11px;
   font-weight: 600;
   color: #333;
 }
 
 .shiny-label {
-  font-size: 10px;
+  font-size: 9px;
   color: #FFD700;
   font-weight: bold;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 /* Modal */
@@ -382,44 +379,31 @@ body {
 
 .modal-content {
   background: white;
-  margin: 30px auto;
-  padding: 30px;
-  border-radius: 16px;
-  max-width: 550px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  animation: modalSlideIn 0.3s ease;
-}
-
-@keyframes modalSlideIn {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 2px solid #e9ecef;
 }
 
 .modal-header h2 {
   color: #667eea;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .modal-close {
-  font-size: 32px;
+  font-size: 28px;
   cursor: pointer;
   color: #999;
-  transition: color 0.3s;
 }
 
 .modal-close:hover {
@@ -428,95 +412,80 @@ body {
 
 /* Forms */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   font-weight: 600;
   color: #495057;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .form-control {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 2px solid #dee2e6;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.3s;
 }
 
 .form-control:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  margin: 10px 0;
+  gap: 8px;
+  font-size: 13px;
+  margin: 8px 0;
   cursor: pointer;
 }
 
 input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
 }
 
 input[type="file"] {
-  padding: 10px;
+  padding: 8px;
   border: 2px solid #dee2e6;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 100%;
+  font-size: 12px;
 }
 
 /* Empty states */
 .empty-state {
   text-align: center;
-  padding: 50px 20px;
+  padding: 30px 15px;
   color: #6c757d;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .loading {
   text-align: center;
-  padding: 30px 20px;
+  padding: 20px;
   color: #6c757d;
+  font-size: 14px;
 }
 
-/* Candy Counter */
-.candy-counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: white;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.candy-count {
-  min-width: 50px;
-  text-align: center;
-  font-weight: bold;
+/* Drag handle */
+.drag-handle {
+  cursor: move;
+  color: #999;
   font-size: 16px;
-  color: #667eea;
+  padding: 0 4px;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
-  .header h1 { font-size: 26px; }
-  .trainer-name { font-size: 18px; }
-  .section-header h2 { font-size: 18px; }
-  .pokemon-card { flex-direction: column; text-align: center; }
-  .pokemon-sprite-large { width: 60px; height: 60px; }
-  .shiny-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+  .header h1 { font-size: 20px; }
+  .list-item-details { font-size: 11px; }
+  .candy-controls { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -530,7 +499,7 @@ input[type="file"] {
     <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
   </div>
 
-  <!-- Current Events Section -->
+  <!-- Current Events -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">
       <h2>📅 Current Events</h2>
@@ -538,14 +507,14 @@ input[type="file"] {
     </div>
     <div class="section-content">
       <div class="event-upload">
-        <p style="margin-bottom:10px; font-weight:600;">Upload Weekly Event Graphic</p>
+        <p style="margin-bottom:8px; font-weight:600; font-size:13px;">Upload Weekly Event Graphic</p>
         <input type="file" id="eventImageUpload" accept="image/*" onchange="uploadEventImage(event)">
       </div>
       <div style="text-align: center;">
         <img id="eventImage" class="event-image" src="" alt="" style="display:none;">
-        <div id="eventImageStatus" style="padding: 20px; color: #6c757d;">Upload an event graphic or check the links below</div>
+        <div id="eventImageStatus" style="padding: 15px; color: #6c757d; font-size:13px;">Upload an event graphic or check the links below</div>
         <div class="event-links">
-          <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck Events</a>
+          <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
           <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
         </div>
       </div>
@@ -559,8 +528,8 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <button class="btn" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
-      <div id="powerUpContent">
+      <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
+      <div id="powerUpContent" style="margin-top:10px;">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -573,8 +542,8 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <button class="btn" onclick="showAddCandyModal()">➕ Add Pokemon</button>
-      <div id="rareCandyContent">
+      <button class="btn btn-small" onclick="showAddCandyModal()">➕ Add Pokemon</button>
+      <div id="rareCandyContent" style="margin-top:10px;">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -587,14 +556,14 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <h3 style="margin-bottom:15px; color: #667eea; font-size: 18px;">✨ Auto-Generated Wants</h3>
+      <h3 style="margin-bottom:10px; color: #667eea; font-size: 15px;">✨ Auto-Generated Wants</h3>
       <div id="autoLuckyWants">
         <div class="loading">Loading...</div>
       </div>
       
-      <h3 style="margin:30px 0 15px; color: #667eea; font-size: 18px;">📋 Manual Trade Plans</h3>
-      <button class="btn" onclick="showAddTradeModal()">➕ Add Trade Plan</button>
-      <div id="tradePlansContent">
+      <h3 style="margin:20px 0 10px; color: #667eea; font-size: 15px;">📋 Manual Trade Plans</h3>
+      <button class="btn btn-small" onclick="showAddTradeModal()">➕ Add Trade Plan</button>
+      <div id="tradePlansContent" style="margin-top:10px;">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -607,9 +576,9 @@ input[type="file"] {
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <div style="margin-bottom: 20px;">
-        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
-        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
+      <div style="margin-bottom: 15px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Google Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
       </div>
       <div id="shinyGapsContent">
         <div class="loading">Loading...</div>
@@ -618,7 +587,7 @@ input[type="file"] {
   </div>
 </div>
 
-<!-- Modals -->
+<!-- Modals (keeping same as before) -->
 <div id="addPowerUpModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -760,9 +729,7 @@ let powerUpData = [];
 let candyData = [];
 let tradePlansData = [];
 let shinyGapsData = [];
-let eventsData = [];
 
-// Complete Pokemon ID mapping
 const POKEMON_IDS = {
   'bulbasaur': 1, 'ivysaur': 2, 'venusaur': 3,
   'charmander': 4, 'charmeleon': 5, 'charizard': 6,
@@ -847,26 +814,15 @@ const POKEMON_IDS = {
 
 function getPokemonId(name) {
   const cleanName = name.toLowerCase().trim()
-    .replace('alolan ', '')
-    .replace('galarian ', '')
-    .replace('hisuian ', '')
-    .replace('shadow ', '')
-    .replace('mega ', '');
-  
+    .replace('alolan ', '').replace('galarian ', '').replace('hisuian ', '')
+    .replace('shadow ', '').replace('mega ', '');
   return POKEMON_IDS[cleanName] || 25;
 }
 
 function getPokemonSprite(name) {
-  const id = getPokemonId(name);
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
 }
 
-function getTypeIconUrl(type) {
-  const typeName = type.toLowerCase().trim();
-  return `https://raw.githubusercontent.com/msikma/pokesprite/master/icons/types/generation-ix/brilliant-diamond-and-shining-pearl/${typeName}.png`;
-}
-
-// Event image upload
 function uploadEventImage(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -894,14 +850,11 @@ function displayEventImage(dataUrl) {
   }
 }
 
-// Toggle section
 function toggleSection(header) {
   header.classList.toggle('collapsed');
-  const content = header.nextElementSibling;
-  content.classList.toggle('collapsed');
+  header.nextElementSibling.classList.toggle('collapsed');
 }
 
-// Modal functions
 function showAddPowerUpModal() {
   document.getElementById('addPowerUpModal').style.display = 'block';
   document.getElementById('powerUpForm').reset();
@@ -921,7 +874,6 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
 
-// Load/Save functions
 async function loadSheetData(sheetName) {
   try {
     const response = await fetch(`${SCRIPT_URL}?sheet=${sheetName}`);
@@ -955,19 +907,17 @@ async function loadAllData() {
   document.getElementById('syncStatus').className = 'status-badge status-loading';
   
   try {
-    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
+    const [powerUp, candy, trades, shinyGaps] = await Promise.all([
       loadSheetData('PowerUpPriority'),
       loadSheetData('RareCandyPriority'),
       loadSheetData('LuckyTradePlans'),
-      loadSheetData('CommunityDayShinies'),
-      loadSheetData('EventsWidget')
+      loadSheetData('CommunityDayShinies')
     ]);
     
     powerUpData = powerUp.length > 1 ? powerUp.slice(1) : [];
     candyData = candy.length > 1 ? candy.slice(1) : [];
     tradePlansData = trades.length > 1 ? trades.slice(1) : [];
     shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
-    eventsData = events.length > 1 ? events.slice(1) : [];
     
     renderAll();
     
@@ -987,20 +937,63 @@ function renderAll() {
   renderShinyGaps();
 }
 
-// Render Events
 function renderEvents() {
   const savedImage = localStorage.getItem('eventImageData');
   displayEventImage(savedImage);
 }
 
-// Drag and Drop for Power-Up
-let draggedPowerUpIndex = null;
+// Drag and drop variables
+let dragSrcEl = null;
+
+function handleDragStart(e) {
+  dragSrcEl = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+  this.classList.add('dragging');
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function handleDragEnter(e) {
+  this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('over');
+}
+
+function handleDrop(e, dataArray, renderFunc, sheetName, headers) {
+  if (e.stopPropagation) e.stopPropagation();
+  
+  if (dragSrcEl !== this) {
+    const srcIndex = parseInt(dragSrcEl.getAttribute('data-index'));
+    const destIndex = parseInt(this.getAttribute('data-index'));
+    
+    const item = dataArray[srcIndex];
+    dataArray.splice(srcIndex, 1);
+    dataArray.splice(destIndex, 0, item);
+    
+    saveSheetData(sheetName, [headers, ...dataArray]);
+    renderFunc();
+  }
+  
+  return false;
+}
+
+function handleDragEnd(e) {
+  this.classList.remove('dragging');
+  document.querySelectorAll('.list-item').forEach(item => item.classList.remove('over'));
+}
 
 function renderPowerUp() {
   const container = document.getElementById('powerUpContent');
   
   if (powerUpData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 No power-up priorities yet. Click "Add Pokemon" to start!</div>';
+    container.innerHTML = '<div class="empty-state">📝 No power-up priorities yet</div>';
     return;
   }
   
@@ -1010,172 +1003,61 @@ function renderPowerUp() {
   sorted.forEach((row, idx) => {
     const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status] = row;
     
-    const typeIcons = types ? types.split(',').map(t => 
-      `<img src="${getTypeIconUrl(t.trim())}" class="type-icon" alt="${t.trim()}" title="${t.trim()}" onerror="this.style.display='none'">`
+    const typeMarkup = types ? types.split(',').map(t => 
+      `<span class="type-badge type-${t.trim().toLowerCase()}">${t.trim()}</span>`
     ).join('') : '';
     
-    const statusIcons = [];
-    if (lucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Lucky">⭐</span>');
-    if (hasElite === 'TRUE') statusIcons.push('<span class="status-icon" title="Has Elite Move">✅</span>');
-    if (needsElite === 'TRUE') statusIcons.push('<span class="status-icon" title="Needs Elite Move">❗</span>');
-    if (needLucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Need Lucky Trade">🤝</span>');
+    const badges = [];
+    if (parseFloat(targetLevel) === 50) badges.push('<span class="badge badge-lvl50">50</span>');
+    if (lucky === 'TRUE') badges.push('<span class="icon" title="Lucky">⭐</span>');
+    if (hasElite === 'TRUE') badges.push('<span class="icon" title="Has Elite">✅</span>');
+    if (needsElite === 'TRUE') badges.push('<span class="icon" title="Needs Elite">❗</span>');
+    if (needLucky === 'TRUE') badges.push('<span class="icon" title="Need Lucky">🤝</span>');
     
-    const level50Badge = parseFloat(targetLevel) === 50 ? '<span class="level-50-badge">LVL 50</span>' : '';
+    const actualIndex = powerUpData.indexOf(row);
     
     html += `
-      <div class="pokemon-card" draggable="true" data-index="${powerUpData.indexOf(row)}" 
-           ondragstart="dragStartPowerUp(event)" ondragover="dragOverPowerUp(event)" ondrop="dropPowerUp(event)" ondragend="dragEndPowerUp(event)">
-        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
-        <div class="pokemon-info">
-          <div class="pokemon-name">
-            ${pokemon} ${statusIcons.join('')} ${level50Badge}
+      <div class="list-item" draggable="true" data-index="${actualIndex}">
+        <span class="drag-handle">☰</span>
+        <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
+        <div class="list-item-content">
+          <div class="list-item-name">
+            ${pokemon} ${badges.join('')} <span class="badge badge-priority">#${priority}</span>
           </div>
-          <div class="pokemon-details">
-            ${typeIcons}
-            <br>
-            <strong>Level:</strong> ${currentLevel} → ${targetLevel} | 
-            <strong>Role:</strong> ${role} | 
-            <strong>Status:</strong> ${status}
-            ${notes ? '<br><em>' + notes + '</em>' : ''}
+          <div class="list-item-details">
+            ${typeMarkup} Lv${currentLevel}→${targetLevel} • ${role} • ${status}
+            ${notes ? ' • ' + notes : ''}
           </div>
         </div>
-        <div>
-          <span class="priority-badge">#${priority}</span>
-          <br><br>
-          <button class="btn btn-small btn-danger" onclick="deletePowerUp(${powerUpData.indexOf(row)})">🗑️</button>
+        <div class="list-item-actions">
+          <button class="btn btn-small btn-danger" onclick="deletePowerUp(${actualIndex})">🗑️</button>
         </div>
       </div>
     `;
   });
   
   container.innerHTML = html;
-}
-
-function dragStartPowerUp(e) {
-  draggedPowerUpIndex = parseInt(e.target.dataset.index);
-  e.target.classList.add('dragging');
-}
-
-function dragOverPowerUp(e) {
-  e.preventDefault();
-}
-
-function dropPowerUp(e) {
-  e.preventDefault();
-  const targetIndex = parseInt(e.currentTarget.dataset.index);
   
-  if (draggedPowerUpIndex !== null && draggedPowerUpIndex !== targetIndex) {
-    const draggedItem = powerUpData[draggedPowerUpIndex];
-    powerUpData.splice(draggedPowerUpIndex, 1);
-    powerUpData.splice(targetIndex, 0, draggedItem);
-    
-    const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
-    saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
-    renderPowerUp();
-  }
-}
-
-function dragEndPowerUp(e) {
-  e.target.classList.remove('dragging');
-  draggedPowerUpIndex = null;
-}
-
-// Drag and Drop for Trades
-let draggedTradeIndex = null;
-
-function renderTrades() {
-  const autoContainer = document.getElementById('autoLuckyWants');
-  const plansContainer = document.getElementById('tradePlansContent');
-  
-  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
-  
-  if (autoWants.length === 0) {
-    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority to auto-populate here</div>';
-  } else {
-    let autoHtml = '';
-    autoWants.forEach(row => {
-      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
-      autoHtml += `
-        <div class="pokemon-card" style="border-left-color: #FFD700; cursor: default;">
-          <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
-          <div class="pokemon-info">
-            <div class="pokemon-name">${pokemon}</div>
-            <div class="pokemon-details">
-              <strong>Need for:</strong> ${role} (Level ${targetLevel})
-              ${notes ? '<br><em>' + notes + '</em>' : ''}
-            </div>
-          </div>
-        </div>
-      `;
+  // Add drag and drop listeners
+  const items = container.querySelectorAll('.list-item');
+  items.forEach(item => {
+    item.addEventListener('dragstart', handleDragStart);
+    item.addEventListener('dragenter', handleDragEnter);
+    item.addEventListener('dragover', handleDragOver);
+    item.addEventListener('dragleave', handleDragLeave);
+    item.addEventListener('drop', function(e) {
+      const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+      handleDrop.call(this, e, powerUpData, renderPowerUp, 'PowerUpPriority', headers);
     });
-    autoContainer.innerHTML = autoHtml;
-  }
-  
-  if (tradePlansData.length === 0) {
-    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet. Click "Add Trade Plan" to start!</div>';
-    return;
-  }
-  
-  let plansHtml = '';
-  tradePlansData.forEach((row, idx) => {
-    const [friend, theyWant, youWant, notes, status] = row;
-    
-    plansHtml += `
-      <div class="pokemon-card" draggable="true" data-index="${idx}"
-           ondragstart="dragStartTrade(event)" ondragover="dragOverTrade(event)" ondrop="dropTrade(event)" ondragend="dragEndTrade(event)">
-        <div style="font-size:40px;">👥</div>
-        <div class="pokemon-info">
-          <div class="pokemon-name">${friend}</div>
-          <div class="pokemon-details">
-            <strong>They want:</strong> ${theyWant || 'Not specified'}<br>
-            <strong>You want:</strong> ${youWant || 'Not specified'}<br>
-            <strong>Status:</strong> ${status}
-            ${notes ? '<br><em>' + notes + '</em>' : ''}
-          </div>
-        </div>
-        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
-      </div>
-    `;
+    item.addEventListener('dragend', handleDragEnd);
   });
-  
-  plansContainer.innerHTML = plansHtml;
 }
 
-function dragStartTrade(e) {
-  draggedTradeIndex = parseInt(e.target.dataset.index);
-  e.target.classList.add('dragging');
-}
-
-function dragOverTrade(e) {
-  e.preventDefault();
-}
-
-function dropTrade(e) {
-  e.preventDefault();
-  const targetIndex = parseInt(e.currentTarget.dataset.index);
-  
-  if (draggedTradeIndex !== null && draggedTradeIndex !== targetIndex) {
-    const draggedItem = tradePlansData[draggedTradeIndex];
-    tradePlansData.splice(draggedTradeIndex, 1);
-    tradePlansData.splice(targetIndex, 0, draggedItem);
-    
-    const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
-    saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
-    renderTrades();
-  }
-}
-
-function dragEndTrade(e) {
-  e.target.classList.remove('dragging');
-  draggedTradeIndex = null;
-}
-
-// Render Candy
 function renderCandy() {
   const container = document.getElementById('rareCandyContent');
   
   if (candyData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 No rare candy priorities yet. Click "Add Pokemon" to start!</div>';
+    container.innerHTML = '<div class="empty-state">📝 No rare candy priorities yet</div>';
     return;
   }
   
@@ -1186,28 +1068,25 @@ function renderCandy() {
     const progress = Math.min((parseInt(current) / parseInt(target)) * 100, 100);
     
     html += `
-      <div class="pokemon-card" style="cursor: default;">
-        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
-        <div class="pokemon-info">
-          <div class="pokemon-name">${pokemon}</div>
-          <div class="pokemon-details">
-            <strong>Target:</strong> ${target} candies | <strong>Need:</strong> ${needed} more
-            ${notes ? '<br><em>' + notes + '</em>' : ''}
+      <div class="list-item" style="cursor: default; flex-wrap: wrap;">
+        <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
+        <div class="list-item-content">
+          <div class="list-item-name">${pokemon}</div>
+          <div class="list-item-details">
+            Need: ${needed} more • Target: ${target} ${notes ? ' • ' + notes : ''}
           </div>
           <div class="progress-bar">
-            <div class="progress-fill" style="width: ${progress}%">${current} / ${target}</div>
+            <div class="progress-fill" style="width: ${progress}%">${current}/${target}</div>
           </div>
         </div>
-        <div style="display:flex; flex-direction:column; gap:5px;">
-          <div class="candy-counter">
-            <button class="btn btn-small" onclick="updateCandy(${idx}, -10)">-10</button>
-            <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-1</button>
-            <span class="candy-count">${current}</span>
-            <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+1</button>
-            <button class="btn btn-small" onclick="updateCandy(${idx}, 10)">+10</button>
-          </div>
-          <button class="btn btn-small btn-danger" onclick="deleteCandy(${idx})">🗑️ Delete</button>
+        <div class="candy-controls">
+          <button class="btn btn-small" onclick="updateCandy(${idx}, -10)">-10</button>
+          <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-1</button>
+          <span class="candy-value">${current}</span>
+          <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+1</button>
+          <button class="btn btn-small" onclick="updateCandy(${idx}, 10)">+10</button>
         </div>
+        <button class="btn btn-small btn-danger" style="margin-left:auto;" onclick="deleteCandy(${idx})">🗑️</button>
       </div>
     `;
   });
@@ -1215,12 +1094,79 @@ function renderCandy() {
   container.innerHTML = html;
 }
 
-// Render Shiny Gaps
+function renderTrades() {
+  const autoContainer = document.getElementById('autoLuckyWants');
+  const plansContainer = document.getElementById('tradePlansContent');
+  
+  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
+  
+  if (autoWants.length === 0) {
+    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority</div>';
+  } else {
+    let html = '';
+    autoWants.forEach(row => {
+      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
+      html += `
+        <div class="list-item" style="border-left-color: #FFD700; cursor: default;">
+          <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
+          <div class="list-item-content">
+            <div class="list-item-name">${pokemon}</div>
+            <div class="list-item-details">
+              For: ${role} (Lv ${targetLevel})${notes ? ' • ' + notes : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    autoContainer.innerHTML = html;
+  }
+  
+  if (tradePlansData.length === 0) {
+    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet</div>';
+    return;
+  }
+  
+  let html = '';
+  tradePlansData.forEach((row, idx) => {
+    const [friend, theyWant, youWant, notes, status] = row;
+    
+    html += `
+      <div class="list-item" draggable="true" data-index="${idx}">
+        <span class="drag-handle">☰</span>
+        <span style="font-size:32px;">👥</span>
+        <div class="list-item-content">
+          <div class="list-item-name">${friend}</div>
+          <div class="list-item-details">
+            They want: ${theyWant || 'TBD'} • You want: ${youWant || 'TBD'} • ${status}
+            ${notes ? ' • ' + notes : ''}
+          </div>
+        </div>
+        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
+      </div>
+    `;
+  });
+  
+  plansContainer.innerHTML = html;
+  
+  const items = plansContainer.querySelectorAll('.list-item');
+  items.forEach(item => {
+    item.addEventListener('dragstart', handleDragStart);
+    item.addEventListener('dragenter', handleDragEnter);
+    item.addEventListener('dragover', handleDragOver);
+    item.addEventListener('dragleave', handleDragLeave);
+    item.addEventListener('drop', function(e) {
+      const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
+      handleDrop.call(this, e, tradePlansData, renderTrades, 'LuckyTradePlans', headers);
+    });
+    item.addEventListener('dragend', handleDragEnd);
+  });
+}
+
 function renderShinyGaps() {
   const container = document.getElementById('shinyGapsContent');
   
   if (shinyGapsData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 Update your Community Day shinies in the Google Sheet</div>';
+    container.innerHTML = '<div class="empty-state">📝 Update Google Sheet</div>';
     return;
   }
   
@@ -1230,28 +1176,24 @@ function renderShinyGaps() {
   });
   
   if (missing.length === 0) {
-    container.innerHTML = '<div class="empty-state">🎉 You have all Community Day shinies!</div>';
+    container.innerHTML = '<div class="empty-state">🎉 All Community Day shinies!</div>';
     return;
   }
   
   let html = '<div class="shiny-grid">';
-  
   missing.forEach(row => {
-    const pokemon = row[0];
     html += `
       <div class="shiny-card">
-        <img src="${getPokemonSprite(pokemon)}" class="shiny-sprite" onerror="this.src='https://via.placeholder.com/70'">
-        <div class="shiny-name">${pokemon}</div>
-        <div class="shiny-label">⭐ Easy Trade</div>
+        <img src="${getPokemonSprite(row[0])}" class="shiny-sprite" onerror="this.src='https://via.placeholder.com/50'">
+        <div class="shiny-name">${row[0]}</div>
+        <div class="shiny-label">⭐ Trade</div>
       </div>
     `;
   });
-  
   html += '</div>';
   container.innerHTML = html;
 }
 
-// Save functions
 async function savePowerUp(e) {
   e.preventDefault();
   
@@ -1323,7 +1265,6 @@ async function saveTrade(e) {
   }
 }
 
-// Update/Delete functions
 async function updateCandy(idx, change) {
   const current = parseInt(candyData[idx][1]);
   candyData[idx][1] = Math.max(0, current + change).toString();
@@ -1358,7 +1299,6 @@ async function deleteTrade(idx) {
   renderTrades();
 }
 
-// Initialize
 window.onload = loadAllData;
 
 window.onclick = function(event) {
