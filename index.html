@@ -46,39 +46,23 @@ body {
 .header h1 {
   color: white;
   font-size: 24px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
   font-weight: 900;
   letter-spacing: 0.5px;
 }
 
 .trainer-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  margin: 8px 0;
-  flex-wrap: wrap;
-}
-
-.trainer-name {
-  color: #2d3748;
-  font-size: 18px;
-  font-weight: 800;
-  background: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 5px 0 8px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .trainer-level {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-  color: #333;
-  font-size: 14px;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 15px;
-  box-shadow: 0 2px 8px rgba(255,215,0,0.4);
+  color: #FFD700;
+  font-weight: 700;
 }
 
 .status-badge {
@@ -639,6 +623,7 @@ input[type="file"] {
 
 @media (max-width: 600px) {
   .header h1 { font-size: 20px; }
+  .trainer-info { font-size: 14px; }
   .list-item-details { font-size: 11px; }
   .candy-controls { flex-wrap: wrap; }
 }
@@ -650,10 +635,7 @@ input[type="file"] {
   <!-- Header -->
   <div class="header">
     <h1>⚡ POKEMON GO DASHBOARD</h1>
-    <div class="trainer-info">
-      <div class="trainer-name">MachoMankey</div>
-      <div class="trainer-level">Level 71</div>
-    </div>
+    <div class="trainer-info">MachoMankey • Level <span class="trainer-level">71</span></div>
     <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
   </div>
 
@@ -668,7 +650,7 @@ input[type="file"] {
       <div class="event-upload-zone" id="uploadZone" onclick="document.getElementById('eventImageUpload').click()">
         <div class="upload-icon">📸</div>
         <div class="upload-text">Upload Weekly Event Graphic</div>
-        <div class="upload-subtext">Click to browse or drag & drop image here</div>
+        <div class="upload-subtext">Click to browse or drag & drop (auto-compresses large images)</div>
         <input type="file" id="eventImageUpload" accept="image/*" style="display:none;" onchange="uploadEventImage(event)">
       </div>
       
@@ -678,43 +660,11 @@ input[type="file"] {
         <button class="remove-image-btn" onclick="removeEventImage()" title="Remove image">×</button>
       </div>
       
-      <!-- Quick Event Info (Feb 16-22, 2026) -->
+      <!-- Event Info from Google Sheets -->
       <div class="event-quick-info">
-        <h4>🗓️ This Week (Feb 16-22, 2026)</h4>
-        
-        <div class="event-item">
-          <div class="event-item-icon">⚔️</div>
-          <div class="event-item-text">
-            <strong>Raids:</strong> Necrozma (5★), Tapu Koko (5★), Moltres (Shadow, 5★)
-          </div>
-        </div>
-        
-        <div class="event-item">
-          <div class="event-item-icon">💡</div>
-          <div class="event-item-text">
-            <strong>Spotlight:</strong> Tuesday - Psyduck (2x Transfer Candy)
-          </div>
-        </div>
-        
-        <div class="event-item">
-          <div class="event-item-icon">🎯</div>
-          <div class="event-item-text">
-            <strong>Raid Hour:</strong> Wednesday 6-7pm - Necrozma
-          </div>
-        </div>
-        
-        <div class="event-item">
-          <div class="event-item-icon">🌟</div>
-          <div class="event-item-text">
-            <strong>Event:</strong> Lunar New Year (Feb 15-19) - 2x XP, Dragon spawns
-          </div>
-        </div>
-        
-        <div class="event-item">
-          <div class="event-item-icon">📆</div>
-          <div class="event-item-text">
-            <strong>Next CD:</strong> Feb 23 - Chikorita (11am-5pm)
-          </div>
+        <h4>🗓️ This Week's Events</h4>
+        <div id="eventsList">
+          <div class="loading">Loading events from Google Sheets...</div>
         </div>
       </div>
       
@@ -722,9 +672,10 @@ input[type="file"] {
         <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
         <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
         <a href="https://www.serebii.net/pokemongo/" target="_blank" class="event-link">🌐 Serebii</a>
+        <a href="https://www.g47ix.pro" target="_blank" class="event-link">📊 G47IX</a>
       </div>
       
-      <div class="last-updated">Event info manually updated • Last: Feb 16, 2026</div>
+      <div class="last-updated">Update events in Google Sheets "CurrentEvents" tab • <button class="btn btn-small" onclick="loadAllData()" style="margin: 5px 0 0;">🔄 Refresh</button></div>
     </div>
   </div>
 
@@ -936,6 +887,7 @@ let powerUpData = [];
 let candyData = [];
 let tradePlansData = [];
 let shinyGapsData = [];
+let eventsData = [];
 
 const POKEMON_IDS = {
   'bulbasaur': 1, 'ivysaur': 2, 'venusaur': 3,
@@ -1030,7 +982,7 @@ function getPokemonSprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
 }
 
-// Drag and drop support for event image
+// Image compression and upload
 function initDragDrop() {
   const uploadZone = document.getElementById('uploadZone');
   
@@ -1080,23 +1032,49 @@ function handleEventImageFile(file) {
     return;
   }
   
-  // Check file size (limit to 5MB for localStorage)
-  if (file.size > 5 * 1024 * 1024) {
-    alert('Image too large (max 5MB). Try a smaller version.');
-    return;
-  }
-  
+  // Compress image if needed
   const reader = new FileReader();
   reader.onload = function(e) {
-    const dataUrl = e.target.result;
-    
-    try {
-      localStorage.setItem('eventImageData', dataUrl);
-      displayEventImage(dataUrl);
-    } catch (err) {
-      console.error('Storage error:', err);
-      alert('Image too large for storage. Try a smaller file.');
-    }
+    const img = new Image();
+    img.onload = function() {
+      // Compress if larger than 2MB
+      let quality = 0.9;
+      if (file.size > 2 * 1024 * 1024) {
+        quality = 0.7;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        quality = 0.5;
+      }
+      
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Maintain aspect ratio, max width 1200px
+      let width = img.width;
+      let height = img.height;
+      const maxWidth = 1200;
+      
+      if (width > maxWidth) {
+        height = (height * maxWidth) / width;
+        width = maxWidth;
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+      
+      try {
+        localStorage.setItem('eventImageData', compressedDataUrl);
+        displayEventImage(compressedDataUrl);
+        console.log(`Image compressed from ${(file.size / 1024 / 1024).toFixed(2)}MB to ${(compressedDataUrl.length * 0.75 / 1024 / 1024).toFixed(2)}MB`);
+      } catch (err) {
+        console.error('Storage error:', err);
+        alert('Image still too large after compression. Try a smaller file.');
+      }
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -1126,6 +1104,31 @@ function renderEvents() {
   if (savedImage) {
     displayEventImage(savedImage);
   }
+  
+  // Render events from Google Sheets
+  const container = document.getElementById('eventsList');
+  
+  if (eventsData.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:15px;">No events loaded. Add to "CurrentEvents" tab in Google Sheets.</div>';
+    return;
+  }
+  
+  let html = '';
+  eventsData.forEach(row => {
+    const [icon, eventType, description] = row;
+    if (icon && description) {
+      html += `
+        <div class="event-item">
+          <div class="event-item-icon">${icon}</div>
+          <div class="event-item-text">
+            <strong>${eventType}:</strong> ${description}
+          </div>
+        </div>
+      `;
+    }
+  });
+  
+  container.innerHTML = html || '<div class="empty-state" style="padding:15px;">Add events to Google Sheets "CurrentEvents" tab</div>';
 }
 
 function toggleSection(header) {
@@ -1185,17 +1188,19 @@ async function loadAllData() {
   document.getElementById('syncStatus').className = 'status-badge status-loading';
   
   try {
-    const [powerUp, candy, trades, shinyGaps] = await Promise.all([
+    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
       loadSheetData('PowerUpPriority'),
       loadSheetData('RareCandyPriority'),
       loadSheetData('LuckyTradePlans'),
-      loadSheetData('CommunityDayShinies')
+      loadSheetData('CommunityDayShinies'),
+      loadSheetData('CurrentEvents')
     ]);
     
     powerUpData = powerUp.length > 1 ? powerUp.slice(1) : [];
     candyData = candy.length > 1 ? candy.slice(1) : [];
     tradePlansData = trades.length > 1 ? trades.slice(1) : [];
     shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
+    eventsData = events.length > 1 ? events.slice(1) : [];
     
     renderAll();
     
