@@ -38,6 +38,7 @@ body {
 }
 .status-connected { background: #d4edda; color: #155724; }
 .status-disconnected { background: #f8d7da; color: #721c24; }
+.status-loading { background: #fff3cd; color: #856404; }
 .card {
   background: white;
   padding: 20px;
@@ -76,6 +77,7 @@ body {
   font-weight: bold;
 }
 .btn:active { background: #3db8af; }
+.btn:disabled { background: #ccc; cursor: not-allowed; }
 .saved-data {
   background: #f8f9fa;
   padding: 15px;
@@ -98,6 +100,11 @@ ol {
   margin: 10px 0 0 20px;
   line-height: 1.8;
 }
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+}
 </style>
 </head>
 <body>
@@ -105,20 +112,20 @@ ol {
 <div class="container">
   <div class="header">
     <h1>⚡ Pokemon Go Dashboard</h1>
-    <div class="status-badge" id="statusBadge">🔄 Testing Connection...</div>
+    <div class="status-badge status-loading" id="statusBadge">🔄 Connecting to Google Sheets...</div>
   </div>
 
   <div class="card">
-    <h2>📋 Sync Test</h2>
-    <p class="info-text">This test verifies the dashboard is working and data persists across devices.</p>
+    <h2>📋 Google Sheets Sync Test</h2>
+    <p class="info-text">This test saves data to your Google Sheet and retrieves it on any device.</p>
     
     <input type="text" class="test-input" id="testInput" placeholder="Enter a Pokemon name...">
-    <button class="btn" onclick="saveTest()">💾 Save Test Data</button>
+    <button class="btn" id="saveBtn" onclick="saveToSheet()">💾 Save to Google Sheets</button>
     
     <div class="saved-data">
-      <strong>Saved Data:</strong>
+      <strong>Data from Google Sheets:</strong>
       <div id="displayData" style="margin-top: 10px;">
-        <em style="color: #999;">Nothing saved yet</em>
+        <div class="loading">Loading...</div>
       </div>
       <div class="timestamp" id="timestamp"></div>
     </div>
@@ -127,72 +134,115 @@ ol {
   <div class="card">
     <h2>🔧 Next Steps</h2>
     <ol>
-      <li>Save test data above on one device</li>
-      <li>Open this URL on another device</li>
-      <li>Verify data appears automatically</li>
-      <li>Once confirmed, we'll add Google Sheets integration</li>
+      <li>Save test data above</li>
+      <li>Check your Google Sheet - you should see the data appear</li>
+      <li>Open this page on another device</li>
+      <li>Verify the same data loads automatically</li>
+      <li>Once confirmed, we'll build the full dashboard!</li>
     </ol>
   </div>
 
   <div class="card">
-    <h2>ℹ️ System Info</h2>
+    <h2>ℹ️ Connection Info</h2>
     <div class="info-text">
-      <strong>URL:</strong> <span id="currentUrl"></span><br>
-      <strong>Storage:</strong> <span id="storageStatus">Checking...</span><br>
+      <strong>Sheet Status:</strong> <span id="sheetStatus">Testing connection...</span><br>
+      <strong>Last Sync:</strong> <span id="lastSync">Never</span><br>
       <strong>Device:</strong> <span id="deviceInfo"></span>
     </div>
   </div>
 </div>
 
 <script>
-// Check localStorage
-function checkStorage() {
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
+const TEST_SHEET = 'PowerUpPriority';
+
+// Load data from Google Sheets
+async function loadFromSheet() {
   try {
-    localStorage.setItem('test', 'test');
-    localStorage.removeItem('test');
-    document.getElementById('storageStatus').textContent = '✅ Available';
-    document.getElementById('statusBadge').textContent = '✅ Dashboard Ready';
+    const response = await fetch(`${SCRIPT_URL}?sheet=${TEST_SHEET}`);
+    const result = await response.json();
+    
+    if (result.error) {
+      throw new Error(result.error);
+    }
+    
+    if (result.data && result.data.length > 0) {
+      // Display the data
+      const lastRow = result.data[result.data.length - 1];
+      const testData = lastRow[0] || 'No data';
+      const timestamp = lastRow[1] || 'Unknown time';
+      const device = lastRow[2] || 'Unknown device';
+      
+      document.getElementById('displayData').innerHTML = `
+        <div style="color: #333; font-size: 16px; margin-top: 5px;">${testData}</div>
+      `;
+      document.getElementById('timestamp').textContent = `Saved: ${timestamp} from ${device}`;
+      document.getElementById('testInput').value = testData;
+      document.getElementById('lastSync').textContent = new Date().toLocaleTimeString();
+    } else {
+      document.getElementById('displayData').innerHTML = '<em style="color: #999;">No data in sheet yet</em>';
+    }
+    
+    document.getElementById('sheetStatus').innerHTML = '✅ Connected';
+    document.getElementById('statusBadge').textContent = '✅ Google Sheets Connected';
     document.getElementById('statusBadge').className = 'status-badge status-connected';
-    return true;
-  } catch(e) {
-    document.getElementById('storageStatus').textContent = '❌ Unavailable';
-    document.getElementById('statusBadge').textContent = '❌ Storage Error';
+    
+  } catch (error) {
+    console.error('Load error:', error);
+    document.getElementById('sheetStatus').innerHTML = '❌ Connection failed';
+    document.getElementById('statusBadge').textContent = '❌ Connection Error';
     document.getElementById('statusBadge').className = 'status-badge status-disconnected';
-    return false;
+    document.getElementById('displayData').innerHTML = `<em style="color: #dc3545;">Error: ${error.message}</em>`;
   }
 }
 
-// Save test data
-function saveTest() {
+// Save data to Google Sheets
+async function saveToSheet() {
   const input = document.getElementById('testInput').value;
   if (!input) {
     alert('Please enter some text first!');
     return;
   }
   
-  const timestamp = new Date().toLocaleString();
-  const device = /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iPhone/iPad' : 'Desktop';
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = '💾 Saving...';
   
-  localStorage.setItem('pogoTest', input);
-  localStorage.setItem('pogoTestTime', timestamp);
-  localStorage.setItem('pogoTestDevice', device);
-  
-  displaySaved();
-  alert('✅ Saved! Now check on your other device.');
-}
-
-// Display saved data
-function displaySaved() {
-  const data = localStorage.getItem('pogoTest');
-  const time = localStorage.getItem('pogoTestTime');
-  const device = localStorage.getItem('pogoTestDevice');
-  
-  if (data) {
-    document.getElementById('displayData').innerHTML = `
-      <div style="color: #333; font-size: 16px; margin-top: 5px;">${data}</div>
-    `;
-    document.getElementById('timestamp').textContent = `Saved: ${time} from ${device}`;
-    document.getElementById('testInput').value = data;
+  try {
+    const timestamp = new Date().toLocaleString();
+    const device = /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iPhone/iPad' : 'Desktop';
+    
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        sheet: TEST_SHEET,
+        values: [
+          ['Pokemon', 'Timestamp', 'Device'],
+          [input, timestamp, device]
+        ]
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.error) {
+      throw new Error(result.error);
+    }
+    
+    document.getElementById('statusBadge').textContent = '✅ Saved Successfully!';
+    document.getElementById('statusBadge').className = 'status-badge status-connected';
+    
+    // Reload data
+    setTimeout(() => loadFromSheet(), 500);
+    
+  } catch (error) {
+    console.error('Save error:', error);
+    alert('❌ Save failed: ' + error.message);
+    document.getElementById('statusBadge').textContent = '❌ Save Error';
+    document.getElementById('statusBadge').className = 'status-badge status-disconnected';
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = '💾 Save to Google Sheets';
   }
 }
 
@@ -202,15 +252,13 @@ function getDeviceInfo() {
   if (/iPhone/.test(ua)) return 'iPhone (Safari)';
   if (/iPad/.test(ua)) return 'iPad (Safari)';
   if (/Mac/.test(ua)) return 'Mac (Safari)';
-  return 'Unknown device';
+  return 'Browser: ' + (ua.match(/Chrome|Safari|Firefox/) || ['Unknown'])[0];
 }
 
 // Initialize
 window.onload = function() {
-  checkStorage();
-  displaySaved();
-  document.getElementById('currentUrl').textContent = window.location.href;
   document.getElementById('deviceInfo').textContent = getDeviceInfo();
+  loadFromSheet();
 };
 </script>
 
