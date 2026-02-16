@@ -10,81 +10,116 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
   padding: 10px;
   min-height: 100vh;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding-bottom: 40px;
 }
 
+/* Header */
 .header {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
+  border-radius: 20px;
+  padding: 30px 20px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  margin-bottom: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '⚡';
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.1;
+  top: -20px;
+  right: 20px;
 }
 
 .header h1 {
-  color: #667eea;
-  font-size: 26px;
-  margin-bottom: 5px;
+  color: white;
+  font-size: 32px;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 800;
 }
 
 .trainer-name {
-  color: #764ba2;
-  font-size: 18px;
+  color: white;
+  font-size: 20px;
   font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  letter-spacing: 1px;
 }
 
 .status-badge {
   display: inline-block;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 13px;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.status-connected { background: #d4edda; color: #155724; }
-.status-disconnected { background: #f8d7da; color: #721c24; }
-.status-loading { background: #fff3cd; color: #856404; }
+.status-connected { background: #28a745; color: white; }
+.status-disconnected { background: #dc3545; color: white; }
+.status-loading { background: #ffc107; color: #333; }
 
+/* Sections */
 .section {
   background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 0;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #667eea;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
-}
-
-.section-header h2 {
-  color: #333;
-  font-size: 20px;
-  margin: 0;
-}
-
-.collapse-icon {
-  color: #667eea;
-  font-size: 20px;
   user-select: none;
 }
 
+.section-header h2 {
+  color: white;
+  font-size: 22px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.collapse-icon {
+  color: white;
+  font-size: 24px;
+  transition: transform 0.3s;
+}
+
+.section-header.collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
 .section-content {
+  padding: 25px;
   display: block;
 }
 
@@ -92,216 +127,238 @@ body {
   display: none;
 }
 
-/* Events Widget */
-.events-widget {
-  text-align: center;
-}
-
-.event-image {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 10px 0;
-}
-
-.event-links {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.event-link {
-  padding: 8px 16px;
-  background: #667eea;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-/* Level 3 Max Tracker */
-.max-tracker {
-  display: grid;
-  gap: 15px;
-}
-
-.max-pokemon {
-  background: #f8f9fa;
+/* Pokemon Cards */
+.pokemon-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
   padding: 15px;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
-}
-
-.max-pokemon-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.pokemon-sprite {
-  width: 50px;
-  height: 50px;
-}
-
-.progress-bar {
-  background: #e9ecef;
-  border-radius: 10px;
-  height: 20px;
-  overflow: hidden;
-  margin-top: 5px;
-}
-
-.progress-fill {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  height: 100%;
-  transition: width 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Tables */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  overflow-x: auto;
-  display: block;
-}
-
-.data-table thead {
-  background: #f8f9fa;
-}
-
-.data-table th {
-  padding: 10px 8px;
-  text-align: left;
-  font-weight: 600;
-  color: #495057;
-  border-bottom: 2px solid #dee2e6;
-  font-size: 12px;
-}
-
-.data-table td {
-  padding: 12px 8px;
-  border-bottom: 1px solid #dee2e6;
-  vertical-align: middle;
-}
-
-.data-table tbody tr:hover {
-  background: #f8f9fa;
-}
-
-/* Buttons */
-.btn {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  margin: 5px;
-}
-
-.btn:active {
-  background: #5568d3;
-}
-
-.btn-small {
-  padding: 5px 10px;
-  font-size: 12px;
-}
-
-.btn-danger {
-  background: #dc3545;
-}
-
-.btn-success {
-  background: #28a745;
-}
-
-/* Forms */
-.form-group {
   margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #495057;
-  font-size: 14px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #dee2e6;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.checkbox-label {
+  border-left: 5px solid #667eea;
   display: flex;
+  gap: 15px;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  margin: 8px 0;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+.pokemon-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* Type badges */
+.pokemon-sprite-large {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.pokemon-info {
+  flex: 1;
+}
+
+.pokemon-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.pokemon-details {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Type Badges */
 .type-badge {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 11px;
   font-weight: bold;
   color: white;
   margin: 2px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.type-normal { background: #A8A878; }
-.type-fire { background: #F08030; }
-.type-water { background: #6890F0; }
-.type-electric { background: #F8D030; color: #333; }
-.type-grass { background: #78C850; }
-.type-ice { background: #98D8D8; }
-.type-fighting { background: #C03028; }
-.type-poison { background: #A040A0; }
-.type-ground { background: #E0C068; }
-.type-flying { background: #A890F0; }
-.type-psychic { background: #F85888; }
-.type-bug { background: #A8B820; }
-.type-rock { background: #B8A038; }
-.type-ghost { background: #705898; }
-.type-dragon { background: #7038F8; }
-.type-dark { background: #705848; }
-.type-steel { background: #B8B8D0; }
-.type-fairy { background: #EE99AC; }
+.type-normal { background: linear-gradient(135deg, #A8A878, #C6C6A7); }
+.type-fire { background: linear-gradient(135deg, #F08030, #F5AC78); }
+.type-water { background: linear-gradient(135deg, #6890F0, #9DB7F5); }
+.type-electric { background: linear-gradient(135deg, #F8D030, #FAE078); color: #333; }
+.type-grass { background: linear-gradient(135deg, #78C850, #A7DB8D); }
+.type-ice { background: linear-gradient(135deg, #98D8D8, #BCE6E6); }
+.type-fighting { background: linear-gradient(135deg, #C03028, #D67873); }
+.type-poison { background: linear-gradient(135deg, #A040A0, #C183C1); }
+.type-ground { background: linear-gradient(135deg, #E0C068, #EBD69D); }
+.type-flying { background: linear-gradient(135deg, #A890F0, #C6B7F5); }
+.type-psychic { background: linear-gradient(135deg, #F85888, #FA92B2); }
+.type-bug { background: linear-gradient(135deg, #A8B820, #C6D16E); }
+.type-rock { background: linear-gradient(135deg, #B8A038, #D1C17D); }
+.type-ghost { background: linear-gradient(135deg, #705898, #A292BC); }
+.type-dragon { background: linear-gradient(135deg, #7038F8, #A27DFA); }
+.type-dark { background: linear-gradient(135deg, #705848, #A29288); }
+.type-steel { background: linear-gradient(135deg, #B8B8D0, #D1D1E0); }
+.type-fairy { background: linear-gradient(135deg, #EE99AC, #F4BDC9); }
 
-/* Status badges */
-.status-todo { color: #856404; }
-.status-progress { color: #004085; }
-.status-done { color: #155724; }
+/* Status Icons */
+.status-icon {
+  font-size: 20px;
+  margin: 0 3px;
+}
+
+.priority-badge {
+  background: linear-gradient(135deg, #FF6B6B, #FFE66D);
+  color: #333;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Progress bars */
+.progress-bar {
+  background: #e9ecef;
+  border-radius: 12px;
+  height: 24px;
+  overflow: hidden;
+  margin-top: 8px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  height: 100%;
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 5px;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.6);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);
+}
+
+/* Events Widget */
+.event-image {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin: 15px 0;
+}
+
+.event-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.event-link {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s;
+}
+
+.event-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(102, 126, 234, 0.6);
+}
+
+/* Shiny Grid */
+.shiny-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.shiny-card {
+  text-align: center;
+  padding: 15px 10px;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.shiny-card:hover {
+  transform: scale(1.05);
+  border-color: #FFD700;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.shiny-sprite {
+  width: 70px;
+  height: 70px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.shiny-name {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.shiny-label {
+  font-size: 10px;
+  color: #FFD700;
+  font-weight: bold;
+  margin-top: 4px;
+}
 
 /* Modal */
 .modal {
@@ -311,62 +368,142 @@ input[type="checkbox"] {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   z-index: 1000;
   overflow-y: auto;
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
   background: white;
-  margin: 20px auto;
-  padding: 25px;
-  border-radius: 12px;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 550px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.modal-header h2 {
+  color: #667eea;
+  font-size: 24px;
 }
 
 .modal-close {
-  font-size: 28px;
+  font-size: 32px;
   cursor: pointer;
   color: #999;
+  transition: color 0.3s;
 }
 
-/* Empty state */
+.modal-close:hover {
+  color: #dc3545;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Empty states */
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 50px 20px;
   color: #6c757d;
+  font-size: 16px;
 }
 
 .loading {
   text-align: center;
-  padding: 20px;
+  padding: 30px 20px;
   color: #6c757d;
+}
+
+/* Candy Counter */
+.candy-counter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.candy-count {
+  min-width: 50px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #667eea;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-  .data-table {
-    font-size: 12px;
-  }
-  
-  .data-table th,
-  .data-table td {
-    padding: 8px 4px;
-  }
-  
-  .btn {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
+  .header h1 { font-size: 26px; }
+  .trainer-name { font-size: 18px; }
+  .section-header h2 { font-size: 18px; }
+  .pokemon-card { flex-direction: column; text-align: center; }
+  .pokemon-sprite-large { width: 60px; height: 60px; }
+  .shiny-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
 }
 </style>
 </head>
@@ -376,7 +513,7 @@ input[type="checkbox"] {
   <!-- Header -->
   <div class="header">
     <h1>⚡ Pokemon Go Dashboard</h1>
-    <div class="trainer-name">MachoMankey</div>
+    <div class="trainer-name">🎮 MachoMankey</div>
     <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
   </div>
 
@@ -386,13 +523,13 @@ input[type="checkbox"] {
       <h2>📅 Current Events</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="eventsSection">
-      <div class="events-widget">
+    <div class="section-content">
+      <div style="text-align: center;">
         <img id="eventImage" class="event-image" src="" alt="Loading event info..." style="display:none;">
-        <div id="eventImageStatus">Loading events...</div>
+        <div id="eventImageStatus" style="padding: 20px; color: #6c757d;">Loading events...</div>
         <div class="event-links">
-          <a href="https://leekduck.com/events/" target="_blank" class="event-link">LeekDuck Events</a>
-          <a href="https://pokemongohub.net/" target="_blank" class="event-link">PoGo Hub</a>
+          <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck Events</a>
+          <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
         </div>
       </div>
     </div>
@@ -404,10 +541,8 @@ input[type="checkbox"] {
       <h2>🎯 Level 3 Max Progress</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="maxTrackerSection">
-      <div class="max-tracker" id="maxTrackerContent">
-        <div class="loading">Loading...</div>
-      </div>
+    <div class="section-content" id="maxTrackerContent">
+      <div class="loading">Loading...</div>
     </div>
   </div>
 
@@ -417,9 +552,9 @@ input[type="checkbox"] {
       <h2>⚡ Power-Up Priority</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="powerUpSection">
-      <button class="btn" onclick="showAddPowerUpModal()">+ Add Pokemon</button>
-      <div id="powerUpTable">
+    <div class="section-content">
+      <button class="btn" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
+      <div id="powerUpContent">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -431,9 +566,9 @@ input[type="checkbox"] {
       <h2>🍬 Rare Candy Priority</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="rareCandySection">
-      <button class="btn" onclick="showAddCandyModal()">+ Add Pokemon</button>
-      <div id="rareCandyTable">
+    <div class="section-content">
+      <button class="btn" onclick="showAddCandyModal()">➕ Add Pokemon</button>
+      <div id="rareCandyContent">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -445,15 +580,15 @@ input[type="checkbox"] {
       <h2>🤝 Lucky Trade Management</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="luckyTradeSection">
-      <h3 style="margin-bottom:10px;">Auto-Generated Wants</h3>
+    <div class="section-content">
+      <h3 style="margin-bottom:15px; color: #667eea; font-size: 18px;">✨ Auto-Generated Wants</h3>
       <div id="autoLuckyWants">
         <div class="loading">Loading...</div>
       </div>
       
-      <h3 style="margin:20px 0 10px;">Manual Trade Plans</h3>
-      <button class="btn" onclick="showAddTradeModal()">+ Add Trade Plan</button>
-      <div id="tradePlansTable">
+      <h3 style="margin:30px 0 15px; color: #667eea; font-size: 18px;">📋 Manual Trade Plans</h3>
+      <button class="btn" onclick="showAddTradeModal()">➕ Add Trade Plan</button>
+      <div id="tradePlansContent">
         <div class="loading">Loading...</div>
       </div>
     </div>
@@ -465,20 +600,19 @@ input[type="checkbox"] {
       <h2>✨ Community Day Shiny Gaps</h2>
       <span class="collapse-icon">▼</span>
     </div>
-    <div class="section-content" id="shinyGapsSection">
-      <p style="margin-bottom:15px; color:#6c757d; font-size:14px;">
-        Update your shiny collection in the Google Sheet, then refresh this page.
-      </p>
-      <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
-      <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
-      <div id="shinyGapsTable">
+    <div class="section-content">
+      <div style="margin-bottom: 20px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
+      </div>
+      <div id="shinyGapsContent">
         <div class="loading">Loading...</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Add Power-Up Modal -->
+<!-- Modals -->
 <div id="addPowerUpModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -488,21 +622,21 @@ input[type="checkbox"] {
     <form id="powerUpForm" onsubmit="savePowerUp(event)">
       <div class="form-group">
         <label>Pokemon Name *</label>
-        <input type="text" class="form-control" id="puPokemon" required>
+        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza">
       </div>
       <div class="form-group">
         <label>Type(s) (comma separated)</label>
-        <input type="text" class="form-control" id="puTypes" placeholder="e.g., Water, Flying">
+        <input type="text" class="form-control" id="puTypes" placeholder="e.g., Dragon, Flying">
       </div>
       <div class="form-group">
         <label class="checkbox-label">
-          <input type="checkbox" id="puLucky"> Is Lucky
+          <input type="checkbox" id="puLucky"> ⭐ Is Lucky
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="puHasElite"> Has Elite/Legacy Move
+          <input type="checkbox" id="puHasElite"> ✅ Has Elite/Legacy Move
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" id="puNeedsElite"> Needs Elite/Legacy Move
+          <input type="checkbox" id="puNeedsElite"> ❗ Needs Elite/Legacy Move
         </label>
       </div>
       <div class="form-group">
@@ -524,12 +658,12 @@ input[type="checkbox"] {
       </div>
       <div class="form-group">
         <label class="checkbox-label">
-          <input type="checkbox" id="puNeedLucky"> Need Lucky Trade
+          <input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky Trade
         </label>
       </div>
       <div class="form-group">
         <label>Notes</label>
-        <input type="text" class="form-control" id="puNotes">
+        <input type="text" class="form-control" id="puNotes" placeholder="Any additional info...">
       </div>
       <div class="form-group">
         <label>Priority (1-10)</label>
@@ -543,12 +677,11 @@ input[type="checkbox"] {
           <option>Done</option>
         </select>
       </div>
-      <button type="submit" class="btn">Save</button>
+      <button type="submit" class="btn">💾 Save</button>
     </form>
   </div>
 </div>
 
-<!-- Add Rare Candy Modal -->
 <div id="addCandyModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -558,7 +691,7 @@ input[type="checkbox"] {
     <form id="candyForm" onsubmit="saveCandy(event)">
       <div class="form-group">
         <label>Pokemon Name *</label>
-        <input type="text" class="form-control" id="candyPokemon" required>
+        <input type="text" class="form-control" id="candyPokemon" required placeholder="e.g., Dialga">
       </div>
       <div class="form-group">
         <label>Current Candy *</label>
@@ -572,12 +705,11 @@ input[type="checkbox"] {
         <label>Notes</label>
         <input type="text" class="form-control" id="candyNotes" placeholder="e.g., Adventure Effect, Legendary">
       </div>
-      <button type="submit" class="btn">Save</button>
+      <button type="submit" class="btn">💾 Save</button>
     </form>
   </div>
 </div>
 
-<!-- Add Trade Plan Modal -->
 <div id="addTradeModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -609,7 +741,7 @@ input[type="checkbox"] {
           <option>Complete</option>
         </select>
       </div>
-      <button type="submit" class="btn">Save</button>
+      <button type="submit" class="btn">💾 Save</button>
     </form>
   </div>
 </div>
@@ -625,12 +757,73 @@ let shinyGapsData = [];
 let maxTrackerData = [];
 let eventsData = [];
 
-// Toggle section collapse
+// Pokemon name to ID mapping (partial - add more as needed)
+const POKEMON_IDS = {
+  'bulbasaur': 1, 'ivysaur': 2, 'venusaur': 3,
+  'charmander': 4, 'charmeleon': 5, 'charizard': 6,
+  'squirtle': 7, 'wartortle': 8, 'blastoise': 9,
+  'pikachu': 25, 'raichu': 26, 'eevee': 133,
+  'dratini': 147, 'dragonair': 148, 'dragonite': 149,
+  'mewtwo': 150, 'mew': 151,
+  'chikorita': 152, 'cyndaquil': 155, 'totodile': 158,
+  'mareep': 179, 'larvitar': 246,
+  'treecko': 252, 'torchic': 255, 'mudkip': 258,
+  'ralts': 280, 'slakoth': 287, 'trapinch': 328,
+  'bagon': 371, 'beldum': 374,
+  'turtwig': 387, 'chimchar': 390, 'piplup': 393,
+  'machop': 66, 'gastly': 92, 'abra': 63,
+  'magikarp': 129, 'porygon': 137,
+  'electabuzz': 125, 'magmar': 126,
+  'roselia': 315, 'seedot': 273, 'weedle': 13,
+  'rhyhorn': 111, 'swinub': 220,
+  'fletchling': 661, 'gible': 443,
+  'oshawott': 501, 'shinx': 403, 'tepig': 498,
+  'snivy': 495, 'sandshrew': 27, 'starly': 396,
+  'hoppip': 187, 'geodude': 74, 'bronzor': 436,
+  'swablu': 333, 'duskull': 355, 'onix': 95,
+  'luxray': 405, 'stufful': 759, 'roggenrola': 524,
+  'litwick': 607, 'teddiursa': 216, 'deino': 633,
+  'slowpoke': 79, 'clefairy': 35,
+  'chespin': 650, 'froakie': 656, 'fennekin': 653,
+  'rayquaza': 384, 'groudon': 383, 'kyogre': 382,
+  'dialga': 483, 'palkia': 484, 'giratina': 487,
+  'kyurem': 646, 'reshiram': 643, 'zekrom': 644,
+  'xerneas': 716, 'yveltal': 717,
+  'lugia': 249, 'ho-oh': 250,
+  'regice': 378, 'registeel': 379, 'regirock': 377,
+  'latias': 380, 'latios': 381,
+  'uxie': 480, 'mesprit': 481, 'azelf': 482,
+  'heatran': 485, 'cresselia': 488,
+  'darkrai': 491, 'shaymin': 492,
+  'arceus': 493,
+  'victini': 494,
+  'cobalion': 638, 'terrakion': 639, 'virizion': 640,
+  'tornadus': 641, 'thundurus': 642, 'landorus': 645,
+  'genesect': 649,
+  'shadow mewtwo': 150, 'shadow lugia': 249
+};
+
+function getPokemonId(name) {
+  const cleanName = name.toLowerCase().trim()
+    .replace('alolan ', '')
+    .replace('galarian ', '')
+    .replace('hisuian ', '')
+    .replace('shadow ', '')
+    .replace('mega ', '');
+  
+  return POKEMON_IDS[cleanName] || 25; // Default to Pikachu
+}
+
+function getPokemonSprite(name) {
+  const id = getPokemonId(name);
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+}
+
+// Toggle section
 function toggleSection(header) {
+  header.classList.toggle('collapsed');
   const content = header.nextElementSibling;
-  const icon = header.querySelector('.collapse-icon');
   content.classList.toggle('collapsed');
-  icon.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
 }
 
 // Modal functions
@@ -653,7 +846,7 @@ function closeModal(modalId) {
   document.getElementById(modalId).style.display = 'none';
 }
 
-// Load data from Google Sheets
+// Load/Save functions
 async function loadSheetData(sheetName) {
   try {
     const response = await fetch(`${SCRIPT_URL}?sheet=${sheetName}`);
@@ -666,15 +859,11 @@ async function loadSheetData(sheetName) {
   }
 }
 
-// Save data to Google Sheets
 async function saveSheetData(sheetName, data) {
   try {
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify({
-        sheet: sheetName,
-        values: data
-      })
+      body: JSON.stringify({ sheet: sheetName, values: data })
     });
     const result = await response.json();
     if (result.error) throw new Error(result.error);
@@ -686,7 +875,6 @@ async function saveSheetData(sheetName, data) {
   }
 }
 
-// Load all data
 async function loadAllData() {
   document.getElementById('syncStatus').textContent = '🔄 Syncing...';
   document.getElementById('syncStatus').className = 'status-badge status-loading';
@@ -708,12 +896,7 @@ async function loadAllData() {
     maxTrackerData = maxTracker.length > 1 ? maxTracker.slice(1) : [];
     eventsData = events.length > 1 ? events.slice(1) : [];
     
-    renderPowerUpTable();
-    renderCandyTable();
-    renderTradePlansTable();
-    renderShinyGapsTable();
-    renderMaxTracker();
-    renderEvents();
+    renderAll();
     
     document.getElementById('syncStatus').textContent = '✅ Synced';
     document.getElementById('syncStatus').className = 'status-badge status-connected';
@@ -721,6 +904,15 @@ async function loadAllData() {
     document.getElementById('syncStatus').textContent = '❌ Sync Error';
     document.getElementById('syncStatus').className = 'status-badge status-disconnected';
   }
+}
+
+function renderAll() {
+  renderEvents();
+  renderMaxTracker();
+  renderPowerUp();
+  renderCandy();
+  renderTrades();
+  renderShinyGaps();
 }
 
 // Render Events
@@ -735,7 +927,7 @@ function renderEvents() {
     status.style.display = 'none';
   } else {
     img.style.display = 'none';
-    status.textContent = 'Add event image URL in Google Sheet (EventsWidget tab)';
+    status.textContent = '💡 Add event image URL in Google Sheet (EventsWidget tab)';
   }
 }
 
@@ -744,7 +936,7 @@ function renderMaxTracker() {
   const container = document.getElementById('maxTrackerContent');
   
   if (maxTrackerData.length === 0) {
-    container.innerHTML = '<div class="empty-state">No Max Pokemon tracked yet. Add them in the Google Sheet (MaxTracker tab).</div>';
+    container.innerHTML = '<div class="empty-state">📝 Add your 3 Max Pokemon in the Google Sheet (MaxTracker tab)</div>';
     return;
   }
   
@@ -756,16 +948,14 @@ function renderMaxTracker() {
     const progress = Math.min((current / target) * 100, 100);
     
     html += `
-      <div class="max-pokemon">
-        <div class="max-pokemon-header">
-          <img class="pokemon-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(pokemon)}.png" onerror="this.src='https://via.placeholder.com/50'">
-          <div>
-            <strong>${pokemon}</strong><br>
-            <small>Level ${current} → ${target}</small>
+      <div class="pokemon-card">
+        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
+        <div class="pokemon-info">
+          <div class="pokemon-name">${pokemon}</div>
+          <div class="pokemon-details">Level ${current} → ${target}</div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${progress}%">${Math.round(progress)}%</div>
           </div>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: ${progress}%">${Math.round(progress)}%</div>
         </div>
       </div>
     `;
@@ -774,196 +964,189 @@ function renderMaxTracker() {
   container.innerHTML = html;
 }
 
-// Render Power-Up Table
-function renderPowerUpTable() {
-  const container = document.getElementById('powerUpTable');
+// Render Power-Up
+function renderPowerUp() {
+  const container = document.getElementById('powerUpContent');
   
   if (powerUpData.length === 0) {
-    container.innerHTML = '<div class="empty-state">No power-up priorities yet. Click "Add Pokemon" to start.</div>';
+    container.innerHTML = '<div class="empty-state">📝 No power-up priorities yet. Click "Add Pokemon" to start!</div>';
     return;
   }
   
-  let html = `
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Pokemon</th>
-          <th>Type</th>
-          <th>Lucky</th>
-          <th>Elite</th>
-          <th>Level</th>
-          <th>Role</th>
-          <th>XL</th>
-          <th>Dust</th>
-          <th>Need Lucky</th>
-          <th>Priority</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  // Sort by priority
+  const sorted = [...powerUpData].sort((a, b) => parseInt(a[12]) - parseInt(b[12]));
   
-  powerUpData.forEach((row, idx) => {
+  let html = '';
+  sorted.forEach((row, idx) => {
     const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status] = row;
     
     const typeBadges = types ? types.split(',').map(t => `<span class="type-badge type-${t.trim().toLowerCase()}">${t.trim()}</span>`).join('') : '';
     
+    const statusIcons = [];
+    if (lucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Lucky">⭐</span>');
+    if (hasElite === 'TRUE') statusIcons.push('<span class="status-icon" title="Has Elite Move">✅</span>');
+    if (needsElite === 'TRUE') statusIcons.push('<span class="status-icon" title="Needs Elite Move">❗</span>');
+    if (needLucky === 'TRUE') statusIcons.push('<span class="status-icon" title="Need Lucky Trade">🤝</span>');
+    
     html += `
-      <tr>
-        <td><strong>${pokemon}</strong></td>
-        <td>${typeBadges}</td>
-        <td>${lucky === 'TRUE' ? '⭐' : ''}</td>
-        <td>${hasElite === 'TRUE' ? '✅' : ''}${needsElite === 'TRUE' ? '❗' : ''}</td>
-        <td>${currentLevel}→${targetLevel}</td>
-        <td>${role}</td>
-        <td>${xlCandy || '-'}</td>
-        <td>${dust || '-'}</td>
-        <td>${needLucky === 'TRUE' ? '🤝' : ''}</td>
-        <td>${priority}</td>
-        <td class="status-${status.toLowerCase().replace(' ', '')}">${status}</td>
-        <td><button class="btn btn-small btn-danger" onclick="deletePowerUp(${idx})">Delete</button></td>
-      </tr>
+      <div class="pokemon-card">
+        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
+        <div class="pokemon-info">
+          <div class="pokemon-name">${pokemon} ${statusIcons.join('')}</div>
+          <div class="pokemon-details">
+            ${typeBadges}
+            <br>
+            <strong>Level:</strong> ${currentLevel} → ${targetLevel} | 
+            <strong>Role:</strong> ${role} | 
+            <strong>Status:</strong> ${status}
+            ${notes ? '<br><em>' + notes + '</em>' : ''}
+          </div>
+        </div>
+        <div>
+          <span class="priority-badge">#${priority}</span>
+          <br><br>
+          <button class="btn btn-small btn-danger" onclick="deletePowerUp(${powerUpData.indexOf(row)})">🗑️</button>
+        </div>
+      </div>
     `;
   });
   
-  html += '</tbody></table>';
   container.innerHTML = html;
 }
 
-// Render Candy Table
-function renderCandyTable() {
-  const container = document.getElementById('rareCandyTable');
+// Render Candy
+function renderCandy() {
+  const container = document.getElementById('rareCandyContent');
   
   if (candyData.length === 0) {
-    container.innerHTML = '<div class="empty-state">No rare candy priorities yet. Click "Add Pokemon" to start.</div>';
+    container.innerHTML = '<div class="empty-state">📝 No rare candy priorities yet. Click "Add Pokemon" to start!</div>';
     return;
   }
   
-  let html = `
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Pokemon</th>
-          <th>Current</th>
-          <th>Target</th>
-          <th>Needed</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-  
+  let html = '';
   candyData.forEach((row, idx) => {
     const [pokemon, current, target, notes] = row;
     const needed = parseInt(target) - parseInt(current);
+    const progress = Math.min((parseInt(current) / parseInt(target)) * 100, 100);
     
     html += `
-      <tr>
-        <td><strong>${pokemon}</strong></td>
-        <td>${current}</td>
-        <td>${target}</td>
-        <td>${needed}</td>
-        <td>${notes || ''}</td>
-        <td>
-          <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-</button>
-          <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+</button>
-          <button class="btn btn-small btn-danger" onclick="deleteCandy(${idx})">Delete</button>
-        </td>
-      </tr>
+      <div class="pokemon-card">
+        <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
+        <div class="pokemon-info">
+          <div class="pokemon-name">${pokemon}</div>
+          <div class="pokemon-details">
+            <strong>Target:</strong> ${target} candies | <strong>Need:</strong> ${needed} more
+            ${notes ? '<br><em>' + notes + '</em>' : ''}
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${progress}%">${current} / ${target}</div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:5px;">
+          <div class="candy-counter">
+            <button class="btn btn-small" onclick="updateCandy(${idx}, -10)">-10</button>
+            <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-1</button>
+            <span class="candy-count">${current}</span>
+            <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+1</button>
+            <button class="btn btn-small" onclick="updateCandy(${idx}, 10)">+10</button>
+          </div>
+          <button class="btn btn-small btn-danger" onclick="deleteCandy(${idx})">🗑️ Delete</button>
+        </div>
+      </div>
     `;
   });
   
-  html += '</tbody></table>';
   container.innerHTML = html;
 }
 
-// Render Trade Plans Table
-function renderTradePlansTable() {
-  const autoWantsContainer = document.getElementById('autoLuckyWants');
-  const tradePlansContainer = document.getElementById('tradePlansTable');
+// Render Trades
+function renderTrades() {
+  const autoContainer = document.getElementById('autoLuckyWants');
+  const plansContainer = document.getElementById('tradePlansContent');
   
-  // Auto-generated wants from Power-Up list
-  const autoWants = powerUpData.filter(row => row[10] === 'TRUE'); // needLucky column
+  // Auto wants
+  const autoWants = powerUpData.filter(row => row[10] === 'TRUE');
   
   if (autoWants.length === 0) {
-    autoWantsContainer.innerHTML = '<div class="empty-state">No Pokemon marked as "Need Lucky Trade" in Power-Up Priority.</div>';
+    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority to auto-populate here</div>';
   } else {
-    let autoHtml = '<ul style="margin:10px 0; padding-left:20px;">';
+    let autoHtml = '';
     autoWants.forEach(row => {
       const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
-      autoHtml += `<li><strong>${pokemon}</strong> - ${notes || 'No notes'}</li>`;
+      autoHtml += `
+        <div class="pokemon-card" style="border-left-color: #FFD700;">
+          <img class="pokemon-sprite-large" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/80'">
+          <div class="pokemon-info">
+            <div class="pokemon-name">${pokemon}</div>
+            <div class="pokemon-details">
+              <strong>Need for:</strong> ${role} (Level ${targetLevel})
+              ${notes ? '<br><em>' + notes + '</em>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
     });
-    autoHtml += '</ul>';
-    autoWantsContainer.innerHTML = autoHtml;
+    autoContainer.innerHTML = autoHtml;
   }
   
-  // Manual trade plans
+  // Manual plans
   if (tradePlansData.length === 0) {
-    tradePlansContainer.innerHTML = '<div class="empty-state">No manual trade plans yet. Click "Add Trade Plan" to start.</div>';
+    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet. Click "Add Trade Plan" to start!</div>';
     return;
   }
   
-  let html = `
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Friend</th>
-          <th>They Want</th>
-          <th>You Want</th>
-          <th>Notes</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-  
+  let plansHtml = '';
   tradePlansData.forEach((row, idx) => {
     const [friend, theyWant, youWant, notes, status] = row;
     
-    html += `
-      <tr>
-        <td><strong>${friend}</strong></td>
-        <td>${theyWant || '-'}</td>
-        <td>${youWant || '-'}</td>
-        <td>${notes || ''}</td>
-        <td>${status}</td>
-        <td><button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">Delete</button></td>
-      </tr>
+    plansHtml += `
+      <div class="pokemon-card">
+        <div style="font-size:40px;">👥</div>
+        <div class="pokemon-info">
+          <div class="pokemon-name">${friend}</div>
+          <div class="pokemon-details">
+            <strong>They want:</strong> ${theyWant || 'Not specified'}<br>
+            <strong>You want:</strong> ${youWant || 'Not specified'}<br>
+            <strong>Status:</strong> ${status}
+            ${notes ? '<br><em>' + notes + '</em>' : ''}
+          </div>
+        </div>
+        <button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">🗑️</button>
+      </div>
     `;
   });
   
-  html += '</tbody></table>';
-  tradePlansContainer.innerHTML = html;
+  plansContainer.innerHTML = plansHtml;
 }
 
-// Render Shiny Gaps Table
-function renderShinyGapsTable() {
-  const container = document.getElementById('shinyGapsTable');
+// Render Shiny Gaps
+function renderShinyGaps() {
+  const container = document.getElementById('shinyGapsContent');
   
   if (shinyGapsData.length === 0) {
-    container.innerHTML = '<div class="empty-state">No shiny data yet. Update the CommunityDayShinies sheet.</div>';
+    container.innerHTML = '<div class="empty-state">📝 Update your Community Day shinies in the Google Sheet</div>';
     return;
   }
   
-  const missing = shinyGapsData.filter(row => row[1] === 'N' || row[1] === 'No' || row[1] === 'FALSE');
+  const missing = shinyGapsData.filter(row => {
+    const have = (row[1] || '').toString().toUpperCase();
+    return have === 'N' || have === 'NO' || have === 'FALSE';
+  });
   
   if (missing.length === 0) {
-    container.innerHTML = '<div class="empty-state">✅ You have all Community Day shinies!</div>';
+    container.innerHTML = '<div class="empty-state">🎉 You have all Community Day shinies!</div>';
     return;
   }
   
-  let html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:15px; margin-top:15px;">';
+  let html = '<div class="shiny-grid">';
   
   missing.forEach(row => {
     const pokemon = row[0];
     html += `
-      <div style="text-align:center; padding:10px; background:#f8f9fa; border-radius:8px;">
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(pokemon)}.png" style="width:60px; height:60px;" onerror="this.src='https://via.placeholder.com/60'">
-        <div style="margin-top:5px; font-size:14px; font-weight:600;">${pokemon}</div>
-        <div style="font-size:11px; color:#6c757d;">Easy trade target</div>
+      <div class="shiny-card">
+        <img src="${getPokemonSprite(pokemon)}" class="shiny-sprite" onerror="this.src='https://via.placeholder.com/70'">
+        <div class="shiny-name">${pokemon}</div>
+        <div class="shiny-label">⭐ Easy Trade</div>
       </div>
     `;
   });
@@ -972,7 +1155,7 @@ function renderShinyGapsTable() {
   container.innerHTML = html;
 }
 
-// Save Power-Up
+// Save functions
 async function savePowerUp(e) {
   e.preventDefault();
   
@@ -985,8 +1168,7 @@ async function savePowerUp(e) {
     document.getElementById('puCurrentLevel').value,
     document.getElementById('puTargetLevel').value,
     document.getElementById('puRole').value,
-    '', // XL candy - calculated
-    '', // Dust - calculated
+    '', '', // XL candy, dust (calculated later)
     document.getElementById('puNeedLucky').checked ? 'TRUE' : 'FALSE',
     document.getElementById('puNotes').value,
     document.getElementById('puPriority').value,
@@ -999,11 +1181,10 @@ async function savePowerUp(e) {
   const success = await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
   if (success) {
     closeModal('addPowerUpModal');
-    renderPowerUpTable();
+    renderPowerUp();
   }
 }
 
-// Save Candy
 async function saveCandy(e) {
   e.preventDefault();
   
@@ -1020,11 +1201,10 @@ async function saveCandy(e) {
   const success = await saveSheetData('RareCandyPriority', [headers, ...candyData]);
   if (success) {
     closeModal('addCandyModal');
-    renderCandyTable();
+    renderCandy();
   }
 }
 
-// Save Trade
 async function saveTrade(e) {
   e.preventDefault();
   
@@ -1042,27 +1222,26 @@ async function saveTrade(e) {
   const success = await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
   if (success) {
     closeModal('addTradeModal');
-    renderTradePlansTable();
+    renderTrades();
   }
 }
 
-// Update candy count
+// Update/Delete functions
 async function updateCandy(idx, change) {
   const current = parseInt(candyData[idx][1]);
   candyData[idx][1] = Math.max(0, current + change).toString();
   
   const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
   await saveSheetData('RareCandyPriority', [headers, ...candyData]);
-  renderCandyTable();
+  renderCandy();
 }
 
-// Delete functions
 async function deletePowerUp(idx) {
   if (!confirm('Delete this entry?')) return;
   powerUpData.splice(idx, 1);
   const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
   await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
-  renderPowerUpTable();
+  renderPowerUp();
 }
 
 async function deleteCandy(idx) {
@@ -1070,7 +1249,7 @@ async function deleteCandy(idx) {
   candyData.splice(idx, 1);
   const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
   await saveSheetData('RareCandyPriority', [headers, ...candyData]);
-  renderCandyTable();
+  renderCandy();
 }
 
 async function deleteTrade(idx) {
@@ -1078,28 +1257,13 @@ async function deleteTrade(idx) {
   tradePlansData.splice(idx, 1);
   const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
   await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
-  renderTradePlansTable();
-}
-
-// Helper to get Pokemon ID for sprites
-function getPokemonId(name) {
-  // This is a simplified version - you'd need a full Pokemon name-to-ID mapping
-  // For now, return a placeholder or use an API lookup
-  const simpleMap = {
-    'bulbasaur': 1, 'charmander': 4, 'squirtle': 7, 'pikachu': 25,
-    'mewtwo': 150, 'rayquaza': 384, 'dialga': 483, 'palkia': 484,
-    'kyurem': 646, 'groudon': 383, 'kyogre': 382
-    // Add more as needed
-  };
-  return simpleMap[name.toLowerCase()] || 25; // Default to Pikachu
+  renderTrades();
 }
 
 // Initialize
-window.onload = function() {
-  loadAllData();
-};
+window.onload = loadAllData;
 
-// Close modal when clicking outside
+// Close modal on outside click
 window.onclick = function(event) {
   if (event.target.classList.contains('modal')) {
     event.target.style.display = 'none';
