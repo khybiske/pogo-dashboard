@@ -3,31 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokemon Go Dashboard</title>
+<title>MachoMankey's PoGo Dashboard</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
-  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 10px;
   min-height: 100vh;
 }
+
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
+  padding-bottom: 40px;
 }
+
 .header {
   background: white;
-  border-radius: 15px 15px 0 0;
+  border-radius: 15px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin-bottom: 15px;
 }
+
 .header h1 {
-  color: #FF6B6B;
-  font-size: 24px;
+  color: #667eea;
+  font-size: 26px;
   margin-bottom: 5px;
 }
+
+.trainer-name {
+  color: #764ba2;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .status-badge {
   display: inline-block;
   padding: 5px 15px;
@@ -36,212 +49,1061 @@ body {
   font-weight: bold;
   margin-top: 10px;
 }
+
 .status-connected { background: #d4edda; color: #155724; }
 .status-disconnected { background: #f8d7da; color: #721c24; }
 .status-loading { background: #fff3cd; color: #856404; }
-.card {
+
+.section {
   background: white;
+  border-radius: 12px;
   padding: 20px;
-  margin: 0;
-  border-top: 1px solid #eee;
-}
-.card:last-child {
-  border-radius: 0 0 15px 15px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-.card h2 {
-  color: #333;
-  font-size: 18px;
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #4ECDC4;
+  border-bottom: 2px solid #667eea;
+  cursor: pointer;
 }
-.test-input {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #ddd;
+
+.section-header h2 {
+  color: #333;
+  font-size: 20px;
+  margin: 0;
+}
+
+.collapse-icon {
+  color: #667eea;
+  font-size: 20px;
+  user-select: none;
+}
+
+.section-content {
+  display: block;
+}
+
+.section-content.collapsed {
+  display: none;
+}
+
+/* Events Widget */
+.events-widget {
+  text-align: center;
+}
+
+.event-image {
+  max-width: 100%;
   border-radius: 8px;
-  font-size: 16px;
   margin: 10px 0;
 }
-.btn {
-  background: #4ECDC4;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 100%;
+
+.event-links {
   margin-top: 10px;
-  font-weight: bold;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.btn:active { background: #3db8af; }
-.btn:disabled { background: #ccc; cursor: not-allowed; }
-.saved-data {
+
+.event-link {
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Level 3 Max Tracker */
+.max-tracker {
+  display: grid;
+  gap: 15px;
+}
+
+.max-pokemon {
   background: #f8f9fa;
   padding: 15px;
   border-radius: 8px;
-  margin-top: 10px;
-  min-height: 50px;
+  border-left: 4px solid #667eea;
 }
-.info-text {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-  margin: 10px 0;
+
+.max-pokemon-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
-.timestamp {
+
+.pokemon-sprite {
+  width: 50px;
+  height: 50px;
+}
+
+.progress-bar {
+  background: #e9ecef;
+  border-radius: 10px;
+  height: 20px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  height: 100%;
+  transition: width 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
   font-size: 12px;
+  font-weight: bold;
+}
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  overflow-x: auto;
+  display: block;
+}
+
+.data-table thead {
+  background: #f8f9fa;
+}
+
+.data-table th {
+  padding: 10px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 12px;
+}
+
+.data-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* Buttons */
+.btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  margin: 5px;
+}
+
+.btn:active {
+  background: #5568d3;
+}
+
+.btn-small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: #dc3545;
+}
+
+.btn-success {
+  background: #28a745;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Type badges */
+.type-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  margin: 2px;
+  text-transform: uppercase;
+}
+
+.type-normal { background: #A8A878; }
+.type-fire { background: #F08030; }
+.type-water { background: #6890F0; }
+.type-electric { background: #F8D030; color: #333; }
+.type-grass { background: #78C850; }
+.type-ice { background: #98D8D8; }
+.type-fighting { background: #C03028; }
+.type-poison { background: #A040A0; }
+.type-ground { background: #E0C068; }
+.type-flying { background: #A890F0; }
+.type-psychic { background: #F85888; }
+.type-bug { background: #A8B820; }
+.type-rock { background: #B8A038; }
+.type-ghost { background: #705898; }
+.type-dragon { background: #7038F8; }
+.type-dark { background: #705848; }
+.type-steel { background: #B8B8D0; }
+.type-fairy { background: #EE99AC; }
+
+/* Status badges */
+.status-todo { color: #856404; }
+.status-progress { color: #004085; }
+.status-done { color: #155724; }
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.modal-content {
+  background: white;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-close {
+  font-size: 28px;
+  cursor: pointer;
   color: #999;
-  margin-top: 10px;
 }
-ol {
-  margin: 10px 0 0 20px;
-  line-height: 1.8;
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
 }
+
 .loading {
   text-align: center;
-  color: #666;
   padding: 20px;
+  color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .data-table {
+    font-size: 12px;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 8px 4px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
+  <!-- Header -->
   <div class="header">
     <h1>⚡ Pokemon Go Dashboard</h1>
-    <div class="status-badge status-loading" id="statusBadge">🔄 Connecting to Google Sheets...</div>
+    <div class="trainer-name">MachoMankey</div>
+    <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
   </div>
 
-  <div class="card">
-    <h2>📋 Google Sheets Sync Test</h2>
-    <p class="info-text">This test saves data to your Google Sheet and retrieves it on any device.</p>
-    
-    <input type="text" class="test-input" id="testInput" placeholder="Enter a Pokemon name...">
-    <button class="btn" id="saveBtn" onclick="saveToSheet()">💾 Save to Google Sheets</button>
-    
-    <div class="saved-data">
-      <strong>Data from Google Sheets:</strong>
-      <div id="displayData" style="margin-top: 10px;">
+  <!-- Current Events Section -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>📅 Current Events</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content" id="eventsSection">
+      <div class="events-widget">
+        <img id="eventImage" class="event-image" src="" alt="Loading event info..." style="display:none;">
+        <div id="eventImageStatus">Loading events...</div>
+        <div class="event-links">
+          <a href="https://leekduck.com/events/" target="_blank" class="event-link">LeekDuck Events</a>
+          <a href="https://pokemongohub.net/" target="_blank" class="event-link">PoGo Hub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Level 3 Max Tracker -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🎯 Level 3 Max Progress</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content" id="maxTrackerSection">
+      <div class="max-tracker" id="maxTrackerContent">
         <div class="loading">Loading...</div>
       </div>
-      <div class="timestamp" id="timestamp"></div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>🔧 Next Steps</h2>
-    <ol>
-      <li>Save test data above</li>
-      <li>Check your Google Sheet - you should see the data appear</li>
-      <li>Open this page on another device</li>
-      <li>Verify the same data loads automatically</li>
-      <li>Once confirmed, we'll build the full dashboard!</li>
-    </ol>
+  <!-- Power-Up Priority -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>⚡ Power-Up Priority</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content" id="powerUpSection">
+      <button class="btn" onclick="showAddPowerUpModal()">+ Add Pokemon</button>
+      <div id="powerUpTable">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>ℹ️ Connection Info</h2>
-    <div class="info-text">
-      <strong>Sheet Status:</strong> <span id="sheetStatus">Testing connection...</span><br>
-      <strong>Last Sync:</strong> <span id="lastSync">Never</span><br>
-      <strong>Device:</strong> <span id="deviceInfo"></span>
+  <!-- Rare Candy Priority -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🍬 Rare Candy Priority</h2>
+      <span class="collapse-icon">▼</span>
     </div>
+    <div class="section-content" id="rareCandySection">
+      <button class="btn" onclick="showAddCandyModal()">+ Add Pokemon</button>
+      <div id="rareCandyTable">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lucky Trade Management -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🤝 Lucky Trade Management</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content" id="luckyTradeSection">
+      <h3 style="margin-bottom:10px;">Auto-Generated Wants</h3>
+      <div id="autoLuckyWants">
+        <div class="loading">Loading...</div>
+      </div>
+      
+      <h3 style="margin:20px 0 10px;">Manual Trade Plans</h3>
+      <button class="btn" onclick="showAddTradeModal()">+ Add Trade Plan</button>
+      <div id="tradePlansTable">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shiny Dex Gaps -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>✨ Community Day Shiny Gaps</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content" id="shinyGapsSection">
+      <p style="margin-bottom:15px; color:#6c757d; font-size:14px;">
+        Update your shiny collection in the Google Sheet, then refresh this page.
+      </p>
+      <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
+      <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
+      <div id="shinyGapsTable">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Power-Up Modal -->
+<div id="addPowerUpModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Power-Up Priority</h2>
+      <span class="modal-close" onclick="closeModal('addPowerUpModal')">&times;</span>
+    </div>
+    <form id="powerUpForm" onsubmit="savePowerUp(event)">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="puPokemon" required>
+      </div>
+      <div class="form-group">
+        <label>Type(s) (comma separated)</label>
+        <input type="text" class="form-control" id="puTypes" placeholder="e.g., Water, Flying">
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="puLucky"> Is Lucky
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="puHasElite"> Has Elite/Legacy Move
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="puNeedsElite"> Needs Elite/Legacy Move
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Current Level *</label>
+        <input type="number" class="form-control" id="puCurrentLevel" step="0.5" min="1" max="55" required>
+      </div>
+      <div class="form-group">
+        <label>Target Level *</label>
+        <input type="number" class="form-control" id="puTargetLevel" step="0.5" min="1" max="55" required>
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select class="form-control" id="puRole">
+          <option>Raid</option>
+          <option>GMAX</option>
+          <option>Buddy</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="puNeedLucky"> Need Lucky Trade
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="puNotes">
+      </div>
+      <div class="form-group">
+        <label>Priority (1-10)</label>
+        <input type="number" class="form-control" id="puPriority" min="1" max="10" value="5">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="puStatus">
+          <option>To Do</option>
+          <option>In Progress</option>
+          <option>Done</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Add Rare Candy Modal -->
+<div id="addCandyModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Rare Candy Priority</h2>
+      <span class="modal-close" onclick="closeModal('addCandyModal')">&times;</span>
+    </div>
+    <form id="candyForm" onsubmit="saveCandy(event)">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="candyPokemon" required>
+      </div>
+      <div class="form-group">
+        <label>Current Candy *</label>
+        <input type="number" class="form-control" id="candyCurrent" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Target Candy *</label>
+        <input type="number" class="form-control" id="candyTarget" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="candyNotes" placeholder="e.g., Adventure Effect, Legendary">
+      </div>
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Add Trade Plan Modal -->
+<div id="addTradeModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Trade Plan</h2>
+      <span class="modal-close" onclick="closeModal('addTradeModal')">&times;</span>
+    </div>
+    <form id="tradeForm" onsubmit="saveTrade(event)">
+      <div class="form-group">
+        <label>Friend Name *</label>
+        <input type="text" class="form-control" id="tradeFriend" required>
+      </div>
+      <div class="form-group">
+        <label>What They Want</label>
+        <input type="text" class="form-control" id="tradeTheyWant">
+      </div>
+      <div class="form-group">
+        <label>What You Want</label>
+        <input type="text" class="form-control" id="tradeYouWant">
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="tradeNotes">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="tradeStatus">
+          <option>Planned</option>
+          <option>Waiting</option>
+          <option>Complete</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Save</button>
+    </form>
   </div>
 </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
-const TEST_SHEET = 'PowerUpPriority';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1E9tGFWTFWHNkN6OheYwQCCuXDdz3oWAmbWTStoufz_w/edit';
 
-async function loadFromSheet() {
+let powerUpData = [];
+let candyData = [];
+let tradePlansData = [];
+let shinyGapsData = [];
+let maxTrackerData = [];
+let eventsData = [];
+
+// Toggle section collapse
+function toggleSection(header) {
+  const content = header.nextElementSibling;
+  const icon = header.querySelector('.collapse-icon');
+  content.classList.toggle('collapsed');
+  icon.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+}
+
+// Modal functions
+function showAddPowerUpModal() {
+  document.getElementById('addPowerUpModal').style.display = 'block';
+  document.getElementById('powerUpForm').reset();
+}
+
+function showAddCandyModal() {
+  document.getElementById('addCandyModal').style.display = 'block';
+  document.getElementById('candyForm').reset();
+}
+
+function showAddTradeModal() {
+  document.getElementById('addTradeModal').style.display = 'block';
+  document.getElementById('tradeForm').reset();
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Load data from Google Sheets
+async function loadSheetData(sheetName) {
   try {
-    const response = await fetch(SCRIPT_URL + '?sheet=' + TEST_SHEET);
+    const response = await fetch(`${SCRIPT_URL}?sheet=${sheetName}`);
     const result = await response.json();
-    
     if (result.error) throw new Error(result.error);
-    
-    if (result.data && result.data.length > 0) {
-      const lastRow = result.data[result.data.length - 1];
-      const testData = lastRow[0] || 'No data';
-      const timestamp = lastRow[1] || 'Unknown time';
-      const device = lastRow[2] || 'Unknown device';
-      
-      document.getElementById('displayData').innerHTML = '<div style="color: #333; font-size: 16px; margin-top: 5px;">' + testData + '</div>';
-      document.getElementById('timestamp').textContent = 'Saved: ' + timestamp + ' from ' + device;
-      document.getElementById('testInput').value = testData;
-      document.getElementById('lastSync').textContent = new Date().toLocaleTimeString();
-    } else {
-      document.getElementById('displayData').innerHTML = '<em style="color: #999;">No data in sheet yet</em>';
-    }
-    
-    document.getElementById('sheetStatus').innerHTML = '✅ Connected';
-    document.getElementById('statusBadge').textContent = '✅ Google Sheets Connected';
-    document.getElementById('statusBadge').className = 'status-badge status-connected';
-    
+    return result.data || [];
   } catch (error) {
-    console.error('Load error:', error);
-    document.getElementById('sheetStatus').innerHTML = '❌ Connection failed';
-    document.getElementById('statusBadge').textContent = '❌ Connection Error';
-    document.getElementById('statusBadge').className = 'status-badge status-disconnected';
-    document.getElementById('displayData').innerHTML = '<em style="color: #dc3545;">Error: ' + error.message + '</em>';
+    console.error(`Error loading ${sheetName}:`, error);
+    return [];
   }
 }
 
-async function saveToSheet() {
-  const input = document.getElementById('testInput').value;
-  if (!input) {
-    alert('Please enter some text first!');
-    return;
-  }
-  
-  const saveBtn = document.getElementById('saveBtn');
-  saveBtn.disabled = true;
-  saveBtn.textContent = '💾 Saving...';
-  
+// Save data to Google Sheets
+async function saveSheetData(sheetName, data) {
   try {
-    const timestamp = new Date().toLocaleString();
-    const device = /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'iPhone/iPad' : 'Desktop';
-    
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify({
-        sheet: TEST_SHEET,
-        values: [['Pokemon', 'Timestamp', 'Device'], [input, timestamp, device]]
+        sheet: sheetName,
+        values: data
       })
     });
-    
     const result = await response.json();
     if (result.error) throw new Error(result.error);
-    
-    document.getElementById('statusBadge').textContent = '✅ Saved Successfully!';
-    document.getElementById('statusBadge').className = 'status-badge status-connected';
-    setTimeout(function() { loadFromSheet(); }, 500);
-    
+    return true;
   } catch (error) {
-    console.error('Save error:', error);
-    alert('❌ Save failed: ' + error.message);
-    document.getElementById('statusBadge').textContent = '❌ Save Error';
-    document.getElementById('statusBadge').className = 'status-badge status-disconnected';
-  } finally {
-    saveBtn.disabled = false;
-    saveBtn.textContent = '💾 Save to Google Sheets';
+    console.error(`Error saving ${sheetName}:`, error);
+    alert('Save failed: ' + error.message);
+    return false;
   }
 }
 
-function getDeviceInfo() {
-  const ua = navigator.userAgent;
-  if (/iPhone/.test(ua)) return 'iPhone (Safari)';
-  if (/iPad/.test(ua)) return 'iPad (Safari)';
-  if (/Mac/.test(ua)) return 'Mac (Safari)';
-  return 'Browser: ' + (ua.match(/Chrome|Safari|Firefox/) || ['Unknown'])[0];
+// Load all data
+async function loadAllData() {
+  document.getElementById('syncStatus').textContent = '🔄 Syncing...';
+  document.getElementById('syncStatus').className = 'status-badge status-loading';
+  
+  try {
+    const [powerUp, candy, trades, shinyGaps, maxTracker, events] = await Promise.all([
+      loadSheetData('PowerUpPriority'),
+      loadSheetData('RareCandyPriority'),
+      loadSheetData('LuckyTradePlans'),
+      loadSheetData('CommunityDayShinies'),
+      loadSheetData('MaxTracker'),
+      loadSheetData('EventsWidget')
+    ]);
+    
+    powerUpData = powerUp.length > 1 ? powerUp.slice(1) : [];
+    candyData = candy.length > 1 ? candy.slice(1) : [];
+    tradePlansData = trades.length > 1 ? trades.slice(1) : [];
+    shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
+    maxTrackerData = maxTracker.length > 1 ? maxTracker.slice(1) : [];
+    eventsData = events.length > 1 ? events.slice(1) : [];
+    
+    renderPowerUpTable();
+    renderCandyTable();
+    renderTradePlansTable();
+    renderShinyGapsTable();
+    renderMaxTracker();
+    renderEvents();
+    
+    document.getElementById('syncStatus').textContent = '✅ Synced';
+    document.getElementById('syncStatus').className = 'status-badge status-connected';
+  } catch (error) {
+    document.getElementById('syncStatus').textContent = '❌ Sync Error';
+    document.getElementById('syncStatus').className = 'status-badge status-disconnected';
+  }
 }
 
+// Render Events
+function renderEvents() {
+  const eventImageUrl = eventsData.length > 0 && eventsData[0][0] ? eventsData[0][0] : '';
+  const img = document.getElementById('eventImage');
+  const status = document.getElementById('eventImageStatus');
+  
+  if (eventImageUrl) {
+    img.src = eventImageUrl;
+    img.style.display = 'block';
+    status.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    status.textContent = 'Add event image URL in Google Sheet (EventsWidget tab)';
+  }
+}
+
+// Render Max Tracker
+function renderMaxTracker() {
+  const container = document.getElementById('maxTrackerContent');
+  
+  if (maxTrackerData.length === 0) {
+    container.innerHTML = '<div class="empty-state">No Max Pokemon tracked yet. Add them in the Google Sheet (MaxTracker tab).</div>';
+    return;
+  }
+  
+  let html = '';
+  maxTrackerData.forEach(row => {
+    const [pokemon, currentLevel, targetLevel] = row;
+    const current = parseFloat(currentLevel) || 0;
+    const target = parseFloat(targetLevel) || 3;
+    const progress = Math.min((current / target) * 100, 100);
+    
+    html += `
+      <div class="max-pokemon">
+        <div class="max-pokemon-header">
+          <img class="pokemon-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(pokemon)}.png" onerror="this.src='https://via.placeholder.com/50'">
+          <div>
+            <strong>${pokemon}</strong><br>
+            <small>Level ${current} → ${target}</small>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: ${progress}%">${Math.round(progress)}%</div>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+// Render Power-Up Table
+function renderPowerUpTable() {
+  const container = document.getElementById('powerUpTable');
+  
+  if (powerUpData.length === 0) {
+    container.innerHTML = '<div class="empty-state">No power-up priorities yet. Click "Add Pokemon" to start.</div>';
+    return;
+  }
+  
+  let html = `
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Pokemon</th>
+          <th>Type</th>
+          <th>Lucky</th>
+          <th>Elite</th>
+          <th>Level</th>
+          <th>Role</th>
+          <th>XL</th>
+          <th>Dust</th>
+          <th>Need Lucky</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  powerUpData.forEach((row, idx) => {
+    const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status] = row;
+    
+    const typeBadges = types ? types.split(',').map(t => `<span class="type-badge type-${t.trim().toLowerCase()}">${t.trim()}</span>`).join('') : '';
+    
+    html += `
+      <tr>
+        <td><strong>${pokemon}</strong></td>
+        <td>${typeBadges}</td>
+        <td>${lucky === 'TRUE' ? '⭐' : ''}</td>
+        <td>${hasElite === 'TRUE' ? '✅' : ''}${needsElite === 'TRUE' ? '❗' : ''}</td>
+        <td>${currentLevel}→${targetLevel}</td>
+        <td>${role}</td>
+        <td>${xlCandy || '-'}</td>
+        <td>${dust || '-'}</td>
+        <td>${needLucky === 'TRUE' ? '🤝' : ''}</td>
+        <td>${priority}</td>
+        <td class="status-${status.toLowerCase().replace(' ', '')}">${status}</td>
+        <td><button class="btn btn-small btn-danger" onclick="deletePowerUp(${idx})">Delete</button></td>
+      </tr>
+    `;
+  });
+  
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// Render Candy Table
+function renderCandyTable() {
+  const container = document.getElementById('rareCandyTable');
+  
+  if (candyData.length === 0) {
+    container.innerHTML = '<div class="empty-state">No rare candy priorities yet. Click "Add Pokemon" to start.</div>';
+    return;
+  }
+  
+  let html = `
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Pokemon</th>
+          <th>Current</th>
+          <th>Target</th>
+          <th>Needed</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  candyData.forEach((row, idx) => {
+    const [pokemon, current, target, notes] = row;
+    const needed = parseInt(target) - parseInt(current);
+    
+    html += `
+      <tr>
+        <td><strong>${pokemon}</strong></td>
+        <td>${current}</td>
+        <td>${target}</td>
+        <td>${needed}</td>
+        <td>${notes || ''}</td>
+        <td>
+          <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-</button>
+          <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+</button>
+          <button class="btn btn-small btn-danger" onclick="deleteCandy(${idx})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+  
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+// Render Trade Plans Table
+function renderTradePlansTable() {
+  const autoWantsContainer = document.getElementById('autoLuckyWants');
+  const tradePlansContainer = document.getElementById('tradePlansTable');
+  
+  // Auto-generated wants from Power-Up list
+  const autoWants = powerUpData.filter(row => row[10] === 'TRUE'); // needLucky column
+  
+  if (autoWants.length === 0) {
+    autoWantsContainer.innerHTML = '<div class="empty-state">No Pokemon marked as "Need Lucky Trade" in Power-Up Priority.</div>';
+  } else {
+    let autoHtml = '<ul style="margin:10px 0; padding-left:20px;">';
+    autoWants.forEach(row => {
+      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
+      autoHtml += `<li><strong>${pokemon}</strong> - ${notes || 'No notes'}</li>`;
+    });
+    autoHtml += '</ul>';
+    autoWantsContainer.innerHTML = autoHtml;
+  }
+  
+  // Manual trade plans
+  if (tradePlansData.length === 0) {
+    tradePlansContainer.innerHTML = '<div class="empty-state">No manual trade plans yet. Click "Add Trade Plan" to start.</div>';
+    return;
+  }
+  
+  let html = `
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Friend</th>
+          <th>They Want</th>
+          <th>You Want</th>
+          <th>Notes</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  tradePlansData.forEach((row, idx) => {
+    const [friend, theyWant, youWant, notes, status] = row;
+    
+    html += `
+      <tr>
+        <td><strong>${friend}</strong></td>
+        <td>${theyWant || '-'}</td>
+        <td>${youWant || '-'}</td>
+        <td>${notes || ''}</td>
+        <td>${status}</td>
+        <td><button class="btn btn-small btn-danger" onclick="deleteTrade(${idx})">Delete</button></td>
+      </tr>
+    `;
+  });
+  
+  html += '</tbody></table>';
+  tradePlansContainer.innerHTML = html;
+}
+
+// Render Shiny Gaps Table
+function renderShinyGapsTable() {
+  const container = document.getElementById('shinyGapsTable');
+  
+  if (shinyGapsData.length === 0) {
+    container.innerHTML = '<div class="empty-state">No shiny data yet. Update the CommunityDayShinies sheet.</div>';
+    return;
+  }
+  
+  const missing = shinyGapsData.filter(row => row[1] === 'N' || row[1] === 'No' || row[1] === 'FALSE');
+  
+  if (missing.length === 0) {
+    container.innerHTML = '<div class="empty-state">✅ You have all Community Day shinies!</div>';
+    return;
+  }
+  
+  let html = '<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:15px; margin-top:15px;">';
+  
+  missing.forEach(row => {
+    const pokemon = row[0];
+    html += `
+      <div style="text-align:center; padding:10px; background:#f8f9fa; border-radius:8px;">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(pokemon)}.png" style="width:60px; height:60px;" onerror="this.src='https://via.placeholder.com/60'">
+        <div style="margin-top:5px; font-size:14px; font-weight:600;">${pokemon}</div>
+        <div style="font-size:11px; color:#6c757d;">Easy trade target</div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// Save Power-Up
+async function savePowerUp(e) {
+  e.preventDefault();
+  
+  const newRow = [
+    document.getElementById('puPokemon').value,
+    document.getElementById('puTypes').value,
+    document.getElementById('puLucky').checked ? 'TRUE' : 'FALSE',
+    document.getElementById('puHasElite').checked ? 'TRUE' : 'FALSE',
+    document.getElementById('puNeedsElite').checked ? 'TRUE' : 'FALSE',
+    document.getElementById('puCurrentLevel').value,
+    document.getElementById('puTargetLevel').value,
+    document.getElementById('puRole').value,
+    '', // XL candy - calculated
+    '', // Dust - calculated
+    document.getElementById('puNeedLucky').checked ? 'TRUE' : 'FALSE',
+    document.getElementById('puNotes').value,
+    document.getElementById('puPriority').value,
+    document.getElementById('puStatus').value
+  ];
+  
+  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+  powerUpData.push(newRow);
+  
+  const success = await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
+  if (success) {
+    closeModal('addPowerUpModal');
+    renderPowerUpTable();
+  }
+}
+
+// Save Candy
+async function saveCandy(e) {
+  e.preventDefault();
+  
+  const newRow = [
+    document.getElementById('candyPokemon').value,
+    document.getElementById('candyCurrent').value,
+    document.getElementById('candyTarget').value,
+    document.getElementById('candyNotes').value
+  ];
+  
+  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
+  candyData.push(newRow);
+  
+  const success = await saveSheetData('RareCandyPriority', [headers, ...candyData]);
+  if (success) {
+    closeModal('addCandyModal');
+    renderCandyTable();
+  }
+}
+
+// Save Trade
+async function saveTrade(e) {
+  e.preventDefault();
+  
+  const newRow = [
+    document.getElementById('tradeFriend').value,
+    document.getElementById('tradeTheyWant').value,
+    document.getElementById('tradeYouWant').value,
+    document.getElementById('tradeNotes').value,
+    document.getElementById('tradeStatus').value
+  ];
+  
+  const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
+  tradePlansData.push(newRow);
+  
+  const success = await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
+  if (success) {
+    closeModal('addTradeModal');
+    renderTradePlansTable();
+  }
+}
+
+// Update candy count
+async function updateCandy(idx, change) {
+  const current = parseInt(candyData[idx][1]);
+  candyData[idx][1] = Math.max(0, current + change).toString();
+  
+  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
+  await saveSheetData('RareCandyPriority', [headers, ...candyData]);
+  renderCandyTable();
+}
+
+// Delete functions
+async function deletePowerUp(idx) {
+  if (!confirm('Delete this entry?')) return;
+  powerUpData.splice(idx, 1);
+  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status'];
+  await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
+  renderPowerUpTable();
+}
+
+async function deleteCandy(idx) {
+  if (!confirm('Delete this entry?')) return;
+  candyData.splice(idx, 1);
+  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
+  await saveSheetData('RareCandyPriority', [headers, ...candyData]);
+  renderCandyTable();
+}
+
+async function deleteTrade(idx) {
+  if (!confirm('Delete this entry?')) return;
+  tradePlansData.splice(idx, 1);
+  const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
+  await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
+  renderTradePlansTable();
+}
+
+// Helper to get Pokemon ID for sprites
+function getPokemonId(name) {
+  // This is a simplified version - you'd need a full Pokemon name-to-ID mapping
+  // For now, return a placeholder or use an API lookup
+  const simpleMap = {
+    'bulbasaur': 1, 'charmander': 4, 'squirtle': 7, 'pikachu': 25,
+    'mewtwo': 150, 'rayquaza': 384, 'dialga': 483, 'palkia': 484,
+    'kyurem': 646, 'groudon': 383, 'kyogre': 382
+    // Add more as needed
+  };
+  return simpleMap[name.toLowerCase()] || 25; // Default to Pikachu
+}
+
+// Initialize
 window.onload = function() {
-  document.getElementById('deviceInfo').textContent = getDeviceInfo();
-  loadFromSheet();
+  loadAllData();
+};
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal')) {
+    event.target.style.display = 'none';
+  }
 };
 </script>
 
