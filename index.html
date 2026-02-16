@@ -175,4 +175,44 @@ function saveTest() {
   
   localStorage.setItem('pogoTest', input);
   localStorage.setItem('pogoTestTime', timestamp);
-  localSto
+  localStorage.setItem('pogoTestDevice', device);
+  
+  displaySaved();
+  alert('✅ Saved! Now check on your other device.');
+}
+
+// Display saved data
+function displaySaved() {
+  const data = localStorage.getItem('pogoTest');
+  const time = localStorage.getItem('pogoTestTime');
+  const device = localStorage.getItem('pogoTestDevice');
+  
+  if (data) {
+    document.getElementById('displayData').innerHTML = `
+      <div style="color: #333; font-size: 16px; margin-top: 5px;">${data}</div>
+    `;
+    document.getElementById('timestamp').textContent = `Saved: ${time} from ${device}`;
+    document.getElementById('testInput').value = data;
+  }
+}
+
+// Get device info
+function getDeviceInfo() {
+  const ua = navigator.userAgent;
+  if (/iPhone/.test(ua)) return 'iPhone (Safari)';
+  if (/iPad/.test(ua)) return 'iPad (Safari)';
+  if (/Mac/.test(ua)) return 'Mac (Safari)';
+  return 'Unknown device';
+}
+
+// Initialize
+window.onload = function() {
+  checkStorage();
+  displaySaved();
+  document.getElementById('currentUrl').textContent = window.location.href;
+  document.getElementById('deviceInfo').textContent = getDeviceInfo();
+};
+</script>
+
+</body>
+</html>
