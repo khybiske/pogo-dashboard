@@ -156,27 +156,21 @@ ol {
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
 const TEST_SHEET = 'PowerUpPriority';
 
-// Load data from Google Sheets
 async function loadFromSheet() {
   try {
-    const response = await fetch(`${SCRIPT_URL}?sheet=${TEST_SHEET}`);
+    const response = await fetch(SCRIPT_URL + '?sheet=' + TEST_SHEET);
     const result = await response.json();
     
-    if (result.error) {
-      throw new Error(result.error);
-    }
+    if (result.error) throw new Error(result.error);
     
     if (result.data && result.data.length > 0) {
-      // Display the data
       const lastRow = result.data[result.data.length - 1];
       const testData = lastRow[0] || 'No data';
       const timestamp = lastRow[1] || 'Unknown time';
       const device = lastRow[2] || 'Unknown device';
       
-      document.getElementById('displayData').innerHTML = `
-        <div style="color: #333; font-size: 16px; margin-top: 5px;">${testData}</div>
-      `;
-      document.getElementById('timestamp').textContent = `Saved: ${timestamp} from ${device}`;
+      document.getElementById('displayData').innerHTML = '<div style="color: #333; font-size: 16px; margin-top: 5px;">' + testData + '</div>';
+      document.getElementById('timestamp').textContent = 'Saved: ' + timestamp + ' from ' + device;
       document.getElementById('testInput').value = testData;
       document.getElementById('lastSync').textContent = new Date().toLocaleTimeString();
     } else {
@@ -192,11 +186,10 @@ async function loadFromSheet() {
     document.getElementById('sheetStatus').innerHTML = '❌ Connection failed';
     document.getElementById('statusBadge').textContent = '❌ Connection Error';
     document.getElementById('statusBadge').className = 'status-badge status-disconnected';
-    document.getElementById('displayData').innerHTML = `<em style="color: #dc3545;">Error: ${error.message}</em>`;
+    document.getElementById('displayData').innerHTML = '<em style="color: #dc3545;">Error: ' + error.message + '</em>';
   }
 }
 
-// Save data to Google Sheets
 async function saveToSheet() {
   const input = document.getElementById('testInput').value;
   if (!input) {
@@ -216,24 +209,16 @@ async function saveToSheet() {
       method: 'POST',
       body: JSON.stringify({
         sheet: TEST_SHEET,
-        values: [
-          ['Pokemon', 'Timestamp', 'Device'],
-          [input, timestamp, device]
-        ]
+        values: [['Pokemon', 'Timestamp', 'Device'], [input, timestamp, device]]
       })
     });
     
     const result = await response.json();
-    
-    if (result.error) {
-      throw new Error(result.error);
-    }
+    if (result.error) throw new Error(result.error);
     
     document.getElementById('statusBadge').textContent = '✅ Saved Successfully!';
     document.getElementById('statusBadge').className = 'status-badge status-connected';
-    
-    // Reload data
-    setTimeout(() => loadFromSheet(), 500);
+    setTimeout(function() { loadFromSheet(); }, 500);
     
   } catch (error) {
     console.error('Save error:', error);
@@ -246,7 +231,6 @@ async function saveToSheet() {
   }
 }
 
-// Get device info
 function getDeviceInfo() {
   const ua = navigator.userAgent;
   if (/iPhone/.test(ua)) return 'iPhone (Safari)';
@@ -255,7 +239,6 @@ function getDeviceInfo() {
   return 'Browser: ' + (ua.match(/Chrome|Safari|Firefox/) || ['Unknown'])[0];
 }
 
-// Initialize
 window.onload = function() {
   document.getElementById('deviceInfo').textContent = getDeviceInfo();
   loadFromSheet();
