@@ -10,38 +10,42 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f2f2f7;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
   padding: 8px;
   min-height: 100vh;
-  color: #1c1c1e;
+  color: #000000; /* Restored black */
 }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 
-/* HEADER */
+/* Header */
 .header {
-  background: #3B7DDD;
-  border-radius: 18px;
-  padding: 20px 15px;
+  background: linear-gradient(180deg, #3B7DDD 0%, #5089E0 50%, #FFFFFF 100%);
+  border-radius: 16px;
+  padding: 20px 15px 15px;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(59,125,221,0.35);
-  margin-bottom: 18px;
+  box-shadow: 0 4px 20px rgba(59, 125, 221, 0.4);
+  margin-bottom: 15px;
+  position: relative;
+  border: 3px solid white;
 }
 
 .header h1 {
   color: white;
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 24px;
+  margin-bottom: 8px;
+  font-weight: 900;
 }
 
 .trainer-info {
-  color: rgba(255,255,255,0.9);
-  font-size: 14px;
-  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .trainer-level {
@@ -52,47 +56,45 @@ body {
 .status-badge {
   display: inline-block;
   padding: 6px 14px;
-  border-radius: 14px;
+  border-radius: 15px;
   font-size: 11px;
   font-weight: 700;
   margin-top: 8px;
+  border: 2px solid white;
 }
 
-.status-connected { background: #34C759; color: white; }
-.status-disconnected { background: #FF3B30; color: white; }
-.status-loading { background: #FFCC00; color: #1c1c1e; }
+.status-connected { background: #48BB78; color: white; }
+.status-disconnected { background: #F56565; color: white; }
+.status-loading { background: #ECC94B; color: #2D3748; }
 
-/* SECTIONS */
+/* Sections */
 .section {
   background: white;
-  border-radius: 14px;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 0;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   overflow: hidden;
-  transition: transform 0.15s ease;
 }
-
-.section:hover { transform: translateY(-2px); }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
-  background: #3B7DDD;
+  padding: 12px 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
 }
 
 .section-header h2 {
   color: white;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
 }
 
 .collapse-icon {
   color: white;
   font-size: 18px;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s;
 }
 
 .section-header.collapsed .collapse-icon {
@@ -100,81 +102,50 @@ body {
 }
 
 .section-content {
-  padding: 16px;
+  padding: 15px;
 }
 
-.section-content.collapsed { display: none; }
+.section-content.collapsed {
+  display: none;
+}
 
-/* EVENTS */
+/* Events */
 .event-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+  padding: 8px;
   margin: 6px 0;
-  background: #f5f7fb;
-  border-radius: 10px;
+  background: #F7FAFC;
+  border-radius: 8px;
   font-size: 13px;
+  transition: all 0.2s ease;
 }
 
 .event-item-live {
-  background: #fff3cd;
+  background: #FFF3CD;
   border-left: 4px solid #FF9500;
 }
 
-.event-item-text strong { color: #3B7DDD; }
-
-/* GENERIC LIST ITEMS */
-.list-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  margin-bottom: 8px;
-  background: #f5f7fb;
-  border-radius: 10px;
-  font-size: 13px;
+.event-item-past {
+  opacity: 0.45;
 }
 
-.list-item img {
-  width: 40px;
-  height: 40px;
+.event-item-icon {
+  font-size: 20px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 8px;
-  font-size: 11px;
+.event-item-text strong {
+  color: #3B7DDD;
   font-weight: 700;
 }
 
-.badge-priority-high { background: #ff3b30; color: white; }
-.badge-priority-medium { background: #ffcc00; color: black; }
-.badge-priority-low { background: #34c759; color: white; }
-
-/* BUTTONS */
-.btn {
-  background: #3B7DDD;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-small {
-  padding: 6px 10px;
-  font-size: 12px;
-}
-
+/* Loading */
 .loading, .empty-state {
   text-align: center;
   padding: 20px;
-  color: #8e8e93;
-  font-size: 13px;
+  font-size: 14px;
+  color: #666;
 }
 </style>
 </head>
@@ -183,7 +154,7 @@ body {
 <div class="container">
 
 <div class="header">
-  <h1>⚡ POKÉMON GO DASHBOARD</h1>
+  <h1>⚡ POKEMON GO DASHBOARD</h1>
   <div class="trainer-info">
     MachoMankey • Level <span class="trainer-level">71</span>
   </div>
@@ -226,7 +197,7 @@ body {
 <!-- LUCKY TRADES -->
 <div class="section">
   <div class="section-header" onclick="toggleSection(this)">
-    <h2>🤝 Lucky Trades</h2>
+    <h2>🤝 Lucky Trade Management</h2>
     <span class="collapse-icon">▼</span>
   </div>
   <div class="section-content">
@@ -249,11 +220,7 @@ body {
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
-  
-let powerUpData = [];
-let candyData = [];
-let tradePlansData = [];
-let shinyGapsData = [];
+
 let eventsData = [];
 
 function toggleSection(header) {
@@ -267,36 +234,14 @@ async function loadSheetData(sheetName) {
   return result.data || [];
 }
 
-async function saveSheetData(sheetName, data) {
-  const response = await fetch(SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sheet: sheetName, values: data })
-  });
-  return await response.json();
-}
-
 async function loadAllData() {
   document.getElementById('syncStatus').textContent = '🔄 Syncing...';
   document.getElementById('syncStatus').className = 'status-badge status-loading';
 
   try {
-    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
-      loadSheetData('PowerUpPriority'),
-      loadSheetData('RareCandyPriority'),
-      loadSheetData('LuckyTradePlans'),
-      loadSheetData('CommunityDayShinies'),
-      loadSheetData('CurrentEvents')
-    ]);
-
-    powerUpData = powerUp.slice(1);
-    candyData = candy.slice(1);
-    tradePlansData = trades.slice(1);
-    shinyGapsData = shinyGaps.slice(1);
-    eventsData = events.slice(1);
-
+    const events = await loadSheetData('CurrentEvents');
+    eventsData = events.length > 1 ? events.slice(1) : [];
     renderEvents();
-    renderPowerUp();
 
     document.getElementById('syncStatus').textContent = '✅ Synced';
     document.getElementById('syncStatus').className = 'status-badge status-connected';
@@ -308,56 +253,59 @@ async function loadAllData() {
 
 function renderEvents() {
   const container = document.getElementById('eventsList');
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
 
   if (!eventsData.length) {
     container.innerHTML = '<div class="empty-state">No events loaded.</div>';
     return;
   }
 
-  let html = '';
-  eventsData.forEach(row => {
-    const [icon, type, desc] = row;
-    const isLive = desc.toLowerCase().includes('today') || desc.toLowerCase().includes(today);
+  const weekdayMap = {
+    monday: 1, mon: 1,
+    tuesday: 2, tue: 2, tues: 2,
+    wednesday: 3, wed: 3,
+    thursday: 4, thu: 4, thurs: 4,
+    friday: 5, fri: 5,
+    saturday: 6, sat: 6,
+    sunday: 7, sun: 7
+  };
 
-    html += `
-      <div class="event-item ${isLive ? 'event-item-live' : ''}">
-        <div>${icon}</div>
-        <div><strong>${type}:</strong> ${desc}</div>
-      </div>
-    `;
-  });
+  const todayJS = new Date().getDay(); // 0=Sun
+  const today = todayJS === 0 ? 7 : todayJS;
 
-  container.innerHTML = html;
-}
-
-function renderPowerUp() {
-  const container = document.getElementById('powerUpContent');
-  if (!powerUpData.length) {
-    container.innerHTML = '<div class="empty-state">No entries.</div>';
-    return;
+  function getDay(description) {
+    const desc = description.toLowerCase();
+    for (const key in weekdayMap) {
+      if (desc.includes(key)) {
+        return weekdayMap[key];
+      }
+    }
+    return 99;
   }
 
-  const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-
-  const sorted = [...powerUpData].sort((a, b) => {
-    const pa = priorityOrder[a[12]] ?? 99;
-    const pb = priorityOrder[b[12]] ?? 99;
-    return pa - pb;
+  const sorted = [...eventsData].sort((a, b) => {
+    return getDay(a[2] || '') - getDay(b[2] || '');
   });
 
   let html = '';
+
   sorted.forEach(row => {
-    const [pokemon, , , , , current, target, role, , , , notes, priority] = row;
-    const priorityClass = priority ? priority.toLowerCase() : 'low';
+    const [icon, type, description] = row;
+    const eventDay = getDay(description || '');
+
+    let classes = "event-item";
+
+    if (eventDay === today) {
+      classes += " event-item-live";
+    } else if (eventDay < today) {
+      classes += " event-item-past";
+    }
 
     html += `
-      <div class="list-item">
-        <div><strong>${pokemon}</strong></div>
-        <div>Lv ${current} → ${target}</div>
-        <div>${role}</div>
-        <span class="badge badge-priority-${priorityClass}">${priority}</span>
-        ${notes ? `<div>${notes}</div>` : ''}
+      <div class="${classes}">
+        <div class="event-item-icon">${icon}</div>
+        <div class="event-item-text">
+          <strong>${type}:</strong> ${description}
+        </div>
       </div>
     `;
   });
