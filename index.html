@@ -10,7 +10,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f2f2f7; /* iOS grouped background */
+  background: #f2f2f7;
   padding: 8px;
   min-height: 100vh;
   color: #1c1c1e;
@@ -36,7 +36,6 @@ body {
   color: white;
   font-size: 22px;
   font-weight: 800;
-  letter-spacing: 0.5px;
 }
 
 .trainer-info {
@@ -73,9 +72,7 @@ body {
   transition: transform 0.15s ease;
 }
 
-.section:hover {
-  transform: translateY(-2px);
-}
+.section:hover { transform: translateY(-2px); }
 
 .section-header {
   display: flex;
@@ -84,7 +81,6 @@ body {
   padding: 14px 16px;
   background: #3B7DDD;
   cursor: pointer;
-  user-select: none;
 }
 
 .section-header h2 {
@@ -107,17 +103,9 @@ body {
   padding: 16px;
 }
 
-.section-content.collapsed {
-  display: none;
-}
+.section-content.collapsed { display: none; }
 
 /* EVENTS */
-.event-quick-info h4 {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #3B7DDD;
-}
-
 .event-item {
   display: flex;
   align-items: center;
@@ -127,7 +115,6 @@ body {
   background: #f5f7fb;
   border-radius: 10px;
   font-size: 13px;
-  transition: background 0.2s ease;
 }
 
 .event-item-live {
@@ -135,41 +122,36 @@ body {
   border-left: 4px solid #FF9500;
 }
 
-.event-item-icon {
-  font-size: 20px;
-}
+.event-item-text strong { color: #3B7DDD; }
 
-.event-item-text strong {
-  color: #3B7DDD;
-}
-
-.event-links {
+/* GENERIC LIST ITEMS */
+.list-item {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #f5f7fb;
+  border-radius: 10px;
+  font-size: 13px;
 }
 
-.event-link {
-  padding: 8px 14px;
-  background: #3B7DDD;
-  color: white;
-  text-decoration: none;
+.list-item img {
+  width: 40px;
+  height: 40px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
   border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: opacity 0.2s ease;
+  font-size: 11px;
+  font-weight: 700;
 }
 
-.event-link:hover {
-  opacity: 0.85;
-}
-
-.last-updated {
-  margin-top: 12px;
-  font-size: 12px;
-  text-align: center;
-}
+.badge-priority-high { background: #ff3b30; color: white; }
+.badge-priority-medium { background: #ffcc00; color: black; }
+.badge-priority-low { background: #34c759; color: white; }
 
 /* BUTTONS */
 .btn {
@@ -188,19 +170,11 @@ body {
   font-size: 12px;
 }
 
-.btn:active {
-  transform: scale(0.97);
-}
-
 .loading, .empty-state {
   text-align: center;
   padding: 20px;
   color: #8e8e93;
   font-size: 13px;
-}
-
-@media (max-width: 600px) {
-  .header h1 { font-size: 19px; }
 }
 </style>
 </head>
@@ -223,33 +197,63 @@ body {
     <span class="collapse-icon">▼</span>
   </div>
   <div class="section-content">
+    <div id="eventsList" class="loading">Loading events...</div>
+  </div>
+</div>
 
-    <div class="event-quick-info">
-      <h4>🗓️ This Week</h4>
-      <div id="eventsList">
-        <div class="loading">Loading events...</div>
-      </div>
-    </div>
+<!-- POWER UP PRIORITY -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>⚡ Power-Up Priority</h2>
+    <span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content">
+    <div id="powerUpContent" class="loading">Loading...</div>
+  </div>
+</div>
 
-    <div class="event-links">
-      <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
-      <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 Hub</a>
-      <a href="https://www.serebii.net/pokemongo/" target="_blank" class="event-link">🌐 Serebii</a>
-      <a href="https://www.g47ix.pro" target="_blank" class="event-link">📊 G47IX</a>
-    </div>
+<!-- RARE CANDY -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🍬 Rare Candy Priority</h2>
+    <span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content">
+    <div id="rareCandyContent" class="loading">Loading...</div>
+  </div>
+</div>
 
-    <div class="last-updated">
-      <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
-    </div>
+<!-- LUCKY TRADES -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🤝 Lucky Trades</h2>
+    <span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content">
+    <div id="tradePlansContent" class="loading">Loading...</div>
+  </div>
+</div>
 
+<!-- SHINY GAPS -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>✨ Community Day Shiny Gaps</h2>
+    <span class="collapse-icon">▼</span>
+  </div>
+  <div class="section-content">
+    <div id="shinyGapsContent" class="loading">Loading...</div>
   </div>
 </div>
 
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
+const SCRIPT_URL = 'YOUR_SCRIPT_URL';
 
+let powerUpData = [];
+let candyData = [];
+let tradePlansData = [];
+let shinyGapsData = [];
 let eventsData = [];
 
 function toggleSection(header) {
@@ -263,14 +267,36 @@ async function loadSheetData(sheetName) {
   return result.data || [];
 }
 
+async function saveSheetData(sheetName, data) {
+  const response = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sheet: sheetName, values: data })
+  });
+  return await response.json();
+}
+
 async function loadAllData() {
   document.getElementById('syncStatus').textContent = '🔄 Syncing...';
   document.getElementById('syncStatus').className = 'status-badge status-loading';
 
   try {
-    const events = await loadSheetData('CurrentEvents');
-    eventsData = events.length > 1 ? events.slice(1) : [];
+    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
+      loadSheetData('PowerUpPriority'),
+      loadSheetData('RareCandyPriority'),
+      loadSheetData('LuckyTradePlans'),
+      loadSheetData('CommunityDayShinies'),
+      loadSheetData('CurrentEvents')
+    ]);
+
+    powerUpData = powerUp.slice(1);
+    candyData = candy.slice(1);
+    tradePlansData = trades.slice(1);
+    shinyGapsData = shinyGaps.slice(1);
+    eventsData = events.slice(1);
+
     renderEvents();
+    renderPowerUp();
 
     document.getElementById('syncStatus').textContent = '✅ Synced';
     document.getElementById('syncStatus').className = 'status-badge status-connected';
@@ -282,34 +308,56 @@ async function loadAllData() {
 
 function renderEvents() {
   const container = document.getElementById('eventsList');
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
 
-  if (eventsData.length === 0) {
+  if (!eventsData.length) {
     container.innerHTML = '<div class="empty-state">No events loaded.</div>';
     return;
   }
 
-  const today = new Date();
-  const weekday = today.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-
-  // Sort alphabetically by EventType for consistency
-  const sorted = [...eventsData].sort((a, b) => a[1].localeCompare(b[1]));
-
   let html = '';
-
-  sorted.forEach(row => {
-    const [icon, type, description] = row;
-
-    const descLower = description.toLowerCase();
-    const isLive =
-      descLower.includes('today') ||
-      descLower.includes(weekday);
+  eventsData.forEach(row => {
+    const [icon, type, desc] = row;
+    const isLive = desc.toLowerCase().includes('today') || desc.toLowerCase().includes(today);
 
     html += `
       <div class="event-item ${isLive ? 'event-item-live' : ''}">
-        <div class="event-item-icon">${icon}</div>
-        <div class="event-item-text">
-          <strong>${type}:</strong> ${description}
-        </div>
+        <div>${icon}</div>
+        <div><strong>${type}:</strong> ${desc}</div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderPowerUp() {
+  const container = document.getElementById('powerUpContent');
+  if (!powerUpData.length) {
+    container.innerHTML = '<div class="empty-state">No entries.</div>';
+    return;
+  }
+
+  const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+
+  const sorted = [...powerUpData].sort((a, b) => {
+    const pa = priorityOrder[a[12]] ?? 99;
+    const pb = priorityOrder[b[12]] ?? 99;
+    return pa - pb;
+  });
+
+  let html = '';
+  sorted.forEach(row => {
+    const [pokemon, , , , , current, target, role, , , , notes, priority] = row;
+    const priorityClass = priority ? priority.toLowerCase() : 'low';
+
+    html += `
+      <div class="list-item">
+        <div><strong>${pokemon}</strong></div>
+        <div>Lv ${current} → ${target}</div>
+        <div>${role}</div>
+        <span class="badge badge-priority-${priorityClass}">${priority}</span>
+        ${notes ? `<div>${notes}</div>` : ''}
       </div>
     `;
   });
