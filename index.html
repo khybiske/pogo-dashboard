@@ -14,7 +14,7 @@ body {
   background-attachment: fixed;
   padding: 8px;
   min-height: 100vh;
-  color: #000000; /* Restored black */
+  color: #000000;
 }
 
 .container {
@@ -140,7 +140,6 @@ body {
   font-weight: 700;
 }
 
-/* Loading */
 .loading, .empty-state {
   text-align: center;
   padding: 20px;
@@ -221,6 +220,10 @@ body {
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
 
+let powerUpData = [];
+let candyData = [];
+let tradePlansData = [];
+let shinyGapsData = [];
 let eventsData = [];
 
 function toggleSection(header) {
@@ -239,16 +242,38 @@ async function loadAllData() {
   document.getElementById('syncStatus').className = 'status-badge status-loading';
 
   try {
-    const events = await loadSheetData('CurrentEvents');
+    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
+      loadSheetData('PowerUpPriority'),
+      loadSheetData('RareCandyPriority'),
+      loadSheetData('LuckyTradePlans'),
+      loadSheetData('CommunityDayShinies'),
+      loadSheetData('CurrentEvents')
+    ]);
+
+    powerUpData = powerUp.length > 1 ? powerUp.slice(1) : [];
+    candyData = candy.length > 1 ? candy.slice(1) : [];
+    tradePlansData = trades.length > 1 ? trades.slice(1) : [];
+    shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
     eventsData = events.length > 1 ? events.slice(1) : [];
-    renderEvents();
+
+    renderAll();
 
     document.getElementById('syncStatus').textContent = '✅ Synced';
     document.getElementById('syncStatus').className = 'status-badge status-connected';
-  } catch (err) {
+
+  } catch (error) {
     document.getElementById('syncStatus').textContent = '❌ Sync Error';
     document.getElementById('syncStatus').className = 'status-badge status-disconnected';
+    console.error(error);
   }
+}
+
+function renderAll() {
+  renderEvents();
+  if (typeof renderPowerUp === 'function') renderPowerUp();
+  if (typeof renderCandy === 'function') renderCandy();
+  if (typeof renderTrades === 'function') renderTrades();
+  if (typeof renderShinyGaps === 'function') renderShinyGaps();
 }
 
 function renderEvents() {
@@ -269,36 +294,28 @@ function renderEvents() {
     sunday: 7, sun: 7
   };
 
-  const todayJS = new Date().getDay(); // 0=Sun
+  const todayJS = new Date().getDay();
   const today = todayJS === 0 ? 7 : todayJS;
 
   function getDay(description) {
-    const desc = description.toLowerCase();
+    const desc = (description || '').toLowerCase();
     for (const key in weekdayMap) {
-      if (desc.includes(key)) {
-        return weekdayMap[key];
-      }
+      if (desc.includes(key)) return weekdayMap[key];
     }
     return 99;
   }
 
-  const sorted = [...eventsData].sort((a, b) => {
-    return getDay(a[2] || '') - getDay(b[2] || '');
-  });
+  const sorted = [...eventsData].sort((a, b) => getDay(a[2]) - getDay(b[2]));
 
   let html = '';
 
   sorted.forEach(row => {
     const [icon, type, description] = row;
-    const eventDay = getDay(description || '');
+    const eventDay = getDay(description);
 
     let classes = "event-item";
-
-    if (eventDay === today) {
-      classes += " event-item-live";
-    } else if (eventDay < today) {
-      classes += " event-item-past";
-    }
+    if (eventDay === today) classes += " event-item-live";
+    else if (eventDay < today) classes += " event-item-past";
 
     html += `
       <div class="${classes}">
