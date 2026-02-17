@@ -4,60 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MachoMankey's PoGo Dashboard</title>
+
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-attachment: fixed;
+  background: #f2f2f7; /* iOS grouped background */
   padding: 8px;
   min-height: 100vh;
+  color: #1c1c1e;
 }
 
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding-bottom: 30px;
+  padding-bottom: 40px;
 }
 
-/* Header - Pokemon Go Style */
+/* HEADER */
 .header {
-  background: linear-gradient(180deg, #3B7DDD 0%, #5089E0 50%, #FFFFFF 100%);
-  border-radius: 16px;
-  padding: 20px 15px 15px;
+  background: #3B7DDD;
+  border-radius: 18px;
+  padding: 20px 15px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(59, 125, 221, 0.4);
-  margin-bottom: 15px;
-  position: relative;
-  border: 3px solid white;
-}
-
-.header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #EE1515 0%, #EE1515 33%, #FFFFFF 33%, #FFFFFF 66%, #3B7DDD 66%, #3B7DDD 100%);
+  box-shadow: 0 6px 20px rgba(59,125,221,0.35);
+  margin-bottom: 18px;
 }
 
 .header h1 {
   color: white;
-  font-size: 24px;
-  margin-bottom: 8px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-  font-weight: 900;
+  font-size: 22px;
+  font-weight: 800;
   letter-spacing: 0.5px;
 }
 
 .trainer-info {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 15px;
-  font-weight: 600;
-  margin: 5px 0 8px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+  margin-top: 6px;
 }
 
 .trainer-level {
@@ -68,49 +53,50 @@ body {
 .status-badge {
   display: inline-block;
   padding: 6px 14px;
-  border-radius: 15px;
+  border-radius: 14px;
   font-size: 11px;
   font-weight: 700;
   margin-top: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  border: 2px solid white;
 }
 
-.status-connected { background: #48BB78; color: white; }
-.status-disconnected { background: #F56565; color: white; }
-.status-loading { background: #ECC94B; color: #2D3748; }
+.status-connected { background: #34C759; color: white; }
+.status-disconnected { background: #FF3B30; color: white; }
+.status-loading { background: #FFCC00; color: #1c1c1e; }
 
-/* Sections */
+/* SECTIONS */
 .section {
   background: white;
-  border-radius: 12px;
-  padding: 0;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
   overflow: hidden;
+  transition: transform 0.15s ease;
+}
+
+.section:hover {
+  transform: translateY(-2px);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 14px 16px;
+  background: #3B7DDD;
   cursor: pointer;
   user-select: none;
 }
 
 .section-header h2 {
   color: white;
-  font-size: 16px;
-  margin: 0;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .collapse-icon {
   color: white;
   font-size: 18px;
-  transition: transform 0.3s;
+  transition: transform 0.2s ease;
 }
 
 .section-header.collapsed .collapse-icon {
@@ -118,1466 +104,220 @@ body {
 }
 
 .section-content {
-  padding: 15px;
-  display: block;
+  padding: 16px;
 }
 
 .section-content.collapsed {
   display: none;
 }
 
-/* Events Section */
-.event-quick-info {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin: 12px 0;
-}
-
+/* EVENTS */
 .event-quick-info h4 {
-  color: #3B7DDD;
   font-size: 14px;
   margin-bottom: 10px;
-  font-weight: 700;
+  color: #3B7DDD;
 }
 
 .event-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px;
+  padding: 10px;
   margin: 6px 0;
-  background: #F7FAFC;
-  border-radius: 8px;
+  background: #f5f7fb;
+  border-radius: 10px;
   font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.event-item-live {
+  background: #fff3cd;
+  border-left: 4px solid #FF9500;
 }
 
 .event-item-icon {
   font-size: 20px;
-  flex-shrink: 0;
-}
-
-.event-item-text {
-  flex: 1;
-  color: #2D3748;
 }
 
 .event-item-text strong {
   color: #3B7DDD;
-  font-weight: 700;
 }
 
 .event-links {
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  gap: 8px;
   flex-wrap: wrap;
   margin-top: 12px;
 }
 
 .event-link {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #3B7DDD, #2C5AA0);
+  padding: 8px 14px;
+  background: #3B7DDD;
   color: white;
   text-decoration: none;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(59, 125, 221, 0.4);
-  transition: all 0.2s;
-  border: 2px solid white;
+  font-size: 12px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
 }
 
 .event-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 125, 221, 0.6);
+  opacity: 0.85;
 }
 
 .last-updated {
-  text-align: center;
-  font-size: 11px;
-  color: #718096;
-  margin-top: 10px;
-  font-style: italic;
-}
-
-/* Compact List Items - Two Line Layout */
-.list-item {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 10px;
-  padding: 10px;
-  margin-bottom: 8px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 3px solid #667eea;
-  font-size: 13px;
-  cursor: move;
-  transition: all 0.2s;
-}
-
-.list-item:hover {
-  background: #e9ecef;
-  transform: translateX(3px);
-}
-
-.list-item.dragging {
-  opacity: 0.5;
-}
-
-.list-item-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.drag-handle {
-  cursor: move;
-  color: #999;
-  font-size: 18px;
-  padding: 0;
-}
-
-.list-item-sprite {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-}
-
-.list-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.list-item-line1 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  font-size: 14px;
-  font-weight: 700;
-  color: #333;
-}
-
-.list-item-line2 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  margin-top: 12px;
   font-size: 12px;
-  color: #666;
+  text-align: center;
 }
 
-.list-item-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  justify-content: center;
-}
-
-/* Type colored text */
-.type-text {
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.type-normal { color: #A8A878; }
-.type-fire { color: #F08030; }
-.type-water { color: #6890F0; }
-.type-electric { color: #D4A017; } /* Darker gold instead of bright yellow */
-.type-grass { color: #78C850; }
-.type-ice { color: #98D8D8; }
-.type-fighting { color: #C03028; }
-.type-poison { color: #A040A0; }
-.type-ground { color: #E0C068; }
-.type-flying { color: #A890F0; }
-.type-psychic { color: #F85888; }
-.type-bug { color: #A8B820; }
-.type-rock { color: #B8A038; }
-.type-ghost { color: #705898; }
-.type-dragon { color: #7038F8; }
-.type-dark { color: #705848; }
-.type-steel { color: #B8B8D0; }
-.type-fairy { color: #EE99AC; }
-
-/* Small badges */
-.badge {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 10px;
-  font-weight: 700;
-  margin: 0 2px;
-  white-space: nowrap;
-}
-
-.badge-lvl50 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; }
-.badge-priority-high { background: linear-gradient(135deg, #FF6B6B, #FF5252); color: white; }
-.badge-priority-medium { background: linear-gradient(135deg, #FFD93D, #FFA500); color: #333; }
-.badge-priority-low { background: linear-gradient(135deg, #A8E6CF, #56CCF2); color: #333; }
-
-/* Icons */
-.icon {
-  font-size: 14px;
-  margin: 0 2px;
-}
-
-/* Buttons */
+/* BUTTONS */
 .btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #3B7DDD;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
   font-weight: 600;
-  margin: 4px;
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
-  transition: all 0.2s;
-}
-
-.btn:active {
-  transform: scale(0.95);
 }
 
 .btn-small {
-  padding: 4px 8px;
-  font-size: 11px;
+  padding: 6px 10px;
+  font-size: 12px;
 }
 
-.btn-icon {
-  background: #e9ecef;
-  color: #666;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: none;
+.btn:active {
+  transform: scale(0.97);
 }
 
-.btn-icon:hover {
-  background: #dee2e6;
-  color: #333;
-}
-
-.btn-icon:active {
-  transform: scale(0.95);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #dc3545, #c82333);
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #28a745, #218838);
-}
-
-/* Progress bars */
-.progress-bar {
-  background: #e9ecef;
-  border-radius: 8px;
-  height: 16px;
-  overflow: hidden;
-  margin-top: 4px;
-  width: 100%;
-}
-
-.progress-fill {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  height: 100%;
-  transition: width 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-/* Candy counter */
-.candy-controls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: white;
-  padding: 4px;
-  border-radius: 6px;
-}
-
-.candy-value {
-  min-width: 40px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 13px;
-  color: #667eea;
-}
-
-/* Shiny Grid */
-.shiny-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.shiny-card {
-  text-align: center;
-  padding: 10px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  transition: all 0.2s;
-  border: 2px solid transparent;
-}
-
-.shiny-card:hover {
-  transform: scale(1.05);
-  border-color: #FFD700;
-}
-
-.shiny-sprite {
-  width: 50px;
-  height: 50px;
-}
-
-.shiny-name {
-  margin-top: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #333;
-}
-
-.shiny-label {
-  font-size: 9px;
-  color: #FFD700;
-  font-weight: bold;
-  margin-top: 2px;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  z-index: 1000;
-  overflow-y: auto;
-  backdrop-filter: blur(5px);
-}
-
-.modal-content {
-  background: white;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 500px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #e9ecef;
-}
-
-.modal-header h2 {
-  color: #667eea;
-  font-size: 20px;
-}
-
-.modal-close {
-  font-size: 28px;
-  cursor: pointer;
-  color: #999;
-}
-
-.modal-close:hover {
-  color: #dc3545;
-}
-
-/* Forms */
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #495057;
-  font-size: 13px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #dee2e6;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  margin: 8px 0;
-  cursor: pointer;
-}
-
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-/* Empty states */
-.empty-state {
-  text-align: center;
-  padding: 30px 15px;
-  color: #6c757d;
-  font-size: 14px;
-}
-
-.loading {
+.loading, .empty-state {
   text-align: center;
   padding: 20px;
-  color: #6c757d;
-  font-size: 14px;
-}
-
-/* Archive toggle */
-.archive-toggle {
-  margin: 10px 0;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  color: #8e8e93;
   font-size: 13px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.archive-toggle:hover {
-  background: #e9ecef;
-}
-
-.archive-toggle input[type="checkbox"] {
-  cursor: pointer;
 }
 
 @media (max-width: 600px) {
-  .header h1 { font-size: 20px; }
-  .trainer-info { font-size: 14px; }
-  .list-item-line2 { font-size: 11px; }
-  .candy-controls { flex-wrap: wrap; }
-  .list-item-actions { flex-direction: row; }
+  .header h1 { font-size: 19px; }
 }
 </style>
 </head>
+
 <body>
-
 <div class="container">
-  <!-- Header -->
-  <div class="header">
-    <h1>⚡ POKEMON GO DASHBOARD</h1>
-    <div class="trainer-info">MachoMankey • Level <span class="trainer-level">71</span></div>
-    <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
-  </div>
 
-  <!-- Current Events -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>📅 Current Events</h2>
-      <span class="collapse-icon">▼</span>
-    </div>
-    <div class="section-content">
-      <!-- AI Extraction Helper - Compact Version -->
-      <div style="background: linear-gradient(135deg, #FFF3CD 0%, #FFF8E1 100%); border: 2px solid #FFC107; border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="color: #856404; font-size: 14px; font-weight: 700;">🤖 Weekly Update Helper</span>
-          <!-- Tooltip commented out as requested
-          <div style="position: relative; display: inline-block;">
-            <span class="info-icon">ℹ️</span>
-            <div class="tooltip" style="display: none;">
-              <strong>Quick Workflow:</strong>
-              <ol>
-                <li>Click "Copy Prompt"</li>
-                <li>Go to Claude.ai or ChatGPT</li>
-                <li>Paste prompt + upload graphic</li>
-                <li>Copy AI output</li>
-                <li>Paste into Google Sheets "CurrentEvents"</li>
-                <li>Click "Refresh" below</li>
-              </ol>
-            </div>
-          </div>
-          -->
-        </div>
-        <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()" style="flex-shrink: 0;">
-          📋 Copy Prompt
-        </button>
-      </div>
-      
-      <!-- Event Info from Google Sheets -->
-      <div class="event-quick-info">
-        <h4>🗓️ This Week's Events</h4>
-        <div id="eventsList">
-          <div class="loading">Loading events from Google Sheets...</div>
-        </div>
-      </div>
-      
-      <div class="event-links">
-        <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
-        <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
-        <a href="https://www.serebii.net/pokemongo/" target="_blank" class="event-link">🌐 Serebii</a>
-        <a href="https://www.g47ix.pro" target="_blank" class="event-link">📊 G47IX</a>
-      </div>
-      
-      <div class="last-updated">
-        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Open Google Sheet</button>
-        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh Data</button>
-      </div>
-    </div>
+<div class="header">
+  <h1>⚡ POKÉMON GO DASHBOARD</h1>
+  <div class="trainer-info">
+    MachoMankey • Level <span class="trainer-level">71</span>
   </div>
+  <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
+</div>
 
-  <!-- Power-Up Priority -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>⚡ Power-Up Priority</h2>
-      <span class="collapse-icon">▼</span>
-    </div>
-    <div class="section-content">
-      <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
-      <label class="archive-toggle">
-        <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()">
-        Show Archived
-      </label>
-      <div id="powerUpContent" style="margin-top:10px;">
-        <div class="loading">Loading...</div>
-      </div>
-    </div>
+<!-- CURRENT EVENTS -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>📅 Current Events</h2>
+    <span class="collapse-icon">▼</span>
   </div>
+  <div class="section-content">
 
-  <!-- Rare Candy Priority -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>🍬 Rare Candy Priority</h2>
-      <span class="collapse-icon">▼</span>
-    </div>
-    <div class="section-content">
-      <button class="btn btn-small" onclick="showAddCandyModal()">➕ Add Pokemon</button>
-      <div id="rareCandyContent" style="margin-top:10px;">
-        <div class="loading">Loading...</div>
+    <div class="event-quick-info">
+      <h4>🗓️ This Week</h4>
+      <div id="eventsList">
+        <div class="loading">Loading events...</div>
       </div>
     </div>
-  </div>
 
-  <!-- Lucky Trade Management -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>🤝 Lucky Trade Management</h2>
-      <span class="collapse-icon">▼</span>
+    <div class="event-links">
+      <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
+      <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 Hub</a>
+      <a href="https://www.serebii.net/pokemongo/" target="_blank" class="event-link">🌐 Serebii</a>
+      <a href="https://www.g47ix.pro" target="_blank" class="event-link">📊 G47IX</a>
     </div>
-    <div class="section-content">
-      <h3 style="margin-bottom:10px; color: #667eea; font-size: 15px;">✨ Auto-Generated Wants</h3>
-      <div id="autoLuckyWants">
-        <div class="loading">Loading...</div>
-      </div>
-      
-      <h3 style="margin:20px 0 10px; color: #667eea; font-size: 15px;">📋 Manual Trade Plans</h3>
-      <button class="btn btn-small" onclick="showAddTradeModal()">➕ Add Trade Plan</button>
-      <div id="tradePlansContent" style="margin-top:10px;">
-        <div class="loading">Loading...</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Shiny Dex Gaps -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <h2>✨ Community Day Shiny Gaps</h2>
-      <span class="collapse-icon">▼</span>
+    <div class="last-updated">
+      <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
     </div>
-    <div class="section-content">
-      <div style="margin-bottom: 15px;">
-        <button class="btn btn-small" onclick="window.open(SHEET_URL, '_blank')">📊 Google Sheet</button>
-        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
-      </div>
-      <div id="shinyGapsContent">
-        <div class="loading">Loading...</div>
-      </div>
-    </div>
+
   </div>
 </div>
 
-<!-- Modals -->
-<div id="addPowerUpModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="powerUpModalTitle">Add Power-Up Priority</h2>
-      <span class="modal-close" onclick="closeModal('addPowerUpModal')">&times;</span>
-    </div>
-    <form id="powerUpForm" onsubmit="savePowerUp(event)">
-      <input type="hidden" id="puEditIndex" value="">
-      <div class="form-group">
-        <label>Pokemon Name *</label>
-        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza">
-      </div>
-      <div class="form-group">
-        <label>Type(s) (comma separated)</label>
-        <input type="text" class="form-control" id="puTypes" placeholder="e.g., Dragon, Flying">
-      </div>
-      <div class="form-group">
-        <label class="checkbox-label">
-          <input type="checkbox" id="puLucky"> ⭐ Is Lucky
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="puHasElite"> ✅ Has Elite/Legacy Move
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" id="puNeedsElite"> ❗ Needs Elite/Legacy Move
-        </label>
-      </div>
-      <div class="form-group">
-        <label>Current Level *</label>
-        <input type="number" class="form-control" id="puCurrentLevel" step="0.5" min="1" max="55" required>
-      </div>
-      <div class="form-group">
-        <label>Target Level *</label>
-        <input type="number" class="form-control" id="puTargetLevel" step="0.5" min="1" max="55" required>
-      </div>
-      <div class="form-group">
-        <label>Role</label>
-        <select class="form-control" id="puRole">
-          <option>Raid</option>
-          <option>GMAX</option>
-          <option>Buddy</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="checkbox-label">
-          <input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky Trade
-        </label>
-      </div>
-      <div class="form-group">
-        <label>Notes</label>
-        <input type="text" class="form-control" id="puNotes" placeholder="Any additional info...">
-      </div>
-      <div class="form-group">
-        <label>Priority *</label>
-        <select class="form-control" id="puPriority" required>
-          <option value="High">High (Most Important)</option>
-          <option value="Medium" selected>Medium</option>
-          <option value="Low">Low (Least Important)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select class="form-control" id="puStatus">
-          <option>To Do</option>
-          <option>In Progress</option>
-          <option>Done</option>
-        </select>
-      </div>
-      <button type="submit" class="btn">💾 Save</button>
-    </form>
-  </div>
-</div>
-
-<div id="addCandyModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Add Rare Candy Priority</h2>
-      <span class="modal-close" onclick="closeModal('addCandyModal')">&times;</span>
-    </div>
-    <form id="candyForm" onsubmit="saveCandy(event)">
-      <div class="form-group">
-        <label>Pokemon Name *</label>
-        <input type="text" class="form-control" id="candyPokemon" required placeholder="e.g., Dialga">
-      </div>
-      <div class="form-group">
-        <label>Current Candy *</label>
-        <input type="number" class="form-control" id="candyCurrent" min="0" required>
-      </div>
-      <div class="form-group">
-        <label>Target Candy *</label>
-        <input type="number" class="form-control" id="candyTarget" min="0" required>
-      </div>
-      <div class="form-group">
-        <label>Notes</label>
-        <input type="text" class="form-control" id="candyNotes" placeholder="e.g., Adventure Effect, Legendary">
-      </div>
-      <button type="submit" class="btn">💾 Save</button>
-    </form>
-  </div>
-</div>
-
-<div id="addTradeModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Add Trade Plan</h2>
-      <span class="modal-close" onclick="closeModal('addTradeModal')">&times;</span>
-    </div>
-    <form id="tradeForm" onsubmit="saveTrade(event)">
-      <div class="form-group">
-        <label>Friend Name *</label>
-        <input type="text" class="form-control" id="tradeFriend" required>
-      </div>
-      <div class="form-group">
-        <label>What They Want</label>
-        <input type="text" class="form-control" id="tradeTheyWant">
-      </div>
-      <div class="form-group">
-        <label>What You Want</label>
-        <input type="text" class="form-control" id="tradeYouWant">
-      </div>
-      <div class="form-group">
-        <label>Notes</label>
-        <input type="text" class="form-control" id="tradeNotes">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select class="form-control" id="tradeStatus">
-          <option>Planned</option>
-          <option>Waiting</option>
-          <option>Complete</option>
-        </select>
-      </div>
-      <button type="submit" class="btn">💾 Save</button>
-    </form>
-  </div>
 </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeEnHA5MtsH2yIzsKOMB4Irz9R1Wqsj6SrcsZjjSEcF2McHJYQxpUhMbcFtXGf80ybIw/exec';
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1E9tGFWTFWHNkN6OheYwQCCuXDdz3oWAmbWTStoufz_w/edit';
 
-let powerUpData = [];
-let candyData = [];
-let tradePlansData = [];
-let shinyGapsData = [];
 let eventsData = [];
-
-const POKEMON_IDS = {
-  'bulbasaur': 1, 'ivysaur': 2, 'venusaur': 3,
-  'charmander': 4, 'charmeleon': 5, 'charizard': 6,
-  'squirtle': 7, 'wartortle': 8, 'blastoise': 9,
-  'weedle': 13, 'kakuna': 14, 'beedrill': 15,
-  'pikachu': 25, 'raichu': 26,
-  'sandshrew': 27, 'sandslash': 28,
-  'clefairy': 35, 'clefable': 36,
-  'abra': 63, 'kadabra': 64, 'alakazam': 65,
-  'machop': 66, 'machoke': 67, 'machamp': 68,
-  'geodude': 74, 'graveler': 75, 'golem': 76,
-  'slowpoke': 79, 'slowbro': 80,
-  'gastly': 92, 'haunter': 93, 'gengar': 94,
-  'onix': 95,
-  'rhyhorn': 111, 'rhydon': 112,
-  'electabuzz': 125,
-  'magmar': 126,
-  'magikarp': 129, 'gyarados': 130,
-  'eevee': 133,
-  'porygon': 137,
-  'dratini': 147, 'dragonair': 148, 'dragonite': 149,
-  'mewtwo': 150, 'mew': 151,
-  'chikorita': 152, 'bayleef': 153, 'meganium': 154,
-  'cyndaquil': 155, 'quilava': 156, 'typhlosion': 157,
-  'totodile': 158, 'croconaw': 159, 'feraligatr': 160,
-  'mareep': 179, 'flaaffy': 180, 'ampharos': 181,
-  'hoppip': 187, 'skiploom': 188, 'jumpluff': 189,
-  'swinub': 220, 'piloswine': 221,
-  'teddiursa': 216, 'ursaring': 217,
-  'larvitar': 246, 'pupitar': 247, 'tyranitar': 248,
-  'lugia': 249, 'ho-oh': 250,
-  'treecko': 252, 'grovyle': 253, 'sceptile': 254,
-  'torchic': 255, 'combusken': 256, 'blaziken': 257,
-  'mudkip': 258, 'marshtomp': 259, 'swampert': 260,
-  'seedot': 273, 'nuzleaf': 274, 'shiftry': 275,
-  'ralts': 280, 'kirlia': 281, 'gardevoir': 282,
-  'slakoth': 287, 'vigoroth': 288, 'slaking': 289,
-  'roselia': 315, 'roserade': 407,
-  'trapinch': 328, 'vibrava': 329, 'flygon': 330,
-  'swablu': 333, 'altaria': 334,
-  'duskull': 355, 'dusclops': 356,
-  'bagon': 371, 'shelgon': 372, 'salamence': 373,
-  'beldum': 374, 'metang': 375, 'metagross': 376,
-  'regirock': 377, 'regice': 378, 'registeel': 379,
-  'latias': 380, 'latios': 381,
-  'kyogre': 382, 'groudon': 383, 'rayquaza': 384,
-  'turtwig': 387, 'grotle': 388, 'torterra': 389,
-  'chimchar': 390, 'monferno': 391, 'infernape': 392,
-  'piplup': 393, 'prinplup': 394, 'empoleon': 395,
-  'starly': 396, 'staravia': 397, 'staraptor': 398,
-  'shinx': 403, 'luxio': 404, 'luxray': 405,
-  'bronzor': 436, 'bronzong': 437,
-  'gible': 443, 'gabite': 444, 'garchomp': 445,
-  'uxie': 480, 'mesprit': 481, 'azelf': 482,
-  'dialga': 483, 'palkia': 484,
-  'heatran': 485,
-  'giratina': 487,
-  'cresselia': 488,
-  'darkrai': 491,
-  'shaymin': 492,
-  'arceus': 493,
-  'victini': 494,
-  'snivy': 495, 'servine': 496, 'serperior': 497,
-  'tepig': 498, 'pignite': 499, 'emboar': 500,
-  'oshawott': 501, 'dewott': 502, 'samurott': 503,
-  'roggenrola': 524, 'boldore': 525, 'gigalith': 526,
-  'litwick': 607, 'lampent': 608, 'chandelure': 609,
-  'deino': 633, 'zweilous': 634, 'hydreigon': 635,
-  'cobalion': 638, 'terrakion': 639, 'virizion': 640,
-  'tornadus': 641, 'thundurus': 642,
-  'reshiram': 643, 'zekrom': 644,
-  'landorus': 645,
-  'kyurem': 646,
-  'genesect': 649,
-  'chespin': 650, 'quilladin': 651, 'chesnaught': 652,
-  'fennekin': 653, 'braixen': 654, 'delphox': 655,
-  'froakie': 656, 'frogadier': 657, 'greninja': 658,
-  'fletchling': 661, 'fletchinder': 662, 'talonflame': 663,
-  'xerneas': 716, 'yveltal': 717,
-  'stufful': 759, 'bewear': 760
-};
-
-function getPokemonId(name) {
-  const cleanName = name.toLowerCase().trim()
-    .replace('alolan ', '').replace('galarian ', '').replace('hisuian ', '')
-    .replace('shadow ', '').replace('mega ', '');
-  return POKEMON_IDS[cleanName] || 25;
-}
-
-function getPokemonSprite(name) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
-}
-
-// Copy AI extraction prompt to clipboard
-function copyPromptToClipboard() {
-  const prompt = `Extract this week's Pokemon Go events into a table with these exact columns: Icon, EventType, Description
-
-Format as tab-separated values ready to paste into Google Sheets.
-
-Use these guidelines:
-- Icon: Use appropriate emoji (⚔️ for raids, 💡 for spotlight, 🌟 for events, 🎯 for special hours, 🏆 for PvP, 🔥 for Max Monday, 📆 for upcoming, etc.)
-- EventType: Short category (Raids, Mega Raids, Event, Spotlight, PvP, Max Monday, GO Tour, etc.)
-- Description: Concise details (Pokemon names, times, bonuses)
-
-Example output format:
-Icon	EventType	Description
-⚔️	Raids	Necrozma (5★) - starts Monday 10am, Raid Hour Wednesday 6pm
-💡	Spotlight	Wednesday 6pm - 2x Transfer Candy
-🌟	Event	Lunar New Year (Tue 10am - Fri 8pm)
-
-Please extract the events from this image now.`;
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(prompt).then(() => {
-      showCopyConfirmation();
-    }).catch(err => {
-      fallbackCopyToClipboard(prompt);
-    });
-  } else {
-    fallbackCopyToClipboard(prompt);
-  }
-}
-
-function fallbackCopyToClipboard(text) {
-  const textArea = document.createElement('textarea');
-  textArea.value = text;
-  textArea.style.position = 'fixed';
-  textArea.style.left = '-999999px';
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-  
-  try {
-    document.execCommand('copy');
-    showCopyConfirmation();
-  } catch (err) {
-    alert('Copy failed. Please copy manually.');
-  }
-  
-  document.body.removeChild(textArea);
-}
-
-function showCopyConfirmation() {
-  const btn = event.target;
-  const originalText = btn.innerHTML;
-  const originalBg = btn.style.background;
-  
-  btn.innerHTML = '✅ Copied!';
-  btn.style.background = 'linear-gradient(135deg, #28a745, #218838)';
-  
-  setTimeout(() => {
-    btn.innerHTML = originalText;
-    btn.style.background = originalBg;
-  }, 2000);
-}
-
-function renderEvents() {
-  const container = document.getElementById('eventsList');
-  
-  if (eventsData.length === 0) {
-    container.innerHTML = '<div class="empty-state" style="padding:15px;">No events loaded. Add to "CurrentEvents" tab in Google Sheets.</div>';
-    return;
-  }
-  
-  let html = '';
-  eventsData.forEach(row => {
-    const [icon, eventType, description] = row;
-    if (icon && description) {
-      html += `
-        <div class="event-item">
-          <div class="event-item-icon">${icon}</div>
-          <div class="event-item-text">
-            <strong>${eventType}:</strong> ${description}
-          </div>
-        </div>
-      `;
-    }
-  });
-  
-  container.innerHTML = html || '<div class="empty-state" style="padding:15px;">Add events to Google Sheets "CurrentEvents" tab</div>';
-}
 
 function toggleSection(header) {
   header.classList.toggle('collapsed');
   header.nextElementSibling.classList.toggle('collapsed');
 }
 
-function showAddPowerUpModal() {
-  document.getElementById('powerUpModalTitle').textContent = 'Add Power-Up Priority';
-  document.getElementById('addPowerUpModal').style.display = 'block';
-  document.getElementById('powerUpForm').reset();
-  document.getElementById('puEditIndex').value = '';
-}
-
-function showEditPowerUpModal(idx) {
-  const row = powerUpData[idx];
-  const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status, archived] = row;
-  
-  document.getElementById('powerUpModalTitle').textContent = 'Edit Power-Up Priority';
-  document.getElementById('puEditIndex').value = idx;
-  document.getElementById('puPokemon').value = pokemon;
-  document.getElementById('puTypes').value = types;
-  document.getElementById('puLucky').checked = lucky === 'TRUE';
-  document.getElementById('puHasElite').checked = hasElite === 'TRUE';
-  document.getElementById('puNeedsElite').checked = needsElite === 'TRUE';
-  document.getElementById('puCurrentLevel').value = currentLevel;
-  document.getElementById('puTargetLevel').value = targetLevel;
-  document.getElementById('puRole').value = role;
-  document.getElementById('puNeedLucky').checked = needLucky === 'TRUE';
-  document.getElementById('puNotes').value = notes;
-  document.getElementById('puPriority').value = priority;
-  document.getElementById('puStatus').value = status;
-  
-  document.getElementById('addPowerUpModal').style.display = 'block';
-}
-
-function showAddCandyModal() {
-  document.getElementById('addCandyModal').style.display = 'block';
-  document.getElementById('candyForm').reset();
-}
-
-function showAddTradeModal() {
-  document.getElementById('addTradeModal').style.display = 'block';
-  document.getElementById('tradeForm').reset();
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-}
-
 async function loadSheetData(sheetName) {
-  try {
-    const response = await fetch(`${SCRIPT_URL}?sheet=${sheetName}`);
-    const result = await response.json();
-    if (result.error) throw new Error(result.error);
-    return result.data || [];
-  } catch (error) {
-    console.error(`Error loading ${sheetName}:`, error);
-    return [];
-  }
-}
-
-async function saveSheetData(sheetName, data) {
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ sheet: sheetName, values: data })
-    });
-    const result = await response.json();
-    if (result.error) throw new Error(result.error);
-    return true;
-  } catch (error) {
-    console.error(`Error saving ${sheetName}:`, error);
-    alert('Save failed: ' + error.message);
-    return false;
-  }
+  const response = await fetch(`${SCRIPT_URL}?sheet=${sheetName}`);
+  const result = await response.json();
+  return result.data || [];
 }
 
 async function loadAllData() {
   document.getElementById('syncStatus').textContent = '🔄 Syncing...';
   document.getElementById('syncStatus').className = 'status-badge status-loading';
-  
+
   try {
-    const [powerUp, candy, trades, shinyGaps, events] = await Promise.all([
-      loadSheetData('PowerUpPriority'),
-      loadSheetData('RareCandyPriority'),
-      loadSheetData('LuckyTradePlans'),
-      loadSheetData('CommunityDayShinies'),
-      loadSheetData('CurrentEvents')
-    ]);
-    
-    powerUpData = powerUp.length > 1 ? powerUp.slice(1) : [];
-    candyData = candy.length > 1 ? candy.slice(1) : [];
-    tradePlansData = trades.length > 1 ? trades.slice(1) : [];
-    shinyGapsData = shinyGaps.length > 1 ? shinyGaps.slice(1) : [];
+    const events = await loadSheetData('CurrentEvents');
     eventsData = events.length > 1 ? events.slice(1) : [];
-    
-    renderAll();
-    
+    renderEvents();
+
     document.getElementById('syncStatus').textContent = '✅ Synced';
     document.getElementById('syncStatus').className = 'status-badge status-connected';
-  } catch (error) {
+  } catch (err) {
     document.getElementById('syncStatus').textContent = '❌ Sync Error';
     document.getElementById('syncStatus').className = 'status-badge status-disconnected';
   }
 }
 
-function renderAll() {
-  renderEvents();
-  renderPowerUp();
-  renderCandy();
-  renderTrades();
-  renderShinyGaps();
-}
+function renderEvents() {
+  const container = document.getElementById('eventsList');
 
-// Drag and drop variables
-let dragSrcEl = null;
-
-function handleDragStart(e) {
-  dragSrcEl = this;
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
-  this.classList.add('dragging');
-}
-
-function handleDragOver(e) {
-  if (e.preventDefault) e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  return false;
-}
-
-function handleDragEnter(e) {
-  this.classList.add('over');
-}
-
-function handleDragLeave(e) {
-  this.classList.remove('over');
-}
-
-function handleDrop(e, dataArray, renderFunc, sheetName, headers) {
-  if (e.stopPropagation) e.stopPropagation();
-  
-  if (dragSrcEl !== this) {
-    const srcIndex = parseInt(dragSrcEl.getAttribute('data-index'));
-    const destIndex = parseInt(this.getAttribute('data-index'));
-    
-    const item = dataArray[srcIndex];
-    dataArray.splice(srcIndex, 1);
-    dataArray.splice(destIndex, 0, item);
-    
-    saveSheetData(sheetName, [headers, ...dataArray]);
-    renderFunc();
-  }
-  
-  return false;
-}
-
-function handleDragEnd(e) {
-  this.classList.remove('dragging');
-  document.querySelectorAll('.list-item').forEach(item => item.classList.remove('over'));
-}
-
-function renderPowerUp() {
-  const container = document.getElementById('powerUpContent');
-  const showArchived = document.getElementById('showArchivedPowerUp').checked;
-  
-  // Filter based on archived status
-  let filtered = powerUpData.filter(row => {
-    const archived = row[14] === 'TRUE';
-    return showArchived || !archived;
-  });
-  
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 No power-up priorities yet</div>';
+  if (eventsData.length === 0) {
+    container.innerHTML = '<div class="empty-state">No events loaded.</div>';
     return;
   }
-  
-  // Sort by priority
-  const priorityOrder = { 'High': 1, 'Medium': 2, 'Low': 3 };
-  const sorted = [...filtered].sort((a, b) => priorityOrder[a[12]] - priorityOrder[b[12]]);
-  
+
+  const today = new Date();
+  const weekday = today.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+
+  // Sort alphabetically by EventType for consistency
+  const sorted = [...eventsData].sort((a, b) => a[1].localeCompare(b[1]));
+
   let html = '';
-  sorted.forEach((row, idx) => {
-    const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes, priority, status, archived] = row;
-    
-    const typeMarkup = types ? types.split(',').map(t => {
-      const type = t.trim().toLowerCase();
-      return `<span class="type-text type-${type}">${t.trim().toUpperCase()}</span>`;
-    }).join(' ') : '';
-    
-    const badges = [];
-    if (parseFloat(targetLevel) === 50) badges.push('<span class="badge badge-lvl50">50</span>');
-    if (lucky === 'TRUE') badges.push('<span class="icon" title="Lucky">⭐</span>');
-    if (hasElite === 'TRUE') badges.push('<span class="icon" title="Has Elite">✅</span>');
-    if (needsElite === 'TRUE') badges.push('<span class="icon" title="Needs Elite">❗</span>');
-    if (needLucky === 'TRUE') badges.push('<span class="icon" title="Need Lucky">🤝</span>');
-    
-    const priorityBadge = `<span class="badge badge-priority-${priority.toLowerCase()}">${priority}</span>`;
-    
-    const actualIndex = powerUpData.indexOf(row);
-    const isArchived = archived === 'TRUE';
-    
+
+  sorted.forEach(row => {
+    const [icon, type, description] = row;
+
+    const descLower = description.toLowerCase();
+    const isLive =
+      descLower.includes('today') ||
+      descLower.includes(weekday);
+
     html += `
-      <div class="list-item" draggable="true" data-index="${actualIndex}" style="${isArchived ? 'opacity: 0.6;' : ''}">
-        <div class="list-item-left">
-          <span class="drag-handle">☰</span>
-          <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
-        </div>
-        <div class="list-item-content">
-          <div class="list-item-line1">
-            ${pokemon} ${priorityBadge} ${badges.join('')}
-          </div>
-          <div class="list-item-line2">
-            ${typeMarkup} • Lv${currentLevel}→${targetLevel} • ${role} • ${status}
-            ${notes ? ' • ' + notes : ''}
-          </div>
-        </div>
-        <div class="list-item-actions">
-          <button class="btn-icon" onclick="showEditPowerUpModal(${actualIndex})" title="Edit">✏️</button>
-          <button class="btn-icon" onclick="toggleArchivePowerUp(${actualIndex})" title="${isArchived ? 'Unarchive' : 'Archive'}">${isArchived ? '📂' : '📦'}</button>
-          <button class="btn-icon" onclick="deletePowerUp(${actualIndex})" title="Delete">🗑️</button>
+      <div class="event-item ${isLive ? 'event-item-live' : ''}">
+        <div class="event-item-icon">${icon}</div>
+        <div class="event-item-text">
+          <strong>${type}:</strong> ${description}
         </div>
       </div>
     `;
   });
-  
-  container.innerHTML = html;
-  
-  // Add drag and drop listeners
-  const items = container.querySelectorAll('.list-item');
-  items.forEach(item => {
-    item.addEventListener('dragstart', handleDragStart);
-    item.addEventListener('dragenter', handleDragEnter);
-    item.addEventListener('dragover', handleDragOver);
-    item.addEventListener('dragleave', handleDragLeave);
-    item.addEventListener('drop', function(e) {
-      const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
-      handleDrop.call(this, e, powerUpData, renderPowerUp, 'PowerUpPriority', headers);
-    });
-    item.addEventListener('dragend', handleDragEnd);
-  });
-}
 
-function renderCandy() {
-  const container = document.getElementById('rareCandyContent');
-  
-  if (candyData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 No rare candy priorities yet</div>';
-    return;
-  }
-  
-  let html = '';
-  candyData.forEach((row, idx) => {
-    const [pokemon, current, target, notes] = row;
-    const needed = parseInt(target) - parseInt(current);
-    const progress = Math.min((parseInt(current) / parseInt(target)) * 100, 100);
-    
-    html += `
-      <div class="list-item" style="cursor: default; flex-wrap: wrap;">
-        <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
-        <div class="list-item-content">
-          <div class="list-item-name">${pokemon}</div>
-          <div class="list-item-details">
-            Need: ${needed} more • Target: ${target} ${notes ? ' • ' + notes : ''}
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: ${progress}%">${current}/${target}</div>
-          </div>
-        </div>
-        <div class="candy-controls">
-          <button class="btn btn-small" onclick="updateCandy(${idx}, -10)">-10</button>
-          <button class="btn btn-small" onclick="updateCandy(${idx}, -1)">-1</button>
-          <span class="candy-value">${current}</span>
-          <button class="btn btn-small" onclick="updateCandy(${idx}, 1)">+1</button>
-          <button class="btn btn-small" onclick="updateCandy(${idx}, 10)">+10</button>
-        </div>
-        <button class="btn-icon" style="margin-left:auto;" onclick="deleteCandy(${idx})">🗑️</button>
-      </div>
-    `;
-  });
-  
   container.innerHTML = html;
 }
 
-function renderTrades() {
-  const autoContainer = document.getElementById('autoLuckyWants');
-  const plansContainer = document.getElementById('tradePlansContent');
-  
-  const autoWants = powerUpData.filter(row => row[10] === 'TRUE' && row[14] !== 'TRUE');
-  
-  if (autoWants.length === 0) {
-    autoContainer.innerHTML = '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority</div>';
-  } else {
-    let html = '';
-    autoWants.forEach(row => {
-      const [pokemon, types, lucky, hasElite, needsElite, currentLevel, targetLevel, role, xlCandy, dust, needLucky, notes] = row;
-      html += `
-        <div class="list-item" style="border-left-color: #FFD700; cursor: default;">
-          <img class="list-item-sprite" src="${getPokemonSprite(pokemon)}" onerror="this.src='https://via.placeholder.com/40'">
-          <div class="list-item-content">
-            <div class="list-item-name">${pokemon}</div>
-            <div class="list-item-details">
-              For: ${role} (Lv ${targetLevel})${notes ? ' • ' + notes : ''}
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    autoContainer.innerHTML = html;
-  }
-  
-  if (tradePlansData.length === 0) {
-    plansContainer.innerHTML = '<div class="empty-state">📝 No manual trade plans yet</div>';
-    return;
-  }
-  
-  let html = '';
-  tradePlansData.forEach((row, idx) => {
-    const [friend, theyWant, youWant, notes, status] = row;
-    
-    html += `
-      <div class="list-item" draggable="true" data-index="${idx}">
-        <span class="drag-handle">☰</span>
-        <span style="font-size:32px;">👥</span>
-        <div class="list-item-content">
-          <div class="list-item-name">${friend}</div>
-          <div class="list-item-details">
-            They want: ${theyWant || 'TBD'} • You want: ${youWant || 'TBD'} • ${status}
-            ${notes ? ' • ' + notes : ''}
-          </div>
-        </div>
-        <button class="btn-icon" onclick="deleteTrade(${idx})">🗑️</button>
-      </div>
-    `;
-  });
-  
-  plansContainer.innerHTML = html;
-  
-  const items = plansContainer.querySelectorAll('.list-item');
-  items.forEach(item => {
-    item.addEventListener('dragstart', handleDragStart);
-    item.addEventListener('dragenter', handleDragEnter);
-    item.addEventListener('dragover', handleDragOver);
-    item.addEventListener('dragleave', handleDragLeave);
-    item.addEventListener('drop', function(e) {
-      const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
-      handleDrop.call(this, e, tradePlansData, renderTrades, 'LuckyTradePlans', headers);
-    });
-    item.addEventListener('dragend', handleDragEnd);
-  });
-}
-
-function renderShinyGaps() {
-  const container = document.getElementById('shinyGapsContent');
-  
-  if (shinyGapsData.length === 0) {
-    container.innerHTML = '<div class="empty-state">📝 Update Google Sheet</div>';
-    return;
-  }
-  
-  const missing = shinyGapsData.filter(row => {
-    const have = (row[1] || '').toString().toUpperCase();
-    return have === 'N' || have === 'NO' || have === 'FALSE';
-  });
-  
-  if (missing.length === 0) {
-    container.innerHTML = '<div class="empty-state">🎉 All Community Day shinies!</div>';
-    return;
-  }
-  
-  let html = '<div class="shiny-grid">';
-  missing.forEach(row => {
-    html += `
-      <div class="shiny-card">
-        <img src="${getPokemonSprite(row[0])}" class="shiny-sprite" onerror="this.src='https://via.placeholder.com/50'">
-        <div class="shiny-name">${row[0]}</div>
-        <div class="shiny-label">⭐ Trade</div>
-      </div>
-    `;
-  });
-  html += '</div>';
-  container.innerHTML = html;
-}
-
-async function savePowerUp(e) {
-  e.preventDefault();
-  
-  const editIndex = document.getElementById('puEditIndex').value;
-  
-  const newRow = [
-    document.getElementById('puPokemon').value,
-    document.getElementById('puTypes').value,
-    document.getElementById('puLucky').checked ? 'TRUE' : 'FALSE',
-    document.getElementById('puHasElite').checked ? 'TRUE' : 'FALSE',
-    document.getElementById('puNeedsElite').checked ? 'TRUE' : 'FALSE',
-    document.getElementById('puCurrentLevel').value,
-    document.getElementById('puTargetLevel').value,
-    document.getElementById('puRole').value,
-    '', '',
-    document.getElementById('puNeedLucky').checked ? 'TRUE' : 'FALSE',
-    document.getElementById('puNotes').value,
-    document.getElementById('puPriority').value,
-    document.getElementById('puStatus').value,
-    'FALSE' // Archived
-  ];
-  
-  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
-  
-  if (editIndex !== '') {
-    // Editing existing entry - preserve archived status
-    newRow[14] = powerUpData[editIndex][14] || 'FALSE';
-    powerUpData[editIndex] = newRow;
-  } else {
-    // Adding new entry
-    powerUpData.push(newRow);
-  }
-  
-  const success = await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
-  if (success) {
-    closeModal('addPowerUpModal');
-    renderPowerUp();
-    renderTrades();
-  }
-}
-
-async function saveCandy(e) {
-  e.preventDefault();
-  
-  const newRow = [
-    document.getElementById('candyPokemon').value,
-    document.getElementById('candyCurrent').value,
-    document.getElementById('candyTarget').value,
-    document.getElementById('candyNotes').value
-  ];
-  
-  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
-  candyData.push(newRow);
-  
-  const success = await saveSheetData('RareCandyPriority', [headers, ...candyData]);
-  if (success) {
-    closeModal('addCandyModal');
-    renderCandy();
-  }
-}
-
-async function saveTrade(e) {
-  e.preventDefault();
-  
-  const newRow = [
-    document.getElementById('tradeFriend').value,
-    document.getElementById('tradeTheyWant').value,
-    document.getElementById('tradeYouWant').value,
-    document.getElementById('tradeNotes').value,
-    document.getElementById('tradeStatus').value
-  ];
-  
-  const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
-  tradePlansData.push(newRow);
-  
-  const success = await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
-  if (success) {
-    closeModal('addTradeModal');
-    renderTrades();
-  }
-}
-
-async function updateCandy(idx, change) {
-  const current = parseInt(candyData[idx][1]);
-  candyData[idx][1] = Math.max(0, current + change).toString();
-  
-  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
-  await saveSheetData('RareCandyPriority', [headers, ...candyData]);
-  renderCandy();
-}
-
-async function toggleArchivePowerUp(idx) {
-  const currentArchived = powerUpData[idx][14] === 'TRUE';
-  powerUpData[idx][14] = currentArchived ? 'FALSE' : 'TRUE';
-  
-  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
-  await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
-  renderPowerUp();
-  renderTrades();
-}
-
-async function deletePowerUp(idx) {
-  if (!confirm('Delete this entry permanently?')) return;
-  powerUpData.splice(idx, 1);
-  const headers = ['Pokemon', 'Types', 'Lucky', 'Has Elite', 'Needs Elite', 'Current Level', 'Target Level', 'Role', 'XL Candy', 'Stardust', 'Need Lucky', 'Notes', 'Priority', 'Status', 'Archived'];
-  await saveSheetData('PowerUpPriority', [headers, ...powerUpData]);
-  renderPowerUp();
-  renderTrades();
-}
-
-async function deleteCandy(idx) {
-  if (!confirm('Delete this entry?')) return;
-  candyData.splice(idx, 1);
-  const headers = ['Pokemon', 'Current', 'Target', 'Notes'];
-  await saveSheetData('RareCandyPriority', [headers, ...candyData]);
-  renderCandy();
-}
-
-async function deleteTrade(idx) {
-  if (!confirm('Delete this entry?')) return;
-  tradePlansData.splice(idx, 1);
-  const headers = ['Friend', 'They Want', 'You Want', 'Notes', 'Status'];
-  await saveSheetData('LuckyTradePlans', [headers, ...tradePlansData]);
-  renderTrades();
-}
-
-window.onload = function() {
-  loadAllData();
-};
-
-window.onclick = function(event) {
-  if (event.target.classList.contains('modal')) {
-    event.target.style.display = 'none';
-  }
-};
+window.onload = loadAllData;
 </script>
 
 </body>
