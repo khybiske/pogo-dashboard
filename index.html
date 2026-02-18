@@ -53,6 +53,23 @@ body {
 .event-item-text strong { color: #3B7DDD; font-weight: 700; }
 .event-item-live { background: #FFF3CD !important; border-left: 4px solid #FF9500; }
 .event-item-past { opacity: 0.45; }
+
+/* Weekly helper - subtle and bottom */
+.weekly-helper {
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 15px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #718096;
+}
+.weekly-helper-text { flex: 1; }
+
 .event-links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
 .event-link { padding: 8px 14px; background: linear-gradient(135deg, #3B7DDD, #2C5AA0); color: white; text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 700; transition: all 0.2s; }
 .event-link:hover { transform: translateY(-2px); }
@@ -170,15 +187,15 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <!-- AI helper -->
-      <div style="background:linear-gradient(135deg,#FFF3CD,#FFF8E1);border:2px solid #FFC107;border-radius:10px;padding:11px 14px;margin-bottom:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-        <span style="color:#856404;font-size:14px;font-weight:700;">🤖 Weekly Update Helper</span>
-        <button class="btn btn-small btn-success" onclick="copyPromptToClipboard()">📋 Copy Prompt</button>
-      </div>
-
       <div class="event-quick-info">
         <h4>🗓️ This Week's Events</h4>
         <div id="eventsList"><div class="loading">Loading…</div></div>
+      </div>
+
+      <!-- Weekly helper - subtle and at bottom -->
+      <div class="weekly-helper">
+        <span class="weekly-helper-text">🤖 Weekly update: Copy prompt → AI + graphic → paste to sheet</span>
+        <button class="btn btn-small" onclick="copyPromptToClipboard()">📋 Copy Prompt</button>
       </div>
 
       <div class="event-links">
