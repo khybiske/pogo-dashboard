@@ -122,76 +122,58 @@ const STARDUST_TO_LEVEL = {
   10: 40, 11: 42, 12: 44, 13: 46, 14: 48, 15: 50
 };
 
-// Candy costs per power-up (normal candy up to L40, XL candy L40+)
-const CANDY_COST_PER_LEVEL = {
-  1: 1, 2: 1, 3: 1, 4: 1, 5: 1,
-  6: 1, 7: 1, 8: 1, 9: 1, 10: 1,
-  11: 2, 12: 2, 13: 2, 14: 2, 15: 2,
-  16: 2, 17: 2, 18: 2, 19: 2, 20: 2,
-  21: 3, 22: 3, 23: 3, 24: 3, 25: 3,
-  26: 4, 27: 4, 28: 4, 29: 4, 30: 4,
-  31: 6, 32: 8, 33: 10, 34: 12, 35: 15,
-  36: 10, 37: 10, 38: 10, 39: 10, 40: 10
+// Cumulative candy costs from official Pokemon Go table
+const CANDY_COSTS = {
+  '1-30': {regular: 122, xl: 0}, '1-35': {regular: 186, xl: 0},
+  '1-40': {regular: 304, xl: 0}, '1-50': {regular: 304, xl: 296},
+  '15-30': {regular: 86, xl: 0}, '15-35': {regular: 150, xl: 0},
+  '15-40': {regular: 268, xl: 0}, '15-50': {regular: 268, xl: 296},
+  '20-30': {regular: 66, xl: 0}, '20-35': {regular: 130, xl: 0},
+  '20-40': {regular: 248, xl: 0}, '20-50': {regular: 248, xl: 296},
+  '25-30': {regular: 38, xl: 0}, '25-35': {regular: 102, xl: 0},
+  '25-40': {regular: 220, xl: 0}, '25-50': {regular: 220, xl: 296},
+  '30-35': {regular: 64, xl: 0}, '30-40': {regular: 182, xl: 0},
+  '30-50': {regular: 182, xl: 296},
+  '35-40': {regular: 118, xl: 0}, '35-50': {regular: 118, xl: 296},
+  '40-50': {regular: 0, xl: 296}
 };
-
-const XL_CANDY_COST_PER_LEVEL = {
-  41: 10, 42: 10, 43: 10, 44: 10, 45: 10,
-  46: 12, 47: 12, 48: 12, 49: 12, 50: 12
-};
-
-function calculateLevelFromStardust() {
-  let stardust = parseInt(document.getElementById('puStardust').value) || 0;
-  const isLucky = document.getElementById('puLucky').checked;
-  const levelField = document.getElementById('puCurrentLevel');
-  const helperText = document.getElementById('stardustHelper');
-  
-  if (stardust === 0) {
-    helperText.textContent = '';
-    return;
-  }
-  
-  // Lucky Pokemon cost half
-  if (isLucky) stardust = stardust * 2;
-  
-  // Handle "K" notation (10K, 11K, etc.)
-  let level = null;
-  if (stardust >= 10000) {
-    const kValue = Math.floor(stardust / 1000);
-    level = STARDUST_TO_LEVEL[kValue] || STARDUST_TO_LEVEL[stardust];
-  } else {
-    level = STARDUST_TO_LEVEL[stardust];
-  }
-  
-  if (level) {
-    levelField.value = level;
-    helperText.textContent = `💡 Level ${level} (${isLucky ? 'Lucky' : 'Normal'} cost)`;
-    helperText.style.color = '#48BB78';
-  } else {
-    helperText.textContent = '⚠️ Stardust cost not recognized';
-    helperText.style.color = '#DD6B20';
-  }
-}
 
 function calculateCandyNeeded(currentLevel, targetLevel) {
-  let regularCandy = 0;
-  let xlCandy = 0;
+  const cur = parseFloat(currentLevel) || 0;
+  const tgt = parseFloat(targetLevel) || 0;
   
-  const start = Math.floor(currentLevel);
-  const end = Math.floor(targetLevel);
+  if (cur >= tgt) return {regularCandy: 0, xlCandy: 0};
   
-  // Count power-ups (each 0.5 level = 1 power-up)
-  const powerUps = (targetLevel - currentLevel) * 2;
+  // Round to milestone (1, 15, 20, 25, 30, 35, 40, 50)
+  const milestones = [1, 15, 20, 25, 30, 35, 40, 50];
+  let startMilestone = 1;
+  let endMilestone = 50;
   
-  for (let i = 0; i < powerUps; i++) {
-    const lvl = start + Math.floor(i / 2);
-    if (lvl < 40) {
-      regularCandy += CANDY_COST_PER_LEVEL[lvl] || 0;
-    } else {
-      xlCandy += XL_CANDY_COST_PER_LEVEL[lvl] || 0;
+  // Find starting milestone (round down)
+  for (let i = milestones.length - 1; i >= 0; i--) {
+    if (cur >= milestones[i]) {
+      startMilestone = milestones[i];
+      break;
     }
   }
   
-  return { regularCandy, xlCandy };
+  // Find ending milestone (round up)
+  for (let i = 0; i < milestones.length; i++) {
+    if (tgt <= milestones[i]) {
+      endMilestone = milestones[i];
+      break;
+    }
+  }
+  
+  const key = `${startMilestone}-${endMilestone}`;
+  const costs = CANDY_COSTS[key];
+  
+  if (costs) {
+    return {regularCandy: costs.regular, xlCandy: costs.xl};
+  }
+  
+  // Fallback
+  return {regularCandy: 0, xlCandy: 0};
 }
 
 function getPokemonId(name) {
