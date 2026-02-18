@@ -44,7 +44,7 @@ body {
 .section-content { padding: 15px; display: block; }
 .section-content.collapsed { display: none; }
 
-/* Events - with ChatGPT improvements */
+/* Events */
 .event-quick-info { background: #F7FAFC; border-radius: 10px; padding: 15px; margin: 12px 0; }
 .event-quick-info h4 { color: #3B7DDD; font-size: 14px; margin-bottom: 10px; font-weight: 700; }
 .event-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px; margin: 6px 0; background: white; border-radius: 8px; font-size: 13px; transition: all 0.2s; }
@@ -53,87 +53,153 @@ body {
 .event-item-text strong { color: #3B7DDD; font-weight: 700; }
 .event-item-live { background: #FFF3CD !important; border-left: 4px solid #FF9500; }
 .event-item-past { opacity: 0.45; }
-
-/* Weekly helper - subtle and bottom */
 .weekly-helper {
-  background: #F7FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin: 15px 0 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 12px;
-  color: #718096;
+  background: #F7FAFC; border: 1px solid #E2E8F0; border-radius: 8px;
+  padding: 8px 12px; margin: 15px 0 12px; display: flex; align-items: center;
+  justify-content: space-between; gap: 8px; font-size: 12px; color: #718096;
 }
 .weekly-helper-text { flex: 1; }
-
 .event-links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
 .event-link { padding: 8px 14px; background: linear-gradient(135deg, #3B7DDD, #2C5AA0); color: white; text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 700; transition: all 0.2s; }
 .event-link:hover { transform: translateY(-2px); }
 
-/* List items - two line layout */
-.list-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; padding: 10px; margin-bottom: 8px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #667eea; transition: all 0.2s; }
-.list-item:hover { background: #e9ecef; transform: translateX(2px); }
+/* Power-Up cards with type-based gradient shading */
+.list-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 10px;
+  border-left: 3px solid #667eea;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.list-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transform: translateX(2px);
+}
 .list-item.dragging { opacity: 0.5; }
 .list-item-left { display: flex; align-items: center; gap: 8px; }
-.drag-handle { cursor: move; color: #ccc; font-size: 16px; }
-.list-item-sprite { width: 40px; height: 40px; flex-shrink: 0; }
-.list-item-content { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.list-item-line1 { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; font-size: 14px; font-weight: 700; color: #222; }
-.list-item-line2 { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; font-size: 12px; color: #666; }
-.list-item-actions { display: flex; flex-direction: column; gap: 3px; justify-content: center; align-items: center; }
+.drag-handle { cursor: move; color: #d0d0d0; font-size: 14px; line-height: 1; }
+.list-item-sprite { width: 42px; height: 42px; flex-shrink: 0; }
+.list-item-content { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.list-item-line1 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a202c;
+}
+.list-item-line2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+.list-item-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
 
 /* Type colored text */
 .type-text { font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; }
-.type-normal   { color: #7A7A5A; }
-.type-fire     { color: #C05010; }
-.type-water    { color: #2050D0; }
-.type-electric { color: #A07800; }
-.type-grass    { color: #3A8A18; }
-.type-ice      { color: #2090A0; }
-.type-fighting { color: #901818; }
-.type-poison   { color: #781878; }
-.type-ground   { color: #906010; }
-.type-flying   { color: #5040B0; }
-.type-psychic  { color: #C00050; }
-.type-bug      { color: #506000; }
-.type-rock     { color: #786020; }
-.type-ghost    { color: #3A2060; }
-.type-dragon   { color: #3000C0; }
-.type-dark     { color: #3A2818; }
-.type-steel    { color: #505060; }
-.type-fairy    { color: #B03060; }
+.type-normal   { color: #6B6B52; }
+.type-fire     { color: #B8380C; }
+.type-water    { color: #1A40B0; }
+.type-electric { color: #8A6800; }
+.type-grass    { color: #2A7210; }
+.type-ice      { color: #187888; }
+.type-fighting { color: #780C0C; }
+.type-poison   { color: #681068; }
+.type-ground   { color: #785008; }
+.type-flying   { color: #4030A0; }
+.type-psychic  { color: #A80040; }
+.type-bug      { color: #405000; }
+.type-rock     { color: #685018; }
+.type-ghost    { color: #2A1850; }
+.type-dragon   { color: #2800A8; }
+.type-dark     { color: #2A1810; }
+.type-steel    { color: #404050; }
+.type-fairy    { color: #982050; }
+
+/* Type background colors (for gradients) */
+:root {
+  --type-normal-bg: rgba(139, 139, 99, 0.12);
+  --type-fire-bg: rgba(192, 80, 16, 0.12);
+  --type-water-bg: rgba(32, 80, 208, 0.12);
+  --type-electric-bg: rgba(160, 120, 0, 0.12);
+  --type-grass-bg: rgba(58, 138, 24, 0.12);
+  --type-ice-bg: rgba(32, 144, 160, 0.12);
+  --type-fighting-bg: rgba(144, 24, 24, 0.12);
+  --type-poison-bg: rgba(120, 24, 120, 0.12);
+  --type-ground-bg: rgba(144, 96, 16, 0.12);
+  --type-flying-bg: rgba(80, 64, 176, 0.12);
+  --type-psychic-bg: rgba(200, 0, 80, 0.12);
+  --type-bug-bg: rgba(80, 96, 0, 0.12);
+  --type-rock-bg: rgba(120, 96, 40, 0.12);
+  --type-ghost-bg: rgba(58, 32, 96, 0.12);
+  --type-dragon-bg: rgba(64, 16, 216, 0.12);
+  --type-dark-bg: rgba(58, 40, 40, 0.12);
+  --type-steel-bg: rgba(80, 80, 96, 0.12);
+  --type-fairy-bg: rgba(176, 48, 96, 0.12);
+}
 
 /* Badges */
-.badge { display: inline-block; padding: 2px 5px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; }
-.badge-lvl50           { background: linear-gradient(135deg,#FFD700,#FFA500); color: #333; }
-.badge-priority-high   { background: #E53E3E; color: white; }
-.badge-priority-medium { background: #DD6B20; color: white; }
-.badge-priority-low    { background: #3182CE; color: white; }
-.icon { font-size: 13px; }
+.badge { display: inline-block; padding: 2px 5px; border-radius: 5px; font-size: 10px; font-weight: 700; white-space: nowrap; line-height: 1.4; }
+.badge-target50 { background: #E6F3FF; color: #2B6CB0; border: 1px solid #90CDF4; }
+.badge-complete50 { background: linear-gradient(135deg,#FFD700,#FFA500); color: #744210; }
+.badge-priority-high   { background: #FED7D7; color: #C53030; border: 1px solid #FC8181; }
+.badge-priority-medium { background: #FEEBC8; color: #C05621; border: 1px solid #F6AD55; }
+.badge-priority-low    { background: #BEE3F8; color: #2C5282; border: 1px solid #90CDF4; }
+.icon { font-size: 14px; line-height: 1; }
 
 /* Buttons */
 .btn { background: linear-gradient(135deg,#667eea,#764ba2); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600; margin: 4px; box-shadow: 0 2px 6px rgba(102,126,234,0.4); transition: all 0.2s; }
 .btn:active { transform: scale(0.95); }
 .btn-small { padding: 4px 10px; font-size: 11px; }
 .btn-success { background: linear-gradient(135deg,#28a745,#218838); }
-.btn-icon { background: none; border: none; padding: 3px 5px; font-size: 14px; cursor: pointer; border-radius: 5px; transition: background 0.15s; line-height: 1; }
-.btn-icon:hover { background: #e2e8f0; }
+.btn-icon {
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 5px 7px;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+  line-height: 1;
+  color: #4A5568;
+}
+.btn-icon:hover { background: #EDF2F7; border-color: #CBD5E0; }
+.btn-icon:active { transform: scale(0.92); }
 
 /* Progress */
-.progress-bar { background: #e9ecef; border-radius: 8px; height: 14px; overflow: hidden; margin-top: 5px; }
+.progress-bar { background: #E2E8F0; border-radius: 8px; height: 14px; overflow: hidden; margin-top: 5px; }
 .progress-fill { background: linear-gradient(90deg,#667eea,#764ba2); height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 9px; font-weight: bold; transition: width 0.3s; }
 
 /* Candy controls */
 .candy-controls { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
 .candy-value { min-width: 36px; text-align: center; font-weight: 700; font-size: 13px; color: #667eea; }
 
-/* Archive toggle */
-.archive-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #666; cursor: pointer; padding: 3px 8px; border-radius: 6px; margin-left: 4px; }
-.archive-toggle:hover { background: #f0f0f0; }
+/* Section footer */
+.section-footer {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.archive-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #718096; cursor: pointer; padding: 3px 8px; border-radius: 6px; }
+.archive-toggle:hover { background: #F7FAFC; }
 
 /* Shiny grid */
 .shiny-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px,1fr)); gap: 8px; margin-top: 12px; }
@@ -156,7 +222,9 @@ body {
 .form-control { width: 100%; padding: 9px 10px; border: 2px solid #dee2e6; border-radius: 6px; font-size: 14px; }
 .form-control:focus { outline: none; border-color: #667eea; }
 .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 6px 0; cursor: pointer; }
+.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
+.type-auto-info { font-size: 11px; color: #48BB78; margin-top: 4px; font-style: italic; }
 
 /* Empty / loading */
 .empty-state { text-align: center; padding: 25px 15px; color: #999; font-size: 13px; }
@@ -164,8 +232,12 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
 
 @media (max-width: 600px) {
   .header h1 { font-size: 20px; }
-  .list-item-actions { flex-direction: row; }
+  .list-item { grid-template-columns: 1fr; gap: 8px; }
+  .list-item-left { order: 1; }
+  .list-item-content { order: 2; }
+  .list-item-actions { order: 3; flex-direction: row; justify-content: flex-end; }
   .list-item-line2 { font-size: 11px; }
+  .section-footer { flex-direction: column; align-items: stretch; }
 }
 </style>
 </head>
@@ -191,13 +263,10 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
         <h4>🗓️ This Week's Events</h4>
         <div id="eventsList"><div class="loading">Loading…</div></div>
       </div>
-
-      <!-- Weekly helper - subtle and at bottom -->
       <div class="weekly-helper">
         <span class="weekly-helper-text">🤖 Weekly update: Copy prompt → AI + graphic → paste to sheet</span>
         <button class="btn btn-small" onclick="copyPromptToClipboard()">📋 Copy Prompt</button>
       </div>
-
       <div class="event-links">
         <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
         <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
@@ -216,11 +285,15 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
       <span class="collapse-icon">▼</span>
     </div>
     <div class="section-content">
-      <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
-      <label class="archive-toggle">
-        <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()"> Show Archived
-      </label>
-      <div id="powerUpContent" style="margin-top:10px;"><div class="loading">Loading…</div></div>
+      <div id="powerUpContent" style="margin-top:6px;">
+        <div class="loading">Loading…</div>
+      </div>
+      <div class="section-footer">
+        <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
+        <label class="archive-toggle">
+          <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()"> Show Archived
+        </label>
+      </div>
     </div>
   </div>
 
@@ -266,7 +339,7 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
     </div>
   </div>
 
-</div><!-- end container -->
+</div>
 
 <!-- Power-Up Modal -->
 <div id="addPowerUpModal" class="modal">
@@ -278,18 +351,22 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
     <form id="powerUpForm" onsubmit="savePowerUp(event)">
       <input type="hidden" id="puEditIndex" value="">
       <div class="form-group">
-        <label>Pokemon Name *</label>
-        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza">
+        <label>Pokemon Name * <span class="form-hint">start typing...</span></label>
+        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza" oninput="autoFillTypes()">
+        <div id="typeAutoFill" class="type-auto-info"></div>
       </div>
       <div class="form-group">
         <label>Type(s) <span class="form-hint">comma separated</span></label>
-        <input type="text" class="form-control" id="puTypes" placeholder="e.g., Dragon, Flying">
+        <input type="text" class="form-control" id="puTypes" placeholder="Auto-filled when Pokemon recognized">
       </div>
-      <div class="form-group">
-        <label class="checkbox-label"><input type="checkbox" id="puLucky"> ⭐ Is Lucky</label>
-        <label class="checkbox-label"><input type="checkbox" id="puHasElite"> ✅ Has Elite/Legacy Move</label>
-        <label class="checkbox-label"><input type="checkbox" id="puNeedsElite"> ❗ Needs Elite/Legacy Move</label>
-        <label class="checkbox-label"><input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky Trade</label>
+      <div class="form-group checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" id="puLucky"> 🍀 Lucky</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHundo"> 💯 Hundo</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShiny"> ✨ Shiny</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShadow"> 👤 Shadow</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHasElite"> £ Has Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedsElite"> ❗ Needs Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky</label>
       </div>
       <div class="form-group">
         <label>Current Level *</label>
@@ -322,6 +399,13 @@ input[type="checkbox"] { width: 17px; height: 17px; cursor: pointer; }
           <option>To Do</option>
           <option>In Progress</option>
           <option>Done</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Archived</label>
+        <select class="form-control" id="puArchived">
+          <option value="FALSE">Active</option>
+          <option value="TRUE">Archived</option>
         </select>
       </div>
       <div class="form-group">
@@ -442,13 +526,106 @@ const POKEMON_IDS = {
   'xerneas':716,'yveltal':717,'stufful':759,'bewear':760
 };
 
+// Pokemon type database for auto-fill
+const POKEMON_TYPES = {
+  'bulbasaur':'Grass,Poison','ivysaur':'Grass,Poison','venusaur':'Grass,Poison',
+  'charmander':'Fire','charmeleon':'Fire','charizard':'Fire,Flying',
+  'squirtle':'Water','wartortle':'Water','blastoise':'Water',
+  'pikachu':'Electric','raichu':'Electric',
+  'sandshrew':'Ground','sandslash':'Ground',
+  'clefairy':'Fairy','clefable':'Fairy',
+  'abra':'Psychic','kadabra':'Psychic','alakazam':'Psychic',
+  'machop':'Fighting','machoke':'Fighting','machamp':'Fighting',
+  'geodude':'Rock,Ground','graveler':'Rock,Ground','golem':'Rock,Ground',
+  'slowpoke':'Water,Psychic','slowbro':'Water,Psychic',
+  'gastly':'Ghost,Poison','haunter':'Ghost,Poison','gengar':'Ghost,Poison',
+  'onix':'Rock,Ground',
+  'rhyhorn':'Ground,Rock','rhydon':'Ground,Rock',
+  'electabuzz':'Electric','magmar':'Fire',
+  'magikarp':'Water','gyarados':'Water,Flying',
+  'eevee':'Normal','porygon':'Normal',
+  'dratini':'Dragon','dragonair':'Dragon','dragonite':'Dragon,Flying',
+  'mewtwo':'Psychic','mew':'Psychic',
+  'chikorita':'Grass','bayleef':'Grass','meganium':'Grass',
+  'cyndaquil':'Fire','quilava':'Fire','typhlosion':'Fire',
+  'totodile':'Water','croconaw':'Water','feraligatr':'Water',
+  'mareep':'Electric','flaaffy':'Electric','ampharos':'Electric',
+  'hoppip':'Grass,Flying','skiploom':'Grass,Flying','jumpluff':'Grass,Flying',
+  'swinub':'Ice,Ground','piloswine':'Ice,Ground',
+  'teddiursa':'Normal','ursaring':'Normal',
+  'larvitar':'Rock,Ground','pupitar':'Rock,Ground','tyranitar':'Rock,Dark',
+  'lugia':'Psychic,Flying','ho-oh':'Fire,Flying',
+  'treecko':'Grass','grovyle':'Grass','sceptile':'Grass',
+  'torchic':'Fire','combusken':'Fire,Fighting','blaziken':'Fire,Fighting',
+  'mudkip':'Water','marshtomp':'Water,Ground','swampert':'Water,Ground',
+  'ralts':'Psychic,Fairy','kirlia':'Psychic,Fairy','gardevoir':'Psychic,Fairy',
+  'slakoth':'Normal','vigoroth':'Normal','slaking':'Normal',
+  'roselia':'Grass,Poison','roserade':'Grass,Poison',
+  'trapinch':'Ground','vibrava':'Ground,Dragon','flygon':'Ground,Dragon',
+  'swablu':'Normal,Flying','altaria':'Dragon,Flying',
+  'bagon':'Dragon','shelgon':'Dragon','salamence':'Dragon,Flying',
+  'beldum':'Steel,Psychic','metang':'Steel,Psychic','metagross':'Steel,Psychic',
+  'regirock':'Rock','regice':'Ice','registeel':'Steel',
+  'latias':'Dragon,Psychic','latios':'Dragon,Psychic',
+  'kyogre':'Water','groudon':'Ground','rayquaza':'Dragon,Flying',
+  'turtwig':'Grass','grotle':'Grass','torterra':'Grass,Ground',
+  'chimchar':'Fire','monferno':'Fire,Fighting','infernape':'Fire,Fighting',
+  'piplup':'Water','prinplup':'Water','empoleon':'Water,Steel',
+  'starly':'Normal,Flying','staravia':'Normal,Flying','staraptor':'Normal,Flying',
+  'shinx':'Electric','luxio':'Electric','luxray':'Electric',
+  'gible':'Dragon,Ground','gabite':'Dragon,Ground','garchomp':'Dragon,Ground',
+  'dialga':'Steel,Dragon','palkia':'Water,Dragon',
+  'giratina':'Ghost,Dragon','darkrai':'Dark','shaymin':'Grass',
+  'snivy':'Grass','servine':'Grass','serperior':'Grass',
+  'tepig':'Fire','pignite':'Fire,Fighting','emboar':'Fire,Fighting',
+  'oshawott':'Water','dewott':'Water','samurott':'Water',
+  'deino':'Dark,Dragon','zweilous':'Dark,Dragon','hydreigon':'Dark,Dragon',
+  'reshiram':'Dragon,Fire','zekrom':'Dragon,Electric','landorus':'Ground,Flying',
+  'chespin':'Grass','quilladin':'Grass','chesnaught':'Grass,Fighting',
+  'fennekin':'Fire','braixen':'Fire','delphox':'Fire,Psychic',
+  'froakie':'Water','frogadier':'Water','greninja':'Water,Dark',
+  'fletchling':'Normal,Flying','fletchinder':'Fire,Flying','talonflame':'Fire,Flying',
+  'xerneas':'Fairy','yveltal':'Dark,Flying'
+};
+
 function getPokemonId(name) {
-  const c = name.toLowerCase().trim()
-    .replace(/^(alolan|galarian|hisuian|shadow|mega) /,'');
+  const c = name.toLowerCase().trim().replace(/^(alolan|galarian|hisuian|shadow|mega) /,'');
   return POKEMON_IDS[c] || 25;
 }
 function sprite(name) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(name)}.png`;
+}
+
+// Auto-fill types when Pokemon name is recognized
+function autoFillTypes() {
+  const name = document.getElementById('puPokemon').value.toLowerCase().trim()
+    .replace(/^(alolan|galarian|hisuian|shadow|mega) /,'');
+  const types = POKEMON_TYPES[name];
+  const typeField = document.getElementById('puTypes');
+  const autoInfo = document.getElementById('typeAutoFill');
+  
+  if (types) {
+    typeField.value = types;
+    autoInfo.textContent = '✓ Types auto-filled';
+    autoInfo.style.color = '#48BB78';
+  } else {
+    autoInfo.textContent = '';
+  }
+}
+
+// Get type background gradient
+function getTypeBackground(typesStr) {
+  if (!typesStr) return '';
+  const types = typesStr.split(',').map(t => t.trim().toLowerCase()).filter(t => t);
+  if (types.length === 0) return '';
+  
+  if (types.length === 1) {
+    return `var(--type-${types[0]}-bg, rgba(200,200,200,0.08))`;
+  } else {
+    const type1 = `var(--type-${types[0]}-bg, rgba(200,200,200,0.08))`;
+    const type2 = `var(--type-${types[1]}-bg, rgba(200,200,200,0.08))`;
+    return `linear-gradient(90deg, ${type1} 0%, ${type2} 100%)`;
+  }
 }
 
 // ── Clipboard ──────────────────────────────────────────────────────────
@@ -497,6 +674,7 @@ function showAddPowerUpModal() {
   document.getElementById('powerUpModalTitle').textContent = 'Add Power-Up Priority';
   document.getElementById('powerUpForm').reset();
   document.getElementById('puEditIndex').value = '';
+  document.getElementById('typeAutoFill').textContent = '';
   document.getElementById('addPowerUpModal').style.display = 'block';
 }
 function showEditPowerUpModal(idx) {
@@ -515,6 +693,11 @@ function showEditPowerUpModal(idx) {
   document.getElementById('puNotes').value        = r[11] || '';
   document.getElementById('puPriority').value     = r[12] || 'Medium';
   document.getElementById('puStatus').value       = r[13] || 'To Do';
+  document.getElementById('puArchived').value     = r[14] || 'FALSE';
+  document.getElementById('puHundo').checked      = r[15] === 'TRUE';
+  document.getElementById('puShiny').checked      = r[16] === 'TRUE';
+  document.getElementById('puShadow').checked     = r[17] === 'TRUE';
+  document.getElementById('typeAutoFill').textContent = '';
   document.getElementById('addPowerUpModal').style.display = 'block';
 }
 function showAddCandyModal()  { document.getElementById('candyForm').reset();  document.getElementById('addCandyModal').style.display='block'; }
@@ -536,7 +719,7 @@ async function saveSheetData(name, data) {
   } catch(e) { alert('Save failed: '+e.message); return false; }
 }
 
-// ── Load all — each sheet fails independently ──────────────────────────
+// ── Load all ───────────────────────────────────────────────────────────
 async function loadAllData() {
   document.getElementById('syncStatus').textContent = '🔄 Syncing…';
   document.getElementById('syncStatus').className   = 'status-badge status-loading';
@@ -574,7 +757,7 @@ async function loadAllData() {
 
 function renderAll() { renderEvents(); renderPowerUp(); renderCandy(); renderTrades(); renderShinyGaps(); }
 
-// ── Events (with ChatGPT's improvements) ───────────────────────────────
+// ── Events ─────────────────────────────────────────────────────────────
 function renderEvents() {
   const container = document.getElementById('eventsList');
   
@@ -584,13 +767,8 @@ function renderEvents() {
   }
 
   const weekdayMap = {
-    monday: 1, mon: 1,
-    tuesday: 2, tue: 2, tues: 2,
-    wednesday: 3, wed: 3,
-    thursday: 4, thu: 4, thurs: 4,
-    friday: 5, fri: 5,
-    saturday: 6, sat: 6,
-    sunday: 7, sun: 7
+    monday: 1, mon: 1, tuesday: 2, tue: 2, tues: 2, wednesday: 3, wed: 3,
+    thursday: 4, thu: 4, thurs: 4, friday: 5, fri: 5, saturday: 6, sat: 6, sunday: 7, sun: 7
   };
 
   const todayJS = new Date().getDay();
@@ -641,240 +819,6 @@ function bindDrag(container, arr, renderFn, sheetName, headers) {
     el.addEventListener('dragend',   function() { this.classList.remove('dragging'); container.querySelectorAll('.list-item').forEach(i=>i.classList.remove('over')); });
     el.addEventListener('dragover',  e => e.preventDefault());
     el.addEventListener('dragenter', function() { this.classList.add('over'); });
-    el.addEventListener('dragleave', function() { this.classList.remove('over'); });
-    el.addEventListener('drop', function(e) {
-      e.stopPropagation(); this.classList.remove('over');
-      if (dragSrc === this) return;
-      const src=parseInt(dragSrc.dataset.index), dst=parseInt(this.dataset.index);
-      const item=arr[src]; arr.splice(src,1); arr.splice(dst,0,item);
-      saveSheetData(sheetName,[headers,...arr]);
-      renderFn();
-    });
-  });
-}
-
-// ── Power-Up ───────────────────────────────────────────────────────────
-const PU_HEADERS = ['Pokemon','Types','Lucky','Has Elite','Needs Elite','Current Level',
-                    'Target Level','Role','XL Candy','Stardust','Need Lucky','Notes',
-                    'Priority','Status','Archived'];
-const PRIO_ORDER = {'High':1,'Medium':2,'Low':3};
-
-function renderPowerUp() {
-  const c = document.getElementById('powerUpContent');
-  const showArch = document.getElementById('showArchivedPowerUp').checked;
-
-  const rows = powerUpData
-    .map((r,i)=>({r,i}))
-    .filter(({r}) => showArch || r[14] !== 'TRUE')
-    .sort((a,b)=>(PRIO_ORDER[a.r[12]]||2)-(PRIO_ORDER[b.r[12]]||2));
-
-  if (!rows.length) { c.innerHTML='<div class="empty-state">📝 No power-up priorities yet</div>'; return; }
-
-  c.innerHTML = rows.map(({r,i}) => {
-    const [pokemon,types,lucky,hasEl,needEl,curLv,tgtLv,role,,,needLucky,notes,prio,status,arch] = r;
-    const isArch = arch === 'TRUE';
-
-    const types_html = (types||'').split(',').filter(t=>t.trim()).map(t=>{
-      const key = t.trim().toLowerCase();
-      return `<span class="type-text type-${key}">${t.trim().toUpperCase()}</span>`;
-    }).join(' ');
-
-    const b = [];
-    if (parseFloat(tgtLv)===50) b.push('<span class="badge badge-lvl50">LV50</span>');
-    if (prio) b.push(`<span class="badge badge-priority-${prio.toLowerCase()}">${prio}</span>`);
-    if (lucky==='TRUE')    b.push('<span class="icon" title="Lucky">⭐</span>');
-    if (hasEl==='TRUE')    b.push('<span class="icon" title="Has Elite Move">✅</span>');
-    if (needEl==='TRUE')   b.push('<span class="icon" title="Needs Elite Move">❗</span>');
-    if (needLucky==='TRUE')b.push('<span class="icon" title="Need Lucky Trade">🤝</span>');
-
-    return `
-    <div class="list-item" draggable="true" data-index="${i}" style="${isArch?'opacity:0.5;':''}">
-      <div class="list-item-left">
-        <span class="drag-handle">☰</span>
-        <img class="list-item-sprite" src="${sprite(pokemon)}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'">
-      </div>
-      <div class="list-item-content">
-        <div class="list-item-line1">${pokemon} ${b.join('')}</div>
-        <div class="list-item-line2">${types_html}${types_html?' •':''} Lv${curLv}→${tgtLv} • ${role} • ${status}${notes?' • '+notes:''}</div>
-      </div>
-      <div class="list-item-actions">
-        <button class="btn-icon" onclick="showEditPowerUpModal(${i})" title="Edit">✏️</button>
-        <button class="btn-icon" onclick="toggleArchive(${i})" title="${isArch?'Unarchive':'Archive'}">${isArch?'📂':'📦'}</button>
-        <button class="btn-icon" onclick="deletePowerUp(${i})" title="Delete">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  bindDrag(c, powerUpData, renderPowerUp, 'PowerUpPriority', PU_HEADERS);
-}
-
-// ── Candy ──────────────────────────────────────────────────────────────
-function renderCandy() {
-  const c = document.getElementById('rareCandyContent');
-  if (!candyData.length) { c.innerHTML='<div class="empty-state">📝 No rare candy priorities yet</div>'; return; }
-  c.innerHTML = candyData.map((r,idx)=>{
-    const cur=parseInt(r[1])||0, tgt=parseInt(r[2])||1;
-    const pct=Math.min(cur/tgt*100,100);
-    return `
-    <div class="list-item" style="cursor:default;grid-template-columns:auto 1fr auto auto;">
-      <img class="list-item-sprite" src="${sprite(r[0])}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'" style="align-self:center;">
-      <div class="list-item-content">
-        <div class="list-item-line1">${r[0]}</div>
-        <div class="list-item-line2">Need ${tgt-cur} more • Target: ${tgt}${r[3]?' • '+r[3]:''}</div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%">${cur}/${tgt}</div></div>
-      </div>
-      <div class="candy-controls">
-        <button class="btn btn-small" onclick="updateCandy(${idx},-10)">-10</button>
-        <button class="btn btn-small" onclick="updateCandy(${idx},-1)">-1</button>
-        <span class="candy-value">${cur}</span>
-        <button class="btn btn-small" onclick="updateCandy(${idx},1)">+1</button>
-        <button class="btn btn-small" onclick="updateCandy(${idx},10)">+10</button>
-      </div>
-      <button class="btn-icon" onclick="deleteCandy(${idx})" title="Delete" style="align-self:center;">🗑️</button>
-    </div>`;
-  }).join('');
-}
-
-// ── Trades ─────────────────────────────────────────────────────────────
-const TRADE_HEADERS = ['Friend','They Want','You Want','Notes','Status'];
-
-function renderTrades() {
-  const ac = document.getElementById('autoLuckyWants');
-  const pc = document.getElementById('tradePlansContent');
-
-  const wants = powerUpData.filter(r=>r[10]==='TRUE' && r[14]!=='TRUE');
-  ac.innerHTML = wants.length ? wants.map(r=>`
-    <div class="list-item" style="border-left-color:#FFD700;cursor:default;">
-      <img class="list-item-sprite" src="${sprite(r[0])}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'">
-      <div class="list-item-content">
-        <div class="list-item-line1">${r[0]}</div>
-        <div class="list-item-line2">For: ${r[7]} (Lv${r[6]})${r[11]?' • '+r[11]:''}</div>
-      </div>
-    </div>`).join('')
-  : '<div class="empty-state">💡 Check "Need Lucky Trade" in Power-Up Priority</div>';
-
-  if (!tradePlansData.length) { pc.innerHTML='<div class="empty-state">📝 No manual trade plans yet</div>'; return; }
-  pc.innerHTML = tradePlansData.map((r,idx)=>`
-    <div class="list-item" draggable="true" data-index="${idx}">
-      <div class="list-item-left">
-        <span class="drag-handle">☰</span>
-        <span style="font-size:28px;">👥</span>
-      </div>
-      <div class="list-item-content">
-        <div class="list-item-line1">${r[0]}</div>
-        <div class="list-item-line2">They want: ${r[1]||'TBD'} • You want: ${r[2]||'TBD'} • ${r[4]}${r[3]?' • '+r[3]:''}</div>
-      </div>
-      <div class="list-item-actions">
-        <button class="btn-icon" onclick="deleteTrade(${idx})" title="Delete">🗑️</button>
-      </div>
-    </div>`).join('');
-
-  bindDrag(pc, tradePlansData, renderTrades, 'LuckyTradePlans', TRADE_HEADERS);
-}
-
-// ── Shinies ────────────────────────────────────────────────────────────
-function renderShinyGaps() {
-  const c = document.getElementById('shinyGapsContent');
-  if (!shinyGapsData.length) { c.innerHTML='<div class="empty-state">📝 Update Google Sheet</div>'; return; }
-  const missing = shinyGapsData.filter(r=>{ const v=(r[1]||'').toUpperCase(); return v==='N'||v==='NO'||v==='FALSE'; });
-  if (!missing.length) { c.innerHTML='<div class="empty-state">🎉 All Community Day shinies collected!</div>'; return; }
-  c.innerHTML = '<div class="shiny-grid">'+missing.map(r=>`
-    <div class="shiny-card">
-      <img src="${sprite(r[0])}" class="shiny-sprite" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'">
-      <div class="shiny-name">${r[0]}</div>
-      <div class="shiny-label">⭐ Want</div>
-    </div>`).join('')+'</div>';
-}
-
-// ── Save / mutate ──────────────────────────────────────────────────────
-async function savePowerUp(e) {
-  e.preventDefault();
-  const idx = document.getElementById('puEditIndex').value;
-  const row = [
-    document.getElementById('puPokemon').value,
-    document.getElementById('puTypes').value,
-    document.getElementById('puLucky').checked    ? 'TRUE':'FALSE',
-    document.getElementById('puHasElite').checked  ? 'TRUE':'FALSE',
-    document.getElementById('puNeedsElite').checked? 'TRUE':'FALSE',
-    document.getElementById('puCurrentLevel').value,
-    document.getElementById('puTargetLevel').value,
-    document.getElementById('puRole').value,
-    '','',
-    document.getElementById('puNeedLucky').checked ? 'TRUE':'FALSE',
-    document.getElementById('puNotes').value,
-    document.getElementById('puPriority').value,
-    document.getElementById('puStatus').value,
-    idx !== '' ? (powerUpData[idx][14]||'FALSE') : 'FALSE'
-  ];
-  if (idx !== '') { powerUpData[idx] = row; } else { powerUpData.push(row); }
-  const ok = await saveSheetData('PowerUpPriority',[PU_HEADERS,...powerUpData]);
-  if (ok) { closeModal('addPowerUpModal'); renderPowerUp(); renderTrades(); }
-}
-
-async function toggleArchive(idx) {
-  powerUpData[idx][14] = powerUpData[idx][14]==='TRUE' ? 'FALSE':'TRUE';
-  await saveSheetData('PowerUpPriority',[PU_HEADERS,...powerUpData]);
-  renderPowerUp(); renderTrades();
-}
-
-async function deletePowerUp(idx) {
-  if (!confirm('Permanently delete this entry?')) return;
-  powerUpData.splice(idx,1);
-  await saveSheetData('PowerUpPriority',[PU_HEADERS,...powerUpData]);
-  renderPowerUp(); renderTrades();
-}
-
-async function saveCandy(e) {
-  e.preventDefault();
-  candyData.push([
-    document.getElementById('candyPokemon').value,
-    document.getElementById('candyCurrent').value,
-    document.getElementById('candyTarget').value,
-    document.getElementById('candyNotes').value
-  ]);
-  const ok = await saveSheetData('RareCandyPriority',[['Pokemon','Current','Target','Notes'],...candyData]);
-  if (ok) { closeModal('addCandyModal'); renderCandy(); }
-}
-
-async function updateCandy(idx, delta) {
-  candyData[idx][1] = Math.max(0, (parseInt(candyData[idx][1])||0)+delta).toString();
-  await saveSheetData('RareCandyPriority',[['Pokemon','Current','Target','Notes'],...candyData]);
-  renderCandy();
-}
-
-async function deleteCandy(idx) {
-  if (!confirm('Delete this entry?')) return;
-  candyData.splice(idx,1);
-  await saveSheetData('RareCandyPriority',[['Pokemon','Current','Target','Notes'],...candyData]);
-  renderCandy();
-}
-
-async function saveTrade(e) {
-  e.preventDefault();
-  tradePlansData.push([
-    document.getElementById('tradeFriend').value,
-    document.getElementById('tradeTheyWant').value,
-    document.getElementById('tradeYouWant').value,
-    document.getElementById('tradeNotes').value,
-    document.getElementById('tradeStatus').value
-  ]);
-  const ok = await saveSheetData('LuckyTradePlans',[TRADE_HEADERS,...tradePlansData]);
-  if (ok) { closeModal('addTradeModal'); renderTrades(); }
-}
-
-async function deleteTrade(idx) {
-  if (!confirm('Delete this trade plan?')) return;
-  tradePlansData.splice(idx,1);
-  await saveSheetData('LuckyTradePlans',[TRADE_HEADERS,...tradePlansData]);
-  renderTrades();
-}
-
-// ── Init ───────────────────────────────────────────────────────────────
-window.onload = loadAllData;
-window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display='none'; };
-</script>
-</body>
-</html>
     el.addEventListener('dragleave', function() { this.classList.remove('over'); });
     el.addEventListener('drop', function(e) {
       e.stopPropagation(); this.classList.remove('over');
