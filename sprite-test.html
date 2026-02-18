@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Loader Test</title>
+<style>
+body { font-family: system-ui; max-width: 800px; margin: 40px auto; padding: 20px; background: #1a1a2e; color: #eee; }
+.test-box { background: #16213e; padding: 20px; border-radius: 8px; margin: 20px 0; }
+input { padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #0f3460; background: #1a1a2e; color: #eee; width: 300px; }
+button { padding: 10px 20px; font-size: 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+button:hover { background: #764ba2; }
+.result { margin-top: 20px; }
+.sprite-display { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+.sprite-display img { width: 96px; height: 96px; image-rendering: pixelated; background: #0f3460; border-radius: 8px; padding: 10px; }
+.info { background: #0f3460; padding: 15px; border-radius: 8px; margin-top: 10px; }
+.success { color: #48BB78; }
+.error { color: #F56565; }
+.cache-info { font-size: 14px; color: #999; margin-top: 5px; }
+.clear-cache { background: #F56565; margin-top: 10px; }
+.clear-cache:hover { background: #C53030; }
+h2 { color: #667eea; }
+</style>
+</head>
+<body>
+
+<h1>🧪 Sprite Loader Test</h1>
+<p>Test the hybrid sprite loading system (Local → Cache → PokeAPI)</p>
+
+<div class="test-box">
+  <h2>Test Pokemon Sprite Loading</h2>
+  <input type="text" id="pokemonName" placeholder="Enter Pokemon name (e.g., necrozma, rowlet)" />
+  <button onclick="testSprite()">Load Sprite</button>
+  <button onclick="testType()">Get Types</button>
+  
+  <div class="result" id="result"></div>
+</div>
+
+<div class="test-box">
+  <h2>Quick Tests</h2>
+  <button onclick="quickTest('pikachu')">Pikachu (Local)</button>
+  <button onclick="quickTest('necrozma')">Necrozma (API)</button>
+  <button onclick="quickTest('rowlet')">Rowlet (API)</button>
+  <button onclick="quickTest('zacian')">Zacian (Gen 8)</button>
+  <button class="clear-cache" onclick="clearCache()">Clear Cache</button>
+  <div class="cache-info" id="cacheInfo"></div>
+</div>
+
+<script>
+// Simplified POKEMON_IDS (just a few for testing local vs API)
+const POKEMON_IDS = {
+  'pikachu': 25, 'charizard': 6, 'mewtwo': 150,
+  'bulbasaur': 1, 'dratini': 147, 'rayquaza': 384
+};
+
+// Test the sprite loading
+async function testSprite() {
+  const name = document.getElementById('pokemonName').value.trim().toLowerCase();
+  if (!name) {
+    showResult('Please enter a Pokemon name', 'error');
+    return;
+  }
+  
+  const startTime = Date.now();
+  showResult('Loading...', '');
+  
+  try {
+    const spriteData = await getSpriteData(name);
+    const loadTime = Date.now() - startTime;
+    
+    const html = `
+      <div class="sprite-display">
+        <img src="${spriteData.sprite}" alt="${name}">
+        <div class="info">
+          <div class="success">✓ Loaded successfully!</div>
+          <div><strong>Name:</strong> ${name}</div>
+          <div><strong>ID:</strong> ${spriteData.id}</div>
+          <div><strong>Source:</strong> ${spriteData.source}</div>
+          <div><strong>Load Time:</strong> ${loadTime}ms</div>
+          <div><strong>Sprite URL:</strong> <a href="${spriteData.sprite}" target="_blank" style="color:#667eea;">View</a></div>
+        </div>
+      </div>
+    `;
+    showResult(html, 'success');
+    updateCacheInfo();
+  } catch (error) {
+    showResult(`Error: ${error.message}`, 'error');
+  }
+}
+
+async function testType() {
+  const name = document.getElementById('pokemonName').value.trim().toLowerCase();
+  if (!name) {
+    showResult('Please enter a Pokemon name', 'error');
+    return;
+  }
+  
+  showResult('Loading types...', '');
+  
+  try {
+    const typeData = await getTypeData(name);
+    const html = `
+      <div class="info">
+        <div class="success">✓ Types loaded!</div>
+        <div><strong>Pokemon:</strong> ${name}</div>
+        <div><strong>Types:</strong> ${typeData.types.join(', ')}</div>
+        <div><strong>Source:</strong> ${typeData.source}</div>
+      </div>
+    `;
+    showResult(html, 'success');
+    updateCacheInfo();
+  } catch (error) {
+    showResult(`Error: ${error.message}`, 'error');
+  }
+}
+
+function quickTest(name) {
+  document.getElementById('pokemonName').value = name;
+  testSprite();
+}
+
+// THE HYBRID SPRITE LOADER
+async function getSpriteData(name) {
+  const cleanName = name.toLowerCase().trim().replace(/^(alolan|galarian|hisuian|shadow|mega|primal) /, '');
+  
+  // 1. Try local POKEMON_IDS first (instant)
+  const localId = POKEMON_IDS[cleanName];
+  if (localId) {
+    return {
+      id: localId,
+      sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${localId}.png`,
+      source: 'Local POKEMON_IDS (instant)'
+    };
+  }
+  
+  // 2. Try localStorage cache (very fast)
+  const cacheKey = `pokemon_sprite_${cleanName}`;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    const data = JSON.parse(cached);
+    return {
+      ...data,
+      source: 'localStorage Cache (fast)'
+    };
+  }
+  
+  // 3. Fetch from PokeAPI (slower, first time only)
+  console.log(`Fetching ${cleanName} from PokeAPI...`);
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${cleanName}`);
+  
+  if (!response.ok) {
+    throw new Error(`Pokemon not found: ${cleanName}`);
+  }
+  
+  const data = await response.json();
+  
+  // Cache the result
+  const cacheData = {
+    id: data.id,
+    sprite: data.sprites.front_default,
+    types: data.types.map(t => t.type.name)
+  };
+  
+  localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  console.log(`Cached ${cleanName} for future use`);
+  
+  return {
+    ...cacheData,
+    source: 'PokeAPI (first time, now cached)'
+  };
+}
+
+// THE HYBRID TYPE LOADER
+async function getTypeData(name) {
+  const cleanName = name.toLowerCase().trim().replace(/^(alolan|galarian|hisuian|shadow|mega|primal) /, '');
+  
+  // Check cache first
+  const cacheKey = `pokemon_sprite_${cleanName}`;
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    const data = JSON.parse(cached);
+    if (data.types) {
+      return {
+        types: data.types,
+        source: 'localStorage Cache'
+      };
+    }
+  }
+  
+  // Fetch from PokeAPI
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${cleanName}`);
+  
+  if (!response.ok) {
+    throw new Error(`Pokemon not found: ${cleanName}`);
+  }
+  
+  const data = await response.json();
+  const types = data.types.map(t => t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1));
+  
+  // Update cache with types
+  const cacheData = {
+    id: data.id,
+    sprite: data.sprites.front_default,
+    types: types
+  };
+  localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  
+  return {
+    types: types,
+    source: 'PokeAPI (now cached)'
+  };
+}
+
+function showResult(html, type) {
+  const result = document.getElementById('result');
+  result.innerHTML = html;
+  result.className = `result ${type}`;
+}
+
+function clearCache() {
+  const keys = Object.keys(localStorage);
+  const pokemonKeys = keys.filter(k => k.startsWith('pokemon_sprite_'));
+  pokemonKeys.forEach(k => localStorage.removeItem(k));
+  showResult(`Cleared ${pokemonKeys.length} cached Pokemon`, 'success');
+  updateCacheInfo();
+}
+
+function updateCacheInfo() {
+  const keys = Object.keys(localStorage);
+  const pokemonKeys = keys.filter(k => k.startsWith('pokemon_sprite_'));
+  document.getElementById('cacheInfo').textContent = `Cache: ${pokemonKeys.length} Pokemon stored`;
+}
+
+// Initialize
+updateCacheInfo();
+</script>
+
+</body>
+</html>
