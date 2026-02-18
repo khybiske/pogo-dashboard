@@ -119,10 +119,6 @@ const POKEMON_TYPES = {
   'deino':'Dark,Dragon','zweilous':'Dark,Dragon','bagon':'Dragon','shelgon':'Dragon'
 };
 
-  'froakie':'Water','frogadier':'Water','greninja':'Water,Dark',
-  'fletchling':'Normal,Flying','fletchinder':'Fire,Flying','talonflame':'Fire,Flying',
-  'xerneas':'Fairy','yveltal':'Dark,Flying'
-};
 
 // Helper functions
 // Stardust cost to level mapping (NEXT POWER-UP COST shown in-game)
@@ -246,7 +242,6 @@ async function autoFillTypes() {
   }
 }
 
-}
 
 function getTypeBackground(typesStr) {
   if (!typesStr) return '';
