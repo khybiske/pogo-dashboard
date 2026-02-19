@@ -1,0 +1,408 @@
+<!-- GENERATED: 2026-02-18-2220-SPRITE-PREVIEW-AND-LOGGING -->
+<!-- Added sprite preview in Power-Up modal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MachoMankey's PoGo Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PoGo Dashboard">
+</head>
+  <!-- Header -->
+  <div class="header">
+    <h1>⚡ POKEMON GO DASHBOARD</h1>
+    <div class="trainer-info">MachoMankey • Level <span class="trainer-level">71</span></div>
+    <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
+    <div id="syncErrorDetail" class="sync-error-detail" style="display:none;"></div>
+  </div>
+
+  <!-- Current Events -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>📅 Current Events</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div class="event-quick-info">
+        <h4>🗓️ This Week's Events</h4>
+        <div id="eventsList"><div class="loading">Loading…</div></div>
+      </div>
+      <div class="weekly-helper">
+        <span class="weekly-helper-text">🤖 Weekly update: Copy prompt → AI + graphic → paste to sheet</span>
+        <button class="btn btn-small" onclick="copyPromptToClipboard()">📋 Copy Prompt</button>
+      </div>
+      <div class="event-links">
+        <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
+        <a href="https://pokemongohub.net/" target="_blank" class="event-link">📰 PoGo Hub</a>
+      </div>
+      <div style="text-align:center;margin-top:12px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL,'_blank')">📊 Open Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Power-Up Priority -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>⚡ Power-Up Priority</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div id="powerUpContent" style="margin-top:6px;">
+        <div class="loading">Loading…</div>
+      </div>
+      <div class="section-footer">
+        <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add Pokemon</button>
+        <label class="archive-toggle">
+          <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()"> Show Archived
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rare Candy -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🍬 Rare Candy Priority</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <button class="btn btn-small" onclick="showAddCandyModal()">➕ Add Pokemon</button>
+      <div id="rareCandyContent" style="margin-top:10px;"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+
+  <!-- Lucky Trade Management -->
+  <section class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🤝 Lucky Trade Management</h2>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">🔍 Pokemon I'm Looking For</h3>
+        <button class="btn" onclick="showAddLuckyWantModal()" style="margin-bottom: 8px;">➕ Add Pokemon</button>
+        <div id="luckyWantsContent"></div>
+      </div>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #333;">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">🪞 Mirror/Duplication Targets</h3>
+        <button class="btn" onclick="showAddMirrorModal()" style="margin-bottom: 8px;">➕ Add Mirror</button>
+        <div id="mirrorTargetsContent"></div>
+      </div>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #333;">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">👥 Lucky Friends Queue</h3>
+        <button class="btn" onclick="showAddLuckyFriendModal()" style="margin-bottom: 8px;">➕ Add Friend</button>
+        <div id="luckyFriendsContent"></div>
+      </div>
+      
+    </div>
+  </section>
+  <!-- Shiny Gaps -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>✨ Community Day Shiny Gaps</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL,'_blank')">📊 Google Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
+      </div>
+      <div id="shinyGapsContent"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Power-Up Modal -->
+<div id="addPowerUpModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="powerUpModalTitle">Add Power-Up Priority</h2>
+      <span class="modal-close" onclick="closeModal('addPowerUpModal')">&times;</span>
+    </div>
+    <form id="powerUpForm" onsubmit="savePowerUp(event)">
+      <input type="hidden" id="puEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name * <span class="form-hint">start typing...</span></label>
+        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza" oninput="autoFillTypes()">
+        <div id="typeAutoFill" class="type-auto-info"></div>
+        <div id="spritePreview" style="margin-top:8px;display:none;">
+          <img id="spritePreviewImg" style="width:64px;height:64px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:4px;" />
+          <div style="font-size:12px;color:#48BB78;margin-top:4px;">✓ Sprite loaded</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Regional Variant</label>
+        <select class="form-control" id="puRegional" onchange="autoFillVariantSprite()">
+          <option value="">None</option>
+          <option>Alolan</option>
+          <option>Galarian</option>
+          <option>Hisuian</option>
+          <option>Paldean</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Form <span class="form-hint">leave blank for base form</span></label>
+        <select class="form-control" id="puForm" onchange="autoFillVariantSprite()">
+          <option value="">Base</option>
+          <option>Dusk Mane</option>
+          <option>Dawn Wings</option>
+          <option>Ultra</option>
+          <option>White</option>
+          <option>Black</option>
+          <option>Origin</option>
+          <option>Sky</option>
+          <option>Attack</option>
+          <option>Defense</option>
+          <option>Speed</option>
+          <option>Incarnate</option>
+          <option>Therian</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Type(s) <span class="form-hint">comma separated</span></label>
+        <input type="text" class="form-control" id="puTypes" placeholder="Auto-filled when Pokemon recognized">
+      </div>
+      <div class="form-group checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" id="puLucky" onchange="calculateLevelFromStardust()"> 🍀 Lucky</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHundo"> 💯 Hundo</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShiny"> ✨ Shiny</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShadow"> 👤 Shadow</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHasElite"> £ Has Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedsElite"> ❗ Needs Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky</label>
+        <label class="checkbox-label"><input type="checkbox" id="puDMAX"> 💎 DMAX</label>
+        <label class="checkbox-label"><input type="checkbox" id="puGMAX"> 🌟 GMAX</label>
+      </div>
+      <div class="form-group">
+        <label>IV % <span class="form-hint">0-100</span></label>
+        <input type="number" class="form-control" id="puIV" min="0" max="100" step="1" placeholder="e.g., 98">
+      </div>
+      <div class="form-group">
+        <label>Stardust Cost <span class="form-hint">to calculate level</span></label>
+        <input type="number" class="form-control" id="puStardust" placeholder="e.g., 5000" oninput="calculateLevelFromStardust()">
+        <div id="stardustHelper" class="type-auto-info"></div>
+      </div>
+      <div class="form-group">
+        <label>Current Level * <span class="form-hint">or let stardust calculate it</span></label>
+        <input type="number" class="form-control" id="puCurrentLevel" step="0.5" min="1" max="55" required>
+      </div>
+      <div class="form-group">
+        <label>Target Level *</label>
+        <input type="number" class="form-control" id="puTargetLevel" step="0.5" min="1" max="55" required>
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select class="form-control" id="puRole">
+          <option>Raid</option>
+          <option>GMAX</option>
+          <option>Buddy</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Priority <span class="form-hint">High = drop everything · Low = whenever</span></label>
+        <select class="form-control" id="puPriority" required>
+          <option value="High">🔴 High</option>
+          <option value="Medium" selected>🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="puStatus">
+          <option>To Do</option>
+          <option>In Progress</option>
+          <option>Done</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Archived</label>
+        <select class="form-control" id="puArchived">
+          <option value="FALSE">Active</option>
+          <option value="TRUE">Archived</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="puNotes" placeholder="Optional notes…">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Candy Modal -->
+<div id="addCandyModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Rare Candy Priority</h2>
+      <span class="modal-close" onclick="closeModal('addCandyModal')">&times;</span>
+    </div>
+    <form id="candyForm" onsubmit="saveCandy(event)">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="candyPokemon" required placeholder="e.g., Dialga">
+      </div>
+      <div class="form-group">
+        <label>Current Candy *</label>
+        <input type="number" class="form-control" id="candyCurrent" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Target Candy *</label>
+        <input type="number" class="form-control" id="candyTarget" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="candyNotes" placeholder="e.g., Adventure Effect">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Lucky Want Modal -->
+<div id="addLuckyWantModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addLuckyWantModal')">&times;</span>
+    <h2 id="luckyWantModalTitle">Add Pokemon to Want List</h2>
+    <form id="luckyWantForm" onsubmit="saveLuckyWant(event)">
+      <input type="hidden" id="lwEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="lwPokemon" required>
+      </div>
+      <div class="form-group">
+        <label>Reason</label>
+        <select class="form-control" id="lwReason">
+          <option value="Dex Entry">Dex Entry</option>
+          <option value="Raid">Raid</option>
+          <option value="PvP">PvP</option>
+          <option value="Collection">Collection</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select class="form-control" id="lwPriority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="lwNotes" placeholder="e.g., Ask Sarah">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Mirror Target Modal -->
+<div id="addMirrorModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addMirrorModal')">&times;</span>
+    <h2 id="mirrorModalTitle">Add Mirror Target</h2>
+    <form id="mirrorForm" onsubmit="saveMirrorTarget(event)">
+      <input type="hidden" id="mtEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="mtPokemon" required oninput="autoFillMirrorTypes()">
+      </div>
+      <div class="form-group">
+        <label>Types</label>
+        <input type="text" class="form-control" id="mtTypes" placeholder="e.g., Dragon,Flying">
+        <div class="type-auto-info" id="mtTypeAutoFill"></div>
+      </div>
+      <div class="form-group checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" id="mtShiny"> ✨ Shiny</label>
+        <label class="checkbox-label"><input type="checkbox" id="mtLegacy"> £ Legacy Move</label>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select class="form-control" id="mtPriority">
+          <option value="High">🔴 High</option>
+          <option value="Medium" selected>🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="mtNotes" placeholder="e.g., New shiny from CD">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Lucky Friend Modal -->
+<div id="addLuckyFriendModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addLuckyFriendModal')">&times;</span>
+    <h2 id="luckyFriendModalTitle">Add Lucky Friend</h2>
+    <form id="luckyFriendForm" onsubmit="saveLuckyFriend(event)">
+      <input type="hidden" id="lfEditIndex" value="">
+      <div class="form-group">
+        <label>Friend Name *</label>
+        <input type="text" class="form-control" id="lfFriend" required>
+      </div>
+      <div class="form-group">
+        <label>They Want</label>
+        <input type="text" class="form-control" id="lfTheyWant" placeholder="Pokemon they're looking for">
+        <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;">
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyShiny"> ✨ Shiny</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyDMAX"> 💎 DMAX</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyGMAX"> 🌟 GMAX</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>You Want</label>
+        <input type="text" class="form-control" id="lfYouWant" placeholder="Pokemon you're looking for">
+        <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;">
+          <label class="checkbox-label"><input type="checkbox" id="lfYouShiny"> ✨ Shiny</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfYouDMAX"> 💎 DMAX</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfYouGMAX"> 🌟 GMAX</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="lfStatus">
+          <option value="Planned">Planned</option>
+          <option value="Waiting">Waiting</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label"><input type="checkbox" id="lfReady"> ✅ Ready to Trade</label>
+      </div>
+      <div class="form-group">
+        <label>Trainer Image URL <span class="form-hint">optional — paste a hosted image link</span></label>
+        <input type="text" class="form-control" id="lfTrainerImage" placeholder="e.g., https://drive.google.com/uc?id=...">
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="lfNotes" placeholder="e.g., This weekend">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
