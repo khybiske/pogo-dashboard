@@ -1,0 +1,687 @@
+<!-- GENERATED: 2026-02-18-2220-SPRITE-PREVIEW-AND-LOGGING -->
+<!-- Added sprite preview in Power-Up modal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MachoMankey's PoGo Dashboard</title>
+<link rel="stylesheet" href="styles.css?v=20260220b">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PoGo Dashboard">
+</head>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-bg-bolts"></div>
+    <div class="header-inner">
+      <img src="apple-touch-icon.png" class="header-ball" alt="Mankey Ball" onclick="playMonkeySound()" style="cursor:pointer;" title="🐒">
+      <div class="header-center">
+        <div class="header-title-wrap">
+          <span class="header-title-shadow">POKÉMON GO</span>
+          <span class="header-title">POKÉMON GO</span>
+        </div>
+        <div class="header-subtitle">DASHBOARD</div>
+        <div class="header-trainer">
+          <span class="header-trainer-name">MachoMankey</span>
+          <span class="header-trainer-sep">·</span>
+          <span class="header-trainer-team">⚡ INSTINCT</span>
+          <span class="header-trainer-sep">·</span>
+          <span class="header-trainer-lv">LV <span id="trainerLevelDisplay" onclick="showLevelPopover(this)" title="Tap to update level">71</span></span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="status-badge status-loading" id="syncStatus">🔄 Syncing...</div>
+        <div id="syncErrorDetail" class="sync-error-detail" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current Events -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>📅 Current Events</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div class="event-quick-info">
+        <h4>🗓️ Week at a Glance</h4>
+        <div id="eventsList" class="events-grid-view"><div class="loading">Loading…</div></div>
+        <div id="eventsListOld" class="events-list-view"></div>
+      </div>
+      <div class="weekly-helper">
+        <span class="weekly-helper-text">🤖 Weekly update: Copy prompt → AI + graphic → paste to sheet</span>
+        <button class="btn btn-small" onclick="copyPromptToClipboard()">📋 Copy Prompt</button>
+      </div>
+      <div class="event-links">
+        <a href="https://leekduck.com/events/" target="_blank" class="event-link">🦆 LeekDuck</a>
+        <a href="https://pokemongohub.net/post/category/event/" target="_blank" class="event-link">📰 GoHub</a>
+      </div>
+      <div style="text-align:center;margin-top:12px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL,'_blank')">📊 Open Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Raid Boss Tracker -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>⚔️ Raid Boss Tracker</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <button class="btn btn-small" onclick="showAddRaidModal()">➕ Add Boss</button>
+        <button class="btn btn-small" onclick="resetRaidBosses()" style="background:#718096;">🔄 Reset Week</button>
+        <span id="raidWeekLabel" style="font-size:11px;color:#999;margin-left:auto;"></span>
+      </div>
+      <div id="raidBossContent"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- Power-Up Priority -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>⚡ Power-Up Priority</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-small" onclick="showAddPowerUpModal()">➕ Add</button>
+        <select id="puFilterStatus" onchange="renderPowerUp()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="all">All statuses</option>
+          <option value="To Do">To Do</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </select>
+        <select id="puFilterPrio" onchange="renderPowerUp()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="all">All priorities</option>
+          <option value="High">🔴 High</option>
+          <option value="Medium">🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+        <select id="puFilterType" onchange="renderPowerUp()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="all">All types</option>
+          <option value="legendary">🏆 Legendary only</option>
+          <option value="shadow">👤 Shadow only</option>
+          <option value="lucky">🍀 Lucky only</option>
+        </select>
+        <select id="puSortBy" onchange="renderPowerUp()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="priority">Sort: Priority</option>
+          <option value="name">Sort: Name</option>
+          <option value="level">Sort: Current Level</option>
+          <option value="candy">Sort: Candy needed</option>
+        </select>
+        <label class="archive-toggle">
+          <input type="checkbox" id="showArchivedPowerUp" onchange="renderPowerUp()"> Archived
+        </label>
+      </div>
+      <div id="powerUpContent" style="margin-top:6px;">
+        <div class="loading">Loading…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rare Candy -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🍬 Rare Candy</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <!-- Zone 1: Inventory -->
+      <div id="rcInventoryBar" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f8f9fa;border-radius:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <span style="font-size:13px;color:#718096;font-weight:600;">Inventory:</span>
+        <button class="btn-icon" style="font-size:11px;padding:1px 6px;" onclick="rcInventoryAdj('regular',-10)">−</button>
+        <span id="rcRegularDisplay" style="font-size:15px;font-weight:700;min-width:28px;text-align:center;">⏳</span>
+        <button class="btn-icon" style="font-size:11px;padding:1px 6px;" onclick="rcInventoryAdj('regular',10)">+</button>
+        <img src="GO_Rare_Candy.png" style="width:20px;height:20px;vertical-align:middle;" title="Rare Candy">
+        <span style="color:#ddd;">│</span>
+        <button class="btn-icon" style="font-size:11px;padding:1px 6px;" onclick="rcInventoryAdj('xl',-10)">−</button>
+        <span id="rcXLDisplay" style="font-size:15px;font-weight:700;min-width:28px;text-align:center;">⏳</span>
+        <button class="btn-icon" style="font-size:11px;padding:1px 6px;" onclick="rcInventoryAdj('xl',10)">+</button>
+        <img src="GO_Rare_Candy_XL.png" style="width:20px;height:20px;vertical-align:middle;" title="Rare Candy XL">
+        <button class="btn btn-small" onclick="showRCInventoryModal()" style="margin-left:auto;">✏️ Update</button>
+      </div>
+      <!-- Zone 2: Adventure Effect Reserves -->
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
+          🎮 Adventure Effect Reserves <span style="font-size:10px;font-weight:400;">(<img src="GO_Rare_Candy.png" style="width:14px;height:14px;vertical-align:middle;"> only — held back from allocation)</span>
+        </div>
+        <div id="rcReservesContent"><div class="loading">Loading…</div></div>
+        <button class="btn btn-small" onclick="showAddReserveModal()" style="margin-top:6px;">➕ Add Reserve</button>
+      </div>
+      <!-- Zone 3: Allocation Plan -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
+          📊 Allocation Plan <span style="font-size:10px;font-weight:400;">(🏆 Leg/Myth checked + target level 50, sorted by priority)</span>
+        </div>
+        <div id="rcAllocationContent"><div class="loading">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Lucky Trade Management -->
+  <section class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>🤝 Lucky Trade Management</h2>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">🔍 Pokemon I'm Looking For</h3>
+        <button class="btn" onclick="showAddLuckyWantModal()" style="margin-bottom: 8px;">➕ Add Pokemon</button>
+        <div id="luckyWantsContent"></div>
+      </div>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #333;">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">🪞 Mirror/Duplication Targets</h3>
+        <button class="btn" onclick="showAddMirrorModal()" style="margin-bottom: 8px;">➕ Add Mirror</button>
+        <div id="mirrorTargetsContent"></div>
+      </div>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #333;">
+      
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px; color: #667eea;">👥 Lucky Friends Queue</h3>
+        <button class="btn" onclick="showAddLuckyFriendModal()" style="margin-bottom: 8px;">➕ Add Trade</button>
+        <div id="luckyFriendsContent"></div>
+      </div>
+      
+    </div>
+  </section>
+  <!-- Shiny Gaps -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>✨ Community Day Shiny Gaps</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-small" onclick="window.open(SHEET_URL,'_blank')">📊 Google Sheet</button>
+        <button class="btn btn-small" onclick="loadAllData()">🔄 Refresh</button>
+      </div>
+      <div id="shinyGapsContent"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- Shiny Odds Reference (collapsed by default) -->
+  <div class="section">
+    <div class="section-header collapsed" onclick="toggleSection(this)">
+      <h2>✨ Shiny Odds Reference</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content collapsed" id="shinyOddsContent">
+    </div>
+  </div>
+
+  <!-- PVP Roster -->
+  <div class="section">
+    <div class="section-header" onclick="toggleSection(this)">
+      <h2>⚔️ PVP Roster</h2>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="section-content">
+      <!-- Season bar -->
+      <div id="pvpSeasonBar" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(135deg,#2d1b69,#553c9a);border-radius:8px;margin-bottom:12px;color:white;flex-wrap:wrap;">
+        <span style="font-size:18px;">🏆</span>
+        <span id="pvpSeasonName" style="font-weight:700;font-size:14px;">Loading…</span>
+        <span style="color:rgba(255,255,255,0.5);">·</span>
+        <span style="font-size:13px;color:rgba(255,255,255,0.85);">Great League</span>
+        <span style="color:rgba(255,255,255,0.5);">·</span>
+        <span id="pvpSeasonCountdown" style="font-size:13px;color:#90cdf4;"></span>
+        <button class="btn-icon" onclick="showPVPSeasonModal()" style="margin-left:auto;background:rgba(255,255,255,0.15);border-radius:4px;padding:3px 8px;font-size:12px;color:white;" title="Edit season">✏️</button>
+      </div>
+      <div style="margin-bottom:8px;">
+      <div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
+          🏅 Meta Snapshot — <span id="pvpMetaCountLabel">Top GL</span>
+        </div>
+        <div id="pvpMetaContent"><div class="loading">Loading…</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
+        🎒 My GL Roster
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-small" onclick="showAddPVPModal()">➕ Add Pokémon</button>
+        <select id="pvpFilterReady" onchange="renderPVP()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="all">All readiness</option>
+          <option value="ready">✅ Ready only</option>
+          <option value="notready">⚔️ Not ready only</option>
+        </select>
+        <select id="pvpFilterMeta" onchange="renderPVP()" class="form-control" style="width:auto;font-size:12px;padding:3px 8px;height:auto;">
+          <option value="all">All Pokémon</option>
+          <option value="meta">Meta only</option>
+          <option value="nonmeta">Non-meta only</option>
+        </select>
+      </div>
+      <div id="pvpRosterContent"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+<!-- Raid Boss Modal -->
+<div id="addRaidModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="raidModalTitle">Add Raid Boss</h2>
+      <span class="modal-close" onclick="closeModal('addRaidModal')">&times;</span>
+    </div>
+    <form id="raidForm" onsubmit="saveRaidBoss(event)">
+      <input type="hidden" id="raidEditIndex" value="">
+      <div class="form-group">
+        <label>Pokémon Name *</label>
+        <input type="text" class="form-control" id="raidPokemon" required placeholder="e.g., Dialga" oninput="raidSpritePreview()">
+        <div id="raidSpritePreviewDiv" style="display:none;margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <img id="raidSpriteImg" style="width:48px;height:48px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:3px;">
+          <div id="raidSpriteInfo" style="font-size:12px;color:#48BB78;"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tier</label>
+        <select class="form-control" id="raidTier">
+          <option value="5★">5★ Legendary</option>
+          <option value="Mega">Mega</option>
+          <option value="DMAX">Dynamax</option>
+          <option value="GMAX">Gigantamax</option>
+          <option value="3★">3★</option>
+          <option value="1★">1★</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Why I want it</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+          <label class="checkbox-label"><input type="checkbox" id="raidShiny"> ✨ Shiny</label>
+          <label class="checkbox-label"><input type="checkbox" id="raidIVs"> 💎 IVs</label>
+          <label class="checkbox-label"><input type="checkbox" id="raidXL"> 🍬 XL Candy</label>
+          <label class="checkbox-label"><input type="checkbox" id="raidDex"> 📖 Dex/Collection</label>
+          <label class="checkbox-label"><input type="checkbox" id="raidCostume"> 🎭 Costume/Form</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select class="form-control" id="raidPriority">
+          <option value="High">🔴 High</option>
+          <option value="Medium" selected>🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="raidNotes" placeholder="e.g., need origin forme">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Power-Up Modal -->
+<div id="addPowerUpModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="powerUpModalTitle">Add Power-Up Priority</h2>
+      <span class="modal-close" onclick="closeModal('addPowerUpModal')">&times;</span>
+    </div>
+    <form id="powerUpForm" onsubmit="savePowerUp(event)">
+      <input type="hidden" id="puEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name * <span class="form-hint">start typing...</span></label>
+        <input type="text" class="form-control" id="puPokemon" required placeholder="e.g., Rayquaza" oninput="autoFillTypes()">
+        <div id="typeAutoFill" class="type-auto-info"></div>
+        <div id="spritePreview" style="margin-top:8px;display:none;">
+          <img id="spritePreviewImg" style="width:64px;height:64px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:4px;" />
+          <div style="font-size:12px;color:#48BB78;margin-top:4px;">✓ Sprite loaded</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Regional Variant</label>
+        <select class="form-control" id="puRegional" onchange="autoFillVariantSprite()">
+          <option value="">None</option>
+          <option>Alolan</option>
+          <option>Galarian</option>
+          <option>Hisuian</option>
+          <option>Paldean</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Form <span class="form-hint">leave blank for base form</span></label>
+        <select class="form-control" id="puForm" onchange="autoFillVariantSprite()">
+          <option value="">Base</option>
+          <option>Dusk Mane</option>
+          <option>Dawn Wings</option>
+          <option>Ultra</option>
+          <option>White</option>
+          <option>Black</option>
+          <option>Origin</option>
+          <option>Sky</option>
+          <option>Attack</option>
+          <option>Defense</option>
+          <option>Speed</option>
+          <option>Incarnate</option>
+          <option>Therian</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Type(s) <span class="form-hint">comma separated</span></label>
+        <input type="text" class="form-control" id="puTypes" placeholder="Auto-filled when Pokemon recognized">
+      </div>
+      <div class="form-group checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" id="puLucky" onchange="calculateLevelFromStardust()"> 🍀 Lucky</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHundo"> 💯 Hundo</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShiny"> ✨ Shiny</label>
+        <label class="checkbox-label"><input type="checkbox" id="puShadow"> 👤 Shadow</label>
+        <label class="checkbox-label"><input type="checkbox" id="puHasElite"> £ Has Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedsElite"> ❗ Needs Legacy</label>
+        <label class="checkbox-label"><input type="checkbox" id="puNeedLucky"> 🤝 Need Lucky</label>
+        <label class="checkbox-label"><input type="checkbox" id="puDMAX"> 💎 DMAX</label>
+        <label class="checkbox-label"><input type="checkbox" id="puGMAX"> 🌟 GMAX</label>
+        <label class="checkbox-label"><input type="checkbox" id="puLegendary"> 🏆 Leg/Myth</label>
+      </div>
+      <div class="form-group">
+        <label>IV % <span class="form-hint">0-100</span></label>
+        <input type="number" class="form-control" id="puIV" min="0" max="100" step="1" placeholder="e.g., 98">
+      </div>
+      <div class="form-group">
+        <label>Stardust Cost <span class="form-hint">to calculate level</span></label>
+        <input type="number" class="form-control" id="puStardust" placeholder="e.g., 5000" oninput="calculateLevelFromStardust()">
+        <div id="stardustHelper" class="type-auto-info"></div>
+      </div>
+      <div class="form-group">
+        <label>Current Level * <span class="form-hint">or let stardust calculate it</span></label>
+        <input type="number" class="form-control" id="puCurrentLevel" step="0.5" min="1" max="55" required oninput="updateXLCandyHelper()">
+      </div>
+      <div class="form-group">
+        <label>Target Level *</label>
+        <input type="number" class="form-control" id="puTargetLevel" step="0.5" min="1" max="55" required oninput="updateXLCandyHelper()">
+      </div>
+      <div class="form-group">
+        <label>Species XL Candy <span class="form-hint">how many you already have</span></label>
+        <input type="number" class="form-control" id="puXLCandy" min="0" placeholder="e.g., 120" oninput="updateXLCandyHelper()">
+        <div id="xlCandyHelper" class="type-auto-info" style="margin-top:4px;"></div>
+      </div>
+      <div class="form-group">
+        <label>Priority <span class="form-hint">High = drop everything · Low = whenever</span></label>
+        <select class="form-control" id="puPriority" required>
+          <option value="High">🔴 High</option>
+          <option value="Medium" selected>🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="puStatus">
+          <option>To Do</option>
+          <option>In Progress</option>
+          <option>Done</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Archived</label>
+        <select class="form-control" id="puArchived">
+          <option value="FALSE">Active</option>
+          <option value="TRUE">Archived</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="puNotes" placeholder="Optional notes…">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- RC Inventory Modal -->
+<div id="rcInventoryModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('rcInventoryModal')">&times;</span>
+    <h2>Update Rare Candy Inventory</h2>
+    <form id="rcInventoryForm" onsubmit="saveRCInventory(event)">
+      <div class="form-group">
+        <label><img src="GO_Rare_Candy.png" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">Regular Rare Candy</label>
+        <input type="number" class="form-control" id="rcRegularInput" min="0" placeholder="e.g., 70">
+      </div>
+      <div class="form-group">
+        <label><img src="GO_Rare_Candy_XL.png" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">XL Rare Candy</label>
+        <input type="number" class="form-control" id="rcXLInput" min="0" placeholder="e.g., 285">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- RC Reserve Modal -->
+<div id="addReserveModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addReserveModal')">&times;</span>
+    <h2 id="reserveModalTitle">Add Adventure Effect Reserve</h2>
+    <form id="reserveForm" onsubmit="saveReserve(event)">
+      <input type="hidden" id="reserveEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="reservePokemon" required placeholder="e.g., Palkia">
+      </div>
+      <div class="form-group">
+        <label><img src="GO_Rare_Candy.png" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">Reserve Amount *</label>
+        <input type="number" class="form-control" id="reserveAmount" min="0" required placeholder="e.g., 20">
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="reserveNotes" placeholder="e.g., Spatial Rend farming">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Lucky Want Modal -->
+<div id="addLuckyWantModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addLuckyWantModal')">&times;</span>
+    <h2 id="luckyWantModalTitle">Add Pokemon to Want List</h2>
+    <form id="luckyWantForm" onsubmit="saveLuckyWant(event)">
+      <input type="hidden" id="lwEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="lwPokemon" required>
+      </div>
+      <div class="form-group">
+        <label>Reason</label>
+        <select class="form-control" id="lwReason">
+          <option value="Dex Entry">Dex Entry</option>
+          <option value="Raid">Raid</option>
+          <option value="PvP">PvP</option>
+          <option value="Collection">Collection</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select class="form-control" id="lwPriority">
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="lwNotes" placeholder="e.g., Ask Sarah">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Mirror Target Modal -->
+<div id="addMirrorModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addMirrorModal')">&times;</span>
+    <h2 id="mirrorModalTitle">Add Mirror Target</h2>
+    <form id="mirrorForm" onsubmit="saveMirrorTarget(event)">
+      <input type="hidden" id="mtEditIndex" value="">
+      <div class="form-group">
+        <label>Pokemon Name *</label>
+        <input type="text" class="form-control" id="mtPokemon" required oninput="autoFillMirrorTypes()">
+      </div>
+      <div class="form-group">
+        <label>Types</label>
+        <input type="text" class="form-control" id="mtTypes" placeholder="e.g., Dragon,Flying">
+        <div class="type-auto-info" id="mtTypeAutoFill"></div>
+      </div>
+      <div class="form-group checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" id="mtShiny"> ✨ Shiny</label>
+        <label class="checkbox-label"><input type="checkbox" id="mtLegacy"> £ Legacy Move</label>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select class="form-control" id="mtPriority">
+          <option value="High">🔴 High</option>
+          <option value="Medium" selected>🟡 Medium</option>
+          <option value="Low">🔵 Low</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="mtNotes" placeholder="e.g., New shiny from CD">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Lucky Friend Modal -->
+<div id="addLuckyFriendModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addLuckyFriendModal')">&times;</span>
+    <h2 id="luckyFriendModalTitle">Add Lucky Friend</h2>
+    <form id="luckyFriendForm" onsubmit="saveLuckyFriend(event)">
+      <input type="hidden" id="lfEditIndex" value="">
+      <div class="form-group" id="lfFriendPickerGroup" style="display:none;">
+        <label>Pick Existing Friend <span class="form-hint">or leave blank to add new</span></label>
+        <select class="form-control" id="lfFriendPicker" onchange="lfPickFriend()">
+          <option value="">— New friend / type name below —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Friend Name *</label>
+        <input type="text" class="form-control" id="lfFriend" required>
+      </div>
+      <div class="form-group">
+        <label>They Want</label>
+        <input type="text" class="form-control" id="lfTheyWant" placeholder="Pokemon they're looking for" oninput="lfPreviewSprite('they')">
+        <div id="lfTheyPreview" style="display:none;margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <img id="lfTheyPreviewImg" style="width:48px;height:48px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:3px;">
+          <div id="lfTheyPreviewInfo" style="font-size:12px;color:#48BB78;"></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;">
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyShiny"> ✨ Shiny</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyDMAX"> 💎 DMAX</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfTheyGMAX"> 🌟 GMAX</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>You Want</label>
+        <input type="text" class="form-control" id="lfYouWant" placeholder="Pokemon you're looking for" oninput="lfPreviewSprite('you')">
+        <div id="lfYouPreview" style="display:none;margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <img id="lfYouPreviewImg" style="width:48px;height:48px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:3px;">
+          <div id="lfYouPreviewInfo" style="font-size:12px;color:#48BB78;"></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;">
+          <label class="checkbox-label"><input type="checkbox" id="lfYouShiny"> ✨ Shiny</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfYouDMAX"> 💎 DMAX</label>
+          <label class="checkbox-label"><input type="checkbox" id="lfYouGMAX"> 🌟 GMAX</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select class="form-control" id="lfStatus">
+          <option value="Planned">Planned</option>
+          <option value="Waiting">Waiting</option>
+          <option value="Complete">Complete</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label"><input type="checkbox" id="lfReady"> ✅ Ready to Trade</label>
+      </div>
+      <div class="form-group">
+        <label>Trainer Image URL <span class="form-hint">optional — paste a hosted image link</span></label>
+        <input type="text" class="form-control" id="lfTrainerImage" placeholder="e.g., https://drive.google.com/uc?id=...">
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="lfNotes" placeholder="e.g., This weekend">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- PVP Season Modal -->
+<div id="pvpSeasonModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('pvpSeasonModal')">&times;</span>
+    <h2>Edit GBL Season</h2>
+    <form id="pvpSeasonForm" onsubmit="savePVPSeason(event)">
+      <div class="form-group">
+        <label>Season Name</label>
+        <input type="text" class="form-control" id="pvpSeasonNameInput" placeholder="e.g., Season 20">
+      </div>
+      <div class="form-group">
+        <label>Season End Date</label>
+        <input type="date" class="form-control" id="pvpSeasonEndInput">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- PVP Pokemon Modal -->
+<div id="addPVPModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('addPVPModal')">&times;</span>
+    <h2 id="pvpModalTitle">Add PVP Pokémon</h2>
+    <form id="pvpForm" onsubmit="savePVP(event)">
+      <input type="hidden" id="pvpEditIndex" value="">
+      <div class="form-group">
+        <label>Pokémon Name *</label>
+        <input type="text" class="form-control" id="pvpPokemon" required placeholder="e.g., Medicham"
+               oninput="pvpSpritePreview()">
+        <div id="pvpSpritePreviewDiv" style="display:none;margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <img id="pvpSpriteImg" style="width:48px;height:48px;image-rendering:pixelated;background:#0f3460;border-radius:4px;padding:3px;">
+          <div id="pvpSpriteInfo" style="font-size:12px;color:#48BB78;"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>PVPpoke Rank <span class="form-hint">lower = better</span></label>
+        <input type="number" class="form-control" id="pvpPVPpokeRank" min="1" placeholder="e.g., 12">
+      </div>
+      <div class="form-group">
+        <label>IV Rank <span class="form-hint">from stadiumgaming.gg</span></label>
+        <input type="text" class="form-control" id="pvpIVRank" placeholder="e.g., Rank 1 / #847">
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label"><input type="checkbox" id="pvpReady"> ✅ Ready for battle</label>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <input type="text" class="form-control" id="pvpNotes" placeholder="e.g., needs 2nd move">
+      </div>
+      <button type="submit" class="btn">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<script src="app.js?v=20260220b"></script>
+</body>
+</html>
